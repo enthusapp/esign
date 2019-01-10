@@ -2,6 +2,9 @@
     "parser": "babel-eslint",
     "extends": "airbnb",
     "plugins": ["react", "jsx-a11y", "import"],
+    "env": {
+      "jest": true
+    },
     "rules": {
       "react/jsx-filename-extension": 0
     }
