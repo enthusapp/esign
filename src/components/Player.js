@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-function Player() {
-  const style = {
-    backgroundColor: 'black',
-    color: 'white',
+class Player extends Component {
+  state = {
+    style: {
+      backgroundColor: 'black',
+      color: 'white',
+    },
   };
 
-  return (
-    <div style={style}>
-      <p>
-        Text
-      </p>
-    </div>
-  );
+  render() {
+    const { style } = this.state;
+    return (
+      <div style={style}>
+        <p>
+          Text
+        </p>
+      </div>
+    );
+  }
 }
 
 export default Player;

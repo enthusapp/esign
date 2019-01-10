@@ -4,6 +4,7 @@ import Player from './Player';
 
 describe('Player', () => {
   let component = null;
+  let style = null;
 
   it('renders correctly', () => {
     component = shallow(<Player />);
@@ -14,14 +15,8 @@ describe('Player', () => {
   });
 
   describe('style', () => {
-    let style = null;
-
-    beforeEach(() => {
-      component = shallow(<Player />);
-      [style] = component.get(0).props;
-    });
-
     it('backgroundColor correctly', () => {
+      ({ style } = component.get(0).props);
       expect(style.backgroundColor).toEqual('black');
     });
 
