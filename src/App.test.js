@@ -23,64 +23,24 @@ describe('basic app test', () => {
   describe('component', () => {
     let component = null;
     let btIncFontSize = null;
-    let btDecFontSize = null;
 
     it('rendering', () => {
       component = shallow(<App />);
       btIncFontSize = component.find('.btIncFontSize');
-      btDecFontSize = component.find('.btDecFontSize');
     });
 
     it('button exists', () => {
       expect(btIncFontSize.exists()).toBe(true);
-      expect(btDecFontSize.exists()).toBe(true);
     });
 
     it('button event', () => {
-      btIncFontSize.simulate('click');
+      component.instance().increase();
       expect(component.state().fontSize).toBe(31);
     });
 
     it('button event', () => {
-      btIncFontSize.simulate('click');
-      expect(component.state().fontSize).toBe(32);
-    });
-
-    it('button event', () => {
-      btDecFontSize.simulate('click');
-      expect(component.state().fontSize).toBe(31);
-    });
-
-    it('button event', () => {
-      btDecFontSize.simulate('click');
+      component.instance().decrease();
       expect(component.state().fontSize).toBe(30);
-    });
-
-    describe('button style', () => {
-      let style = null;
-
-      it('exists', () => {
-        ({ style } = btDecFontSize.props());
-      });
-
-      it('exists', () => {
-        let height = null;
-        let width = null;
-        let margin = null;
-        let fontSize = null;
-
-        ({
-          height,
-          width,
-          margin,
-          fontSize,
-        } = style);
-
-        expect(height).toBe('100px');
-        expect(width).toBe('100px');
-        expect(margin).toBe('10px');
-        expect(fontSize).toBe('30px');
-      });
     });
 
     describe('button to player', () => {
@@ -96,7 +56,7 @@ describe('basic app test', () => {
       });
 
       it('click and fontSize', () => {
-        btDecFontSize.simulate('click');
+        component.instance().decrease();
         player = component.find('.player');
         expect(player.props().fontSize).toBe(29);
       });

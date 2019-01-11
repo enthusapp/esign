@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Player from './components/Player';
+import IncButton from './components/IncButton';
 
 class App extends Component {
   constructor(props) {
@@ -20,12 +21,6 @@ class App extends Component {
   render() {
     const { increase, decrease } = this;
     const { fontSize } = this.state;
-    const buttonStyle = {
-      height: '100px',
-      width: '100px',
-      margin: '10px',
-      fontSize: '30px',
-    };
     return (
       <div className="App">
         <Player
@@ -37,22 +32,11 @@ class App extends Component {
           direction="scroll-up"
           fontSize={fontSize}
         />
-        <button
+        <IncButton
           className="btIncFontSize"
-          type="button"
-          onClick={increase}
-          style={buttonStyle}
-        >
-          {'+'}
-        </button>
-        <button
-          className="btDecFontSize"
-          type="button"
-          onClick={decrease}
-          style={buttonStyle}
-        >
-          {'-'}
-        </button>
+          increase={increase}
+          decrease={decrease}
+        />
       </div>
     );
   }
