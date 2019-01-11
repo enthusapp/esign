@@ -5,6 +5,7 @@ class Button extends Component {
   static propTypes = {
     text: PropTypes.string.isRequired,
     number: PropTypes.number.isRequired,
+    handleEvent: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -15,11 +16,22 @@ class Button extends Component {
     };
   }
 
+  onClick = () => {
+    const { handleEvent } = this.props;
+    this.setState(({ number }) => ({ number: handleEvent(number) }));
+  }
+
   render() {
     const { text } = this.props;
+    const { onClick } = this;
     return (
       <div>
-        <button type="button">{text}</button>
+        <button
+          type="button"
+          onClick={onClick}
+        >
+          {text}
+        </button>
       </div>
     );
   }
