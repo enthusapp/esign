@@ -55,5 +55,24 @@ describe('basic app test', () => {
       btDecFontSize.simulate('click');
       expect(component.state().number).toBe(30);
     });
+
+    describe('button to player', () => {
+      let player = null;
+
+      it('player exists', () => {
+        player = component.find('.player');
+        expect(player.exists()).toBe(true);
+      });
+
+      it('fontSize', () => {
+        expect(player.props().fontSize).toBe(30);
+      });
+
+      it('click and fontSize', () => {
+        btDecFontSize.simulate('click');
+        player = component.find('.player');
+        expect(player.props().fontSize).toBe(29);
+      });
+    });
   });
 });

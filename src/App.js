@@ -10,25 +10,26 @@ class App extends Component {
   }
 
   increase = () => {
-    const { number } = this.state;
-    this.setState(() => ({ number: number + 1 }));
+    this.setState(({ number }) => ({ number: number + 1 }));
   }
 
   decrease = () => {
-    const { number } = this.state;
-    this.setState(() => ({ number: number - 1 }));
+    this.setState(({ number }) => ({ number: number - 1 }));
   }
 
   render() {
     const { increase, decrease } = this;
+    const { number } = this.state;
     return (
       <div className="App">
         <Player
+          className="player"
           text="Text"
           backgroundColor="black"
           color="white"
           height="100px"
           direction="scroll-up"
+          fontSize={number}
         />
         <button
           className="btIncFontSize"
