@@ -22,23 +22,38 @@ describe('basic app test', () => {
 
   describe('component', () => {
     let component = null;
+    let btIncFontSize = null;
+    let btDecFontSize = null;
 
     it('rendering', () => {
       component = shallow(<App />);
+      btIncFontSize = component.find('.btIncFontSize');
+      btDecFontSize = component.find('.btDecFontSize');
     });
 
     it('button exists', () => {
-      expect(component.find('button').exists()).toBe(true);
+      expect(btIncFontSize.exists()).toBe(true);
+      expect(btDecFontSize.exists()).toBe(true);
     });
 
     it('button event', () => {
-      component.find('button').simulate('click');
+      btIncFontSize.simulate('click');
       expect(component.state().number).toBe(31);
     });
 
     it('button event', () => {
-      component.find('button').simulate('click');
+      btIncFontSize.simulate('click');
       expect(component.state().number).toBe(32);
+    });
+
+    it('button event', () => {
+      btDecFontSize.simulate('click');
+      expect(component.state().number).toBe(31);
+    });
+
+    it('button event', () => {
+      btDecFontSize.simulate('click');
+      expect(component.state().number).toBe(30);
     });
   });
 });
