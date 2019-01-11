@@ -56,6 +56,25 @@ describe('basic app test', () => {
       expect(component.state().number).toBe(30);
     });
 
+    describe('button style', () => {
+      let style = null;
+
+      it('exists', () => {
+        ({ style } = btDecFontSize.props());
+      });
+
+      it('exists', () => {
+        let height = null;
+        let width = null;
+        let margin = null;
+
+        ({ height, width, margin } = style);
+        expect(height).toBe('100px');
+        expect(width).toBe('100px');
+        expect(margin).toBe('10px');
+      });
+    });
+
     describe('button to player', () => {
       let player = null;
 

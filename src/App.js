@@ -20,6 +20,11 @@ class App extends Component {
   render() {
     const { increase, decrease } = this;
     const { number } = this.state;
+    const buttonStyle = {
+      height: '100px',
+      width: '100px',
+      margin: '10px',
+    };
     return (
       <div className="App">
         <Player
@@ -35,6 +40,7 @@ class App extends Component {
           className="btIncFontSize"
           type="button"
           onClick={increase}
+          style={buttonStyle}
         >
           {'+'}
         </button>
@@ -42,6 +48,7 @@ class App extends Component {
           className="btDecFontSize"
           type="button"
           onClick={decrease}
+          style={buttonStyle}
         >
           {'-'}
         </button>
