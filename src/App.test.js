@@ -34,12 +34,12 @@ describe('basic app test', () => {
     });
 
     it('button event', () => {
-      component.instance().increase();
+      component.instance().increaseFontSize();
       expect(component.state().fontSize).toBe(31);
     });
 
     it('button event', () => {
-      component.instance().decrease();
+      component.instance().decreaseFontSize();
       expect(component.state().fontSize).toBe(30);
     });
 
@@ -56,7 +56,7 @@ describe('basic app test', () => {
       });
 
       it('click and fontSize', () => {
-        component.instance().decrease();
+        component.instance().decreaseFontSize();
         player = component.find('.player');
         expect(player.props().fontSize).toBe(29);
       });

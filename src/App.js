@@ -10,16 +10,16 @@ class App extends Component {
     };
   }
 
-  increase = () => {
+  increaseFontSize = () => {
     this.setState(({ fontSize }) => ({ fontSize: fontSize + 1 }));
   }
 
-  decrease = () => {
+  decreaseFontSize = () => {
     this.setState(({ fontSize }) => ({ fontSize: fontSize - 1 }));
   }
 
   render() {
-    const { increase, decrease } = this;
+    const { increaseFontSize, decreaseFontSize } = this;
     const { fontSize } = this.state;
     return (
       <div className="App">
@@ -34,8 +34,8 @@ class App extends Component {
         />
         <IncButton
           className="btIncFontSize"
-          increase={increase}
-          decrease={decrease}
+          increase={increaseFontSize}
+          decrease={decreaseFontSize}
         />
       </div>
     );
