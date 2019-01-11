@@ -8,6 +8,7 @@ function Player(prop) {
     color,
     height,
     direction,
+    fontSize,
   } = prop;
 
   return (
@@ -26,7 +27,7 @@ function Player(prop) {
         margin: '0',
         lineHeight: '100%',
         textAlign: 'center',
-        fontSize: '30px',
+        fontSize: `${fontSize}px`,
         animation: `${direction} 10s linear infinite`,
       }}
       >
