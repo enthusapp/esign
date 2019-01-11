@@ -13,14 +13,8 @@ describe('basic app test', () => {
 
   it('renders without crashing', () => {
     ReactDOM.render(<App />, div);
-    ReactDOM.unmountComponentAtNode(div);
-  });
-
-  it('set app title', () => {
-    ReactDOM.render(<App />, div);
     window.requestAnimationFrame(() => {
      expect(document.title).to.equal('Enthus Esign');
-     done();
     });
     ReactDOM.unmountComponentAtNode(div);
   });

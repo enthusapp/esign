@@ -1,23 +1,36 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Player extends Component {
-  state = {
-    style: {
-      backgroundColor: 'black',
-      color: 'white',
-    },
-  };
+function Player(prop) {
+  const {
+    text,
+    backgroundColor,
+    color,
+    height,
+  } = prop;
 
-  render() {
-    const { style } = this.state;
-    return (
-      <div style={style}>
-        <p>
-          Text
-        </p>
-      </div>
-    );
-  }
+  return (
+    <div style={{
+      backgroundColor,
+      color,
+      overflow: 'hidden',
+      position: 'relative',
+      height,
+    }}
+    >
+      <p style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        margin: '0',
+        lineHeight: '100%',
+        textAlign: 'center',
+        fontSize: '30px',
+      }}
+      >
+        {text}
+      </p>
+    </div>
+  );
 }
 
 export default Player;
