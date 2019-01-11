@@ -67,11 +67,19 @@ describe('basic app test', () => {
         let height = null;
         let width = null;
         let margin = null;
+        let fontSize = null;
 
-        ({ height, width, margin } = style);
+        ({
+          height,
+          width,
+          margin,
+          fontSize,
+        } = style);
+
         expect(height).toBe('100px');
         expect(width).toBe('100px');
         expect(margin).toBe('10px');
+        expect(fontSize).toBe('30px');
       });
     });
 

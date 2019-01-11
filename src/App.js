@@ -24,6 +24,7 @@ class App extends Component {
       height: '100px',
       width: '100px',
       margin: '10px',
+      fontSize: '30px',
     };
     return (
       <div className="App">
