@@ -13,12 +13,9 @@ describe('Player', () => {
         backgroundColor="black"
         color="white"
         height="100px"
+        direction="scroll-up"
       />,
     );
-  });
-
-  it('text correctly', () => {
-    expect(component.text()).toEqual('Text');
   });
 
   describe('background style', () => {
@@ -53,7 +50,7 @@ describe('Player', () => {
     });
 
     describe('style', () => {
-      it('text correctrly', () => {
+      it('absolute correctrly', () => {
         ({ style } = tcomp.get(0).props);
         expect(style.position).toEqual('absolute');
       });
@@ -74,6 +71,9 @@ describe('Player', () => {
       });
       it('font-size correctrly', () => {
         expect(style.fontSize).toEqual('30px');
+      });
+      it('animation correctrly', () => {
+        expect(style.animation).toEqual('scroll-up 10s linear infinite');
       });
     });
   });

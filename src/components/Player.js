@@ -1,4 +1,5 @@
 import React from 'react';
+import './Player.css';
 
 function Player(prop) {
   const {
@@ -6,6 +7,7 @@ function Player(prop) {
     backgroundColor,
     color,
     height,
+    direction,
   } = prop;
 
   return (
@@ -25,6 +27,7 @@ function Player(prop) {
         lineHeight: '100%',
         textAlign: 'center',
         fontSize: '30px',
+        animation: `${direction} 10s linear infinite`,
       }}
       >
         {text}

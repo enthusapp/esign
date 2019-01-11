@@ -9,6 +9,7 @@ function App() {
         backgroundColor="black"
         color="white"
         height="100px"
+        direction="scroll-up"
       />
     </div>
   );

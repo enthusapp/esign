@@ -14,8 +14,8 @@ describe('basic app test', () => {
   it('renders without crashing', () => {
     ReactDOM.render(<App />, div);
     window.requestAnimationFrame(() => {
-     expect(document.title).to.equal('Enthus Esign');
+      expect(document.title).to.equal('Enthus Esign');
     });
     ReactDOM.unmountComponentAtNode(div);
   });
-})
+});
