@@ -5,21 +5,21 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      number: 30,
+      fontSize: 30,
     };
   }
 
   increase = () => {
-    this.setState(({ number }) => ({ number: number + 1 }));
+    this.setState(({ fontSize }) => ({ fontSize: fontSize + 1 }));
   }
 
   decrease = () => {
-    this.setState(({ number }) => ({ number: number - 1 }));
+    this.setState(({ fontSize }) => ({ fontSize: fontSize - 1 }));
   }
 
   render() {
     const { increase, decrease } = this;
-    const { number } = this.state;
+    const { fontSize } = this.state;
     const buttonStyle = {
       height: '100px',
       width: '100px',
@@ -34,7 +34,7 @@ class App extends Component {
           color="white"
           height="100px"
           direction="scroll-up"
-          fontSize={number}
+          fontSize={fontSize}
         />
         <button
           className="btIncFontSize"

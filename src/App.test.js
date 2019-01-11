@@ -38,22 +38,22 @@ describe('basic app test', () => {
 
     it('button event', () => {
       btIncFontSize.simulate('click');
-      expect(component.state().number).toBe(31);
+      expect(component.state().fontSize).toBe(31);
     });
 
     it('button event', () => {
       btIncFontSize.simulate('click');
-      expect(component.state().number).toBe(32);
+      expect(component.state().fontSize).toBe(32);
     });
 
     it('button event', () => {
       btDecFontSize.simulate('click');
-      expect(component.state().number).toBe(31);
+      expect(component.state().fontSize).toBe(31);
     });
 
     it('button event', () => {
       btDecFontSize.simulate('click');
-      expect(component.state().number).toBe(30);
+      expect(component.state().fontSize).toBe(30);
     });
 
     describe('button style', () => {
