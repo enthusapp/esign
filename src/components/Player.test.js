@@ -19,27 +19,14 @@ describe('Player', () => {
     );
   });
 
-  describe('background style', () => {
-    it('backgroundColor correctly', () => {
-      ({ style } = component.get(0).props);
-      expect(style.backgroundColor).toEqual('black');
-    });
+  it('backgroundColor style correctly', () => {
+    ({ style } = component.get(0).props);
 
-    it('color correctly', () => {
-      expect(style.color).toEqual('white');
-    });
-
-    it('overflow correctly', () => {
-      expect(style.overflow).toEqual('hidden');
-    });
-
-    it('position correctly', () => {
-      expect(style.position).toEqual('relative');
-    });
-
-    it('height correctly', () => {
-      expect(style.height).toEqual('100px');
-    });
+    expect(style.backgroundColor).toEqual('black');
+    expect(style.color).toEqual('white');
+    expect(style.overflow).toEqual('hidden');
+    expect(style.position).toEqual('relative');
+    expect(style.height).toEqual('100px');
   });
 
   let tcomp = null;
@@ -50,32 +37,17 @@ describe('Player', () => {
       expect(tcomp.text()).toEqual('Text');
     });
 
-    describe('style', () => {
-      it('absolute correctrly', () => {
-        ({ style } = tcomp.get(0).props);
-        expect(style.position).toEqual('absolute');
-      });
-      it('width correctrly', () => {
-        expect(style.width).toEqual('100%');
-      });
-      it('height correctrly', () => {
-        expect(style.height).toEqual('100%');
-      });
-      it('margin correctrly', () => {
-        expect(style.margin).toEqual('0');
-      });
-      it('line-height correctrly', () => {
-        expect(style.lineHeight).toEqual('100%');
-      });
-      it('text-align correctrly', () => {
-        expect(style.textAlign).toEqual('center');
-      });
-      it('font-size correctrly', () => {
-        expect(style.fontSize).toEqual('30px');
-      });
-      it('animation correctrly', () => {
-        expect(style.animation).toEqual('scroll-up 10s linear infinite');
-      });
+    it('text style correctrly', () => {
+      ({ style } = tcomp.get(0).props);
+
+      expect(style.position).toEqual('absolute');
+      expect(style.width).toEqual('100%');
+      expect(style.height).toEqual('100%');
+      expect(style.margin).toEqual('0');
+      expect(style.lineHeight).toEqual('100%');
+      expect(style.textAlign).toEqual('center');
+      expect(style.fontSize).toEqual('30px');
+      expect(style.animation).toEqual('scroll-up 10s linear infinite');
     });
   });
 });
