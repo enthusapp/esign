@@ -5,6 +5,7 @@ import IncButton from './IncButton';
 describe('IncButton', () => {
   let component = null;
   let number = 0;
+  const TestName = 'TestName';
 
   function increase() {
     number += 1;
@@ -17,10 +18,12 @@ describe('IncButton', () => {
   it('renders correctly', () => {
     component = shallow(
       <IncButton
+        name={TestName}
         increase={increase}
         decrease={decrease}
       />,
     );
+    expect(component.find('.name').text()).toBe(TestName);
   });
 
   describe('component', () => {
@@ -37,22 +40,18 @@ describe('IncButton', () => {
       expect(btDecFontSize.exists()).toBe(true);
     });
 
-    it('button event', () => {
+    it('button increase', () => {
       btIncFontSize.simulate('click');
       expect(number).toBe(1);
-    });
 
-    it('button event', () => {
       btIncFontSize.simulate('click');
       expect(number).toBe(2);
     });
 
-    it('button event', () => {
+    it('button decrease', () => {
       btDecFontSize.simulate('click');
       expect(number).toBe(1);
-    });
 
-    it('button event', () => {
       btDecFontSize.simulate('click');
       expect(number).toBe(0);
     });
@@ -81,6 +80,13 @@ describe('IncButton', () => {
         expect(width).toBe('100px');
         expect(margin).toBe('10px');
         expect(fontSize).toBe('30px');
+      });
+    });
+
+    describe('button SVG image', () => {
+      it('button text is SVG image', () => {
+      });
+      it('SVG image is different between mobile and desk', () => {
       });
     });
   });

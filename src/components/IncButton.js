@@ -2,6 +2,7 @@ import React from 'react';
 
 function IncButton(prop) {
   const {
+    name,
     increase,
     decrease,
   } = prop;
@@ -15,6 +16,7 @@ function IncButton(prop) {
 
   return (
     <div>
+      <p className="name">{name}</p>
       <button
         className="btIncFontSize"
         type="button"
