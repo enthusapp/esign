@@ -45,6 +45,8 @@ describe('basic app test', () => {
           val: 'speed',
         },
       ];
+      // TODO: need refactoring as
+      // just use name, limitation
 
       buttons.forEach((bt) => {
         let button = null;
