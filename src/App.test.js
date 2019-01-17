@@ -22,57 +22,74 @@ describe('basic app test', () => {
 
   describe('component', () => {
     let component = null;
-    let btIncFontSize = null;
+    let player = null;
 
     it('rendering', () => {
       component = shallow(<App />);
-      btIncFontSize = component.find('.btIncFontSize');
+      player = component.find('.player');
+      expect(player.exists()).toBe(true);
     });
 
-    it('font size button exists', () => {
-      expect(btIncFontSize.exists()).toBe(true);
-    });
+    describe('check button list', () => {
+      const buttons = [
+        {
+          name: '.btIncFontSize',
+          inc: 'increaseFontSize',
+          dec: 'decreaseFontSize',
+          val: 'fontSize',
+        },
+        {
+          name: '.btSpeed',
+          inc: 'increaseSpeed',
+          dec: 'decreaseSpeed',
+          val: 'speed',
+        },
+      ];
 
-    it('font size button event', () => {
-      component.instance().increaseFontSize();
-      expect(component.state().fontSize).toBe(31);
+      buttons.forEach((bt) => {
+        let button = null;
 
-      component.instance().decreaseFontSize();
-      expect(component.state().fontSize).toBe(30);
-    });
-
-    describe('font size button event limitation', () => {
-      it('max', () => {
-        Array(200).fill().forEach(() => {
-          component.instance().increaseFontSize();
+        it('font size button exists', () => {
+          button = component.find(bt.name);
+          expect(button.exists()).toBe(true);
         });
-        expect(component.state().fontSize).toBeLessThan(101);
-      });
 
-      it('min', () => {
-        Array(200).fill().forEach(() => {
-          component.instance().decreaseFontSize();
+        it('font size button event', () => {
+          component.instance()[bt.inc]();
+          expect(component.state()[bt.val]).toBe(31);
+
+          component.instance()[bt.dec]();
+          expect(component.state()[bt.val]).toBe(30);
         });
-        expect(component.state().fontSize).toBeGreaterThan(0);
-      });
-    });
 
-    describe('button to player', () => {
-      let player = null;
+        describe('font size button event limitation', () => {
+          it('max', () => {
+            Array(200).fill().forEach(() => {
+              component.instance()[bt.inc]();
+            });
+            expect(component.state()[bt.val]).toBeLessThan(101);
+          });
 
-      it('player exists', () => {
-        player = component.find('.player');
-        expect(player.exists()).toBe(true);
-      });
+          it('min', () => {
+            Array(200).fill().forEach(() => {
+              component.instance()[bt.dec]();
+            });
+            expect(component.state()[bt.val]).toBeGreaterThan(0);
+          });
+        });
 
-      it('fontSize', () => {
-        expect(player.props().fontSize).toBe(component.state().fontSize);
-      });
+        describe('button to player', () => {
+          it('has proporty', () => {
+            player = component.find('.player');
+            expect(player.props()[bt.val]).toBe(component.state()[bt.val]);
+          });
 
-      it('click and fontSize', () => {
-        component.instance().decreaseFontSize();
-        player = component.find('.player');
-        expect(player.props().fontSize).toBe(component.state().fontSize);
+          it('click and fontSize', () => {
+            component.instance().decreaseFontSize();
+            player = component.find('.player');
+            expect(player.props()[bt.val]).toBe(component.state()[bt.val]);
+          });
+        });
       });
     });
   });

@@ -7,6 +7,7 @@ class App extends Component {
     super(props);
     this.state = {
       fontSize: 30,
+      speed: 30,
     };
   }
 
@@ -26,9 +27,27 @@ class App extends Component {
     );
   }
 
+  increaseSpeed = () => {
+    this.setState(
+      ({ speed }) => ({
+        speed: speed < 101 ? speed + 1 : 100,
+      }),
+    );
+  }
+
+  decreaseSpeed = () => {
+    this.setState(
+      ({ speed }) => ({
+        speed: speed > 2 ? speed - 1 : 1,
+      }),
+    );
+  }
+
   render() {
     const { increaseFontSize, decreaseFontSize } = this;
     const { fontSize } = this.state;
+    const { increaseSpeed, decreaseSpeed } = this;
+    const { speed } = this.state;
     return (
       <div className="App">
         <Player
@@ -39,12 +58,19 @@ class App extends Component {
           height="100px"
           direction="scroll-up"
           fontSize={fontSize}
+          speed={speed}
         />
         <IncButton
           name="Font Size"
           className="btIncFontSize"
           increase={increaseFontSize}
           decrease={decreaseFontSize}
+        />
+        <IncButton
+          name="Speed"
+          className="btSpeed"
+          increase={increaseSpeed}
+          decrease={decreaseSpeed}
         />
       </div>
     );
