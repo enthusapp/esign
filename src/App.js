@@ -14,7 +14,7 @@ const incButtonList = [
   {
     id: 1,
     name: 'speed',
-    defaultVal: 30,
+    defaultVal: 10,
     lowLimit: 1,
     highLimit: 100,
     reverse: true,
