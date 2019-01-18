@@ -56,27 +56,33 @@ class App extends Component {
   getIncButtunList = () => incButtonList;
 
   render() {
-    const { fontSize } = this.state;
-    const { fontSizeInc, fontSizeDec } = this;
-    const { speed } = this.state;
+    const playerProps = {
+      className: 'player',
+      text: 'Text',
+      backgroundColor: 'black',
+      color: 'white',
+      height: '100px',
+      direction: 'scroll-up',
+    };
+
+    incButtonList.forEach((bt) => {
+      const { name } = bt;
+      const { [name]: btState } = this.state;
+      playerProps[name] = btState;
+    });
+
     const IncButtonComponents = incButtonList.map(bt => (<IncButton
       name={bt.name}
       className={bt.name}
-      increase={fontSizeInc}
-      decrease={fontSizeDec}
+      increase={App.prototype[`${bt.name}Inc`]}
+      decrease={App.prototype[`${bt.name}Dec`]}
     />
     ));
+
     return (
       <div className="App">
         <Player
-          className="player"
-          text="Text"
-          backgroundColor="black"
-          color="white"
-          height="100px"
-          direction="scroll-up"
-          fontSize={fontSize}
-          speed={speed}
+          {...playerProps}
         />
         {IncButtonComponents}
       </div>
