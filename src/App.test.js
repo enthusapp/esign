@@ -46,25 +46,30 @@ describe('basic app test', () => {
           defaultVal,
           lowLimit,
           highLimit,
+          reverse,
         } = bt;
 
         button = component.find(`.${name}`);
         expect(button.exists()).toBe(true);
 
+        let expectVal = reverse ? defaultVal - 1 : defaultVal + 1;
         component.instance()[`${name}Inc`]();
-        expect(component.state()[name]).toBe(defaultVal + 1);
+        expect(component.state()[name]).toBe(expectVal);
 
+        expectVal = defaultVal;
         component.instance()[`${name}Dec`]();
-        expect(component.state()[name]).toBe(defaultVal);
+        expect(component.state()[name]).toBe(expectVal);
 
         Array(200).fill().forEach(() => {
           component.instance()[`${name}Inc`]();
         });
         expect(component.state()[name]).toBeLessThan(highLimit + 1);
+        expect(component.state()[name]).toBeGreaterThan(lowLimit - 1);
 
         Array(200).fill().forEach(() => {
           component.instance()[`${name}Dec`]();
         });
+        expect(component.state()[name]).toBeLessThan(highLimit + 1);
         expect(component.state()[name]).toBeGreaterThan(lowLimit - 1);
 
         player = component.find('.player');

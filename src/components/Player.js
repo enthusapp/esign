@@ -9,6 +9,7 @@ function Player(prop) {
     height,
     direction,
     fontSize,
+    speed,
   } = prop;
 
   return (
@@ -28,7 +29,7 @@ function Player(prop) {
         lineHeight: '100%',
         textAlign: 'center',
         fontSize: `${fontSize}px`,
-        animation: `${direction} 10s linear infinite`,
+        animation: `${direction} ${speed}s linear infinite`,
       }}
       >
         {text}

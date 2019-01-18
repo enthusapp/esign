@@ -15,6 +15,7 @@ describe('Player', () => {
         height="100px"
         direction="scroll-up"
         fontSize={30}
+        speed={10}
       />,
     );
   });
