@@ -60,13 +60,13 @@ describe('basic app test', () => {
         component.instance()[`${name}Dec`]();
         expect(component.state()[name]).toBe(expectVal);
 
-        Array(200).fill().forEach(() => {
+        Array(highLimit * 2).fill().forEach(() => {
           component.instance()[`${name}Inc`]();
         });
         expect(component.state()[name]).toBeLessThan(highLimit + 1);
         expect(component.state()[name]).toBeGreaterThan(lowLimit - 1);
 
-        Array(200).fill().forEach(() => {
+        Array(highLimit * 3).fill().forEach(() => {
           component.instance()[`${name}Dec`]();
         });
         expect(component.state()[name]).toBeLessThan(highLimit + 1);

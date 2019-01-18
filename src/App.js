@@ -21,18 +21,6 @@ const incButtonList = [
   },
 ];
 
-function increase(name, prev, highLimit) {
-  return {
-    [name]: prev < highLimit - 1 ? prev + 1 : highLimit,
-  };
-}
-
-function decrease(name, prev, lowLimit) {
-  return {
-    [name]: prev > lowLimit + 1 ? prev - 1 : lowLimit,
-  };
-}
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -50,23 +38,27 @@ class App extends Component {
 
       makeState[name] = defaultVal;
 
-      App.prototype[`${name}Inc`] = () => {
+      const increase = () => {
         const { [name]: prev } = this.state;
-        if (reverse) {
-          this.setState(decrease(name, prev, lowLimit));
-        } else {
-          this.setState(increase(name, prev, highLimit));
-        }
+        this.setState({
+          [name]: prev < highLimit - 1 ? prev + 1 : highLimit,
+        });
       };
 
-      App.prototype[`${name}Dec`] = () => {
+      const decrease = () => {
         const { [name]: prev } = this.state;
-        if (reverse) {
-          this.setState(increase(name, prev, highLimit));
-        } else {
-          this.setState(decrease(name, prev, lowLimit));
-        }
+        this.setState({
+          [name]: prev > lowLimit + 1 ? prev - 1 : lowLimit,
+        });
       };
+
+      if (reverse) {
+        App.prototype[`${name}Inc`] = decrease.bind(this);
+        App.prototype[`${name}Dec`] = increase.bind(this);
+      } else {
+        App.prototype[`${name}Inc`] = increase.bind(this);
+        App.prototype[`${name}Dec`] = decrease.bind(this);
+      }
     });
 
     this.state = makeState;
