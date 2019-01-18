@@ -4,12 +4,14 @@ import IncButton from './components/IncButton';
 
 const incButtonList = [
   {
+    id: 0,
     name: 'fontSize',
     defaultVal: 30,
     lowLimit: 1,
     highLimit: 100,
   },
   {
+    id: 1,
     name: 'speed',
     defaultVal: 30,
     lowLimit: 1,
@@ -72,6 +74,7 @@ class App extends Component {
     });
 
     const IncButtonComponents = incButtonList.map(bt => (<IncButton
+      key={bt.id}
       name={bt.name}
       className={bt.name}
       increase={App.prototype[`${bt.name}Inc`]}
