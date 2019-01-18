@@ -53,11 +53,11 @@ class App extends Component {
       };
 
       if (reverse) {
-        App.prototype[`${name}Inc`] = decrease.bind(this);
-        App.prototype[`${name}Dec`] = increase.bind(this);
+        App.prototype[`${name}Inc`] = decrease;
+        App.prototype[`${name}Dec`] = increase;
       } else {
-        App.prototype[`${name}Inc`] = increase.bind(this);
-        App.prototype[`${name}Dec`] = decrease.bind(this);
+        App.prototype[`${name}Inc`] = increase;
+        App.prototype[`${name}Dec`] = decrease;
       }
     });
 
