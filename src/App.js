@@ -2,24 +2,24 @@ import React, { Component } from 'react';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
 
+const incButtonList = [
+  {
+    name: 'fontSize',
+    defaultVal: 30,
+    lowLimit: 1,
+    highLimit: 100,
+  },
+  {
+    name: 'speed',
+    defaultVal: 30,
+    lowLimit: 1,
+    highLimit: 100,
+  },
+];
+
 class App extends Component {
   constructor(props) {
     super(props);
-
-    const incButtonList = [
-      {
-        name: 'fontSize',
-        defaultVal: 30,
-        lowLimit: 1,
-        highLimit: 100,
-      },
-      {
-        name: 'speed',
-        defaultVal: 30,
-        lowLimit: 1,
-        highLimit: 100,
-      },
-    ];
 
     const makeState = {};
 
@@ -53,43 +53,19 @@ class App extends Component {
     this.state = makeState;
   }
 
-  increaseFontSize = () => {
-    this.setState(
-      ({ fontSize }) => ({
-        fontSize: fontSize < 101 ? fontSize + 1 : 100,
-      }),
-    );
-  }
-
-  decreaseFontSize = () => {
-    this.setState(
-      ({ fontSize }) => ({
-        fontSize: fontSize > 2 ? fontSize - 1 : 1,
-      }),
-    );
-  }
-
-  increaseSpeed = () => {
-    this.setState(
-      ({ speed }) => ({
-        speed: speed < 101 ? speed + 1 : 100,
-      }),
-    );
-  }
-
-  decreaseSpeed = () => {
-    this.setState(
-      ({ speed }) => ({
-        speed: speed > 2 ? speed - 1 : 1,
-      }),
-    );
-  }
+  getIncButtunList = () => incButtonList;
 
   render() {
     const { fontSize } = this.state;
-    const { increaseSpeed, decreaseSpeed } = this;
     const { fontSizeInc, fontSizeDec } = this;
     const { speed } = this.state;
+    const IncButtonComponents = incButtonList.map(bt => (<IncButton
+      name={bt.name}
+      className={bt.name}
+      increase={fontSizeInc}
+      decrease={fontSizeDec}
+    />
+    ));
     return (
       <div className="App">
         <Player
@@ -102,18 +78,7 @@ class App extends Component {
           fontSize={fontSize}
           speed={speed}
         />
-        <IncButton
-          name="Font Size"
-          className="btIncFontSize"
-          increase={fontSizeInc}
-          decrease={fontSizeDec}
-        />
-        <IncButton
-          name="Speed"
-          className="btSpeed"
-          increase={increaseSpeed}
-          decrease={decreaseSpeed}
-        />
+        {IncButtonComponents}
       </div>
     );
   }

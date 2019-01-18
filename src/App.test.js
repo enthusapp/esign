@@ -20,78 +20,55 @@ describe('basic app test', () => {
     ReactDOM.unmountComponentAtNode(div);
   });
 
-  describe('component', () => {
-    let component = null;
-    let player = null;
+  let component = null;
+  let player = null;
 
+  describe('component', () => {
     it('rendering', () => {
       component = shallow(<App />);
       player = component.find('.player');
       expect(player.exists()).toBe(true);
     });
+  });
 
-    describe('check button list', () => {
-      const buttons = [
-        {
-          name: '.btIncFontSize',
-          inc: 'increaseFontSize',
-          dec: 'decreaseFontSize',
-          val: 'fontSize',
-        },
-        {
-          name: '.btSpeed',
-          inc: 'increaseSpeed',
-          dec: 'decreaseSpeed',
-          val: 'speed',
-        },
-      ];
-      // TODO: need refactoring as
-      // just use name, limitation
+  describe('check button list', () => {
+    let buttons = null;
+    let button = null;
 
+    it('get IncButtonList', () => {
+      buttons = component.instance().getIncButtunList();
+    });
+
+    it('test each button', () => {
       buttons.forEach((bt) => {
-        let button = null;
+        const {
+          name,
+          defaultVal,
+          lowLimit,
+          highLimit,
+        } = bt;
 
-        it('font size button exists', () => {
-          button = component.find(bt.name);
-          expect(button.exists()).toBe(true);
+        button = component.find(`.${name}`);
+        expect(button.exists()).toBe(true);
+
+        component.instance()[`${name}Inc`]();
+        expect(component.state()[name]).toBe(defaultVal + 1);
+
+        component.instance()[`${name}Dec`]();
+        expect(component.state()[name]).toBe(defaultVal);
+
+        Array(200).fill().forEach(() => {
+          component.instance()[`${name}Inc`]();
         });
+        expect(component.state()[name]).toBeLessThan(highLimit + 1);
 
-        it('font size button event', () => {
-          component.instance()[bt.inc]();
-          expect(component.state()[bt.val]).toBe(31);
-
-          component.instance()[bt.dec]();
-          expect(component.state()[bt.val]).toBe(30);
+        Array(200).fill().forEach(() => {
+          component.instance()[`${name}Dec`]();
         });
+        expect(component.state()[name]).toBeGreaterThan(lowLimit - 1);
 
-        describe('font size button event limitation', () => {
-          it('max', () => {
-            Array(200).fill().forEach(() => {
-              component.instance()[bt.inc]();
-            });
-            expect(component.state()[bt.val]).toBeLessThan(101);
-          });
-
-          it('min', () => {
-            Array(200).fill().forEach(() => {
-              component.instance()[bt.dec]();
-            });
-            expect(component.state()[bt.val]).toBeGreaterThan(0);
-          });
-        });
-
-        describe('button to player', () => {
-          it('has proporty', () => {
-            player = component.find('.player');
-            expect(player.props()[bt.val]).toBe(component.state()[bt.val]);
-          });
-
-          it('click and fontSize', () => {
-            component.instance().decreaseFontSize();
-            player = component.find('.player');
-            expect(player.props()[bt.val]).toBe(component.state()[bt.val]);
-          });
-        });
+        player = component.find('.player');
+        expect(player.props()[name]).toBe(component.state()[name]);
       });
     });
   });
