@@ -64,7 +64,7 @@ class App extends Component {
     this.state = makeState;
   }
 
-  getIncButtunList = () => incButtonList;
+  getIncButtunList = () => incButtonList; // TODO: refactoring
 
   render() {
     const playerProps = {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class Player extends Component {
+class Mover extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,7 +67,7 @@ class Player extends Component {
   }
 }
 
-Player.propTypes = {
+Mover.propTypes = {
   text: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
@@ -75,4 +75,4 @@ Player.propTypes = {
   fontSize: PropTypes.number.isRequired,
 };
 
-export default Player;
+export default Mover;

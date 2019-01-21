@@ -5,6 +5,7 @@ import Player from './Player';
 describe('Player', () => {
   let component = null;
   let style = null;
+  const targetSpeed = 2000;
 
   it('renders correctly', () => {
     component = shallow(
@@ -15,7 +16,7 @@ describe('Player', () => {
         height="100px"
         direction="scroll-up"
         fontSize={30}
-        speed={10}
+        speed={targetSpeed}
       />,
     );
   });
@@ -48,7 +49,6 @@ describe('Player', () => {
       expect(style.lineHeight).toEqual('100%');
       expect(style.textAlign).toEqual('center');
       expect(style.fontSize).toEqual('30px');
-      expect(style.animation).toEqual('scroll-up 10s linear infinite');
     });
   });
 });
