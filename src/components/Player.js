@@ -11,6 +11,16 @@ class Player extends Component {
   }
 
   componentDidMount() {
+    this.setAnimate();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
+      this.setAnimate();
+    }
+  }
+
+  setAnimate() {
     const {
       speed,
     } = this.props;
@@ -24,27 +34,6 @@ class Player extends Component {
       duration: speed * 1000,
       iterations: Infinity,
     });
-  }
-
-  componentDidUpdate(prevProps) {
-    const {
-      speed,
-    } = this.props;
-    const {
-      prevSpeed,
-    } = prevProps;
-
-    if (speed !== prevSpeed) {
-      this.textP.current.animate([
-        { transform: 'translateY(100%)' },
-        { transform: 'translateY(30%)', offset: 0.3 },
-        { transform: 'translateY(30%)', offset: 0.6 },
-        { transform: 'translateY(-100%)' },
-      ], {
-        duration: speed * 1000,
-        iterations: Infinity,
-      });
-    }
   }
 
   render() {
