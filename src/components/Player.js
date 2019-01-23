@@ -20,40 +20,10 @@ class Player extends Component {
   setAnimate() {
     const {
       speed,
-      height,
-      fontSize,
-      direction,
+      animation,
     } = this.props;
 
-    const heightMiddle = Math.trunc((height - fontSize) / 2);
-    const animations = {
-      up: [
-        { transform: `translateY(${height}rem)` },
-        { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translateY(${heightMiddle}rem)`, offset: 0.6 },
-        { transform: `translateY(-${height}rem)` },
-      ],
-      down: [
-        { transform: `translateY(-${height}rem)` },
-        { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translateY(${heightMiddle}rem)`, offset: 0.6 },
-        { transform: `translateY(${height}rem)` },
-      ],
-      right: [
-        { transform: `translate(-100%, ${heightMiddle}rem)` },
-        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.6 },
-        { transform: `translate(100%, ${heightMiddle}rem)` },
-      ],
-      left: [
-        { transform: `translate(100%, ${heightMiddle}rem)` },
-        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.6 },
-        { transform: `translate(-100%, ${heightMiddle}rem)` },
-      ],
-    };
-
-    this.textP.current.animate(animations[direction], {
+    this.textP.current.animate(animation, {
       duration: speed * 1000,
       iterations: Infinity,
     });
@@ -105,6 +75,13 @@ Player.propTypes = {
   direction: PropTypes.string.isRequired,
   fontSize: PropTypes.number.isRequired,
   speed: PropTypes.number.isRequired,
+  animation: PropTypes.arrayOf(PropTypes.object),
 };
 
+Player.defaultProps = {
+  animation: [
+    { transform: 'translateY(100%)' },
+    { transform: 'translateY(-100%)' },
+  ],
+};
 export default Player;

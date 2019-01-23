@@ -21,6 +21,8 @@ const incButtonList = [
   },
 ];
 
+const playerHeight = 10;
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -66,14 +68,47 @@ class App extends Component {
 
   getIncButtunList = () => incButtonList; // TODO: refactoring
 
+  getAnimationList = () => {
+    const fontSize = incButtonList[0].defaultVal;
+    const heightMiddle = Math.trunc((playerHeight - fontSize) / 2);
+
+    return {
+      up: [
+        { transform: `translateY(${playerHeight}rem)` },
+        { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
+        { transform: `translateY(${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translateY(-${playerHeight}rem)` },
+      ],
+      down: [
+        { transform: `translateY(-${playerHeight}rem)` },
+        { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
+        { transform: `translateY(${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translateY(${playerHeight}rem)` },
+      ],
+      right: [
+        { transform: `translate(-100%, ${heightMiddle}rem)`, offset: 0 },
+        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
+        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translate(100%, ${heightMiddle}rem)`, offset: 1 },
+      ],
+      left: [
+        { transform: `translate(100%, ${heightMiddle}rem)` },
+        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
+        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translate(-100%, ${heightMiddle}rem)` },
+      ],
+    };
+  }
+
   render() {
     const playerProps = {
       className: 'player',
       text: 'Text',
       backgroundColor: 'black',
       color: 'white',
-      height: '10',
+      height: String(playerHeight),
       direction: 'left',
+      animation: this.getAnimationList().right,
     };
 
     incButtonList.forEach((bt) => {
