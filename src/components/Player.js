@@ -4,9 +4,6 @@ import PropTypes from 'prop-types';
 class Player extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      transform: 'translateY(100%)',
-    };
     this.textP = React.createRef();
   }
 
@@ -28,10 +25,22 @@ class Player extends Component {
     } = this.props;
 
     this.textP.current.animate([
-      { transform: `translateY(${height}rem)` },
-      { transform: `translateY(${Math.trunc((height - fontSize) / 2)}rem)`, offset: 0.3 },
-      { transform: `translateY(${Math.trunc((height - fontSize) / 2)}rem)`, offset: 0.6 },
-      { transform: `translateY(-${height}rem)` },
+      // { transform: `translateY(${height}rem)` },
+      // { transform: `translateY(${Math.trunc((height - fontSize) / 2)}rem)`, offset: 0.3 },
+      // { transform: `translateY(${Math.trunc((height - fontSize) / 2)}rem)`, offset: 0.6 },
+      // { transform: `translateY(-${height}rem)` },
+      // { transform: 'translate(10rem, 10rem)' },
+      // { transform: 'translate(0rem, 10rem)', offset: 0.3 },
+      // { transform: 'translate(0rem, 10rem)', offset: 0.6 },
+      // { transform: 'translate(-10rem, 10rem)' },
+      // { transform: `translateX(${10}rem)` },
+      // { transform: `translateX(${0}rem)`, offset: 0.3 },
+      // { transform: `translateX(${0}rem)`, offset: 0.6 },
+      // { transform: `translateX(-${10}rem)` },
+      { transform: `translate(100%, 2rem)` },
+      { transform: `translate(0%, 2rem)`, offset: 0.3 },
+      { transform: `translate(0%, 2rem)`, offset: 0.6 },
+      { transform: `translate(-100%, 2rem)` },
     ], {
       duration: speed * 1000,
       iterations: Infinity,
@@ -46,10 +55,6 @@ class Player extends Component {
       height,
       fontSize,
     } = this.props;
-
-    const {
-      transform,
-    } = this.state;
 
     return (
       <div
@@ -71,7 +76,6 @@ class Player extends Component {
             lineHeight: '100%',
             textAlign: 'center',
             fontSize: `${fontSize}rem`,
-            transform: `${transform}`,
           }}
         >
           {text}
