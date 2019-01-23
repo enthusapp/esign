@@ -11,15 +11,40 @@ class Player extends Component {
   }
 
   componentDidMount() {
+    const {
+      speed,
+    } = this.props;
+
     this.textP.current.animate([
       { transform: 'translateY(100%)' },
       { transform: 'translateY(30%)', offset: 0.3 },
       { transform: 'translateY(30%)', offset: 0.6 },
       { transform: 'translateY(-100%)' },
     ], {
-      duration: 10000,
+      duration: speed * 1000,
       iterations: Infinity,
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      speed,
+    } = this.props;
+    const {
+      prevSpeed,
+    } = prevProps;
+
+    if (speed !== prevSpeed) {
+      this.textP.current.animate([
+        { transform: 'translateY(100%)' },
+        { transform: 'translateY(30%)', offset: 0.3 },
+        { transform: 'translateY(30%)', offset: 0.6 },
+        { transform: 'translateY(-100%)' },
+      ], {
+        duration: speed * 1000,
+        iterations: Infinity,
+      });
+    }
   }
 
   render() {
@@ -70,6 +95,7 @@ Player.propTypes = {
   color: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
   fontSize: PropTypes.number.isRequired,
+  speed: PropTypes.number.isRequired,
 };
 
 export default Player;
