@@ -6,7 +6,7 @@ const incButtonList = [
   {
     id: 0,
     name: 'fontSize',
-    defaultVal: 30,
+    defaultVal: 5,
     lowLimit: 1,
     highLimit: 100,
     reverse: false,
@@ -72,7 +72,7 @@ class App extends Component {
       text: 'Text',
       backgroundColor: 'black',
       color: 'white',
-      height: '100px',
+      height: '10rem',
       direction: 'scroll-up',
     };
 

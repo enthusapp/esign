@@ -13,8 +13,8 @@ class Player extends Component {
   componentDidMount() {
     this.textP.current.animate([
       { transform: 'translateY(100%)' },
-      { transform: 'translateY(50%)', offset: 0.3 },
-      { transform: 'translateY(50%)', offset: 0.6 },
+      { transform: 'translateY(30%)', offset: 0.3 },
+      { transform: 'translateY(30%)', offset: 0.6 },
       { transform: 'translateY(-100%)' },
     ], {
       duration: 10000,
@@ -53,7 +53,7 @@ class Player extends Component {
             margin: '0',
             lineHeight: '100%',
             textAlign: 'center',
-            fontSize: `${fontSize}px`,
+            fontSize: `${fontSize}rem`,
             transform: `${transform}`,
           }}
         >

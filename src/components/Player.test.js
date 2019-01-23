@@ -48,7 +48,7 @@ describe('Player', () => {
       expect(style.margin).toEqual('0');
       expect(style.lineHeight).toEqual('100%');
       expect(style.textAlign).toEqual('center');
-      expect(style.fontSize).toEqual('30px');
+      expect(style.fontSize).toEqual('30rem');
     });
   });
 });
