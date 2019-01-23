@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import Player from './Player';
 
 describe('Player', () => {
@@ -8,7 +8,7 @@ describe('Player', () => {
   const targetSpeed = 2000;
 
   it('renders correctly', () => {
-    component = shallow(
+    component = mount(
       <Player
         text="Text"
         backgroundColor="black"
@@ -21,8 +21,8 @@ describe('Player', () => {
     );
   });
 
-  it('backgroundColor style correctly', () => {
-    ({ style } = component.get(0).props);
+  it('style correctly', () => {
+    ({ style } = component.find('div').props());
 
     expect(style.backgroundColor).toEqual('black');
     expect(style.color).toEqual('white');

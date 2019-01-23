@@ -11,18 +11,15 @@ class Player extends Component {
   }
 
   componentDidMount() {
-    // Don't know how to test web-animation-api in jest
-    if (process.env.NODE_ENV !== 'test') {
-      this.textP.current.animate([
-        { transform: 'translateY(100%)' },
-        { transform: 'translateY(50%)', offset: 0.3 },
-        { transform: 'translateY(50%)', offset: 0.6 },
-        { transform: 'translateY(-100%)' },
-      ], {
-        duration: 10000,
-        iterations: Infinity,
-      });
-    }
+    this.textP.current.animate([
+      { transform: 'translateY(100%)' },
+      { transform: 'translateY(50%)', offset: 0.3 },
+      { transform: 'translateY(50%)', offset: 0.6 },
+      { transform: 'translateY(-100%)' },
+    ], {
+      duration: 10000,
+      iterations: Infinity,
+    });
   }
 
   render() {
