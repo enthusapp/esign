@@ -72,7 +72,7 @@ class App extends Component {
       text: 'Text',
       backgroundColor: 'black',
       color: 'white',
-      height: '10rem',
+      height: '10',
       direction: 'scroll-up',
     };
 

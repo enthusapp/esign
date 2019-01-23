@@ -13,7 +13,7 @@ describe('Player', () => {
         text="Text"
         backgroundColor="black"
         color="white"
-        height="100px"
+        height="100"
         direction="scroll-up"
         fontSize={30}
         speed={targetSpeed}
@@ -28,7 +28,7 @@ describe('Player', () => {
     expect(style.color).toEqual('white');
     expect(style.overflow).toEqual('hidden');
     expect(style.position).toEqual('relative');
-    expect(style.height).toEqual('100px');
+    expect(style.height).toEqual('100rem');
   });
 
   let tcomp = null;

@@ -23,13 +23,15 @@ class Player extends Component {
   setAnimate() {
     const {
       speed,
+      height,
+      fontSize,
     } = this.props;
 
     this.textP.current.animate([
-      { transform: 'translateY(100%)' },
-      { transform: 'translateY(30%)', offset: 0.3 },
-      { transform: 'translateY(30%)', offset: 0.6 },
-      { transform: 'translateY(-100%)' },
+      { transform: `translateY(${height}rem)` },
+      { transform: `translateY(${Math.trunc((height - fontSize) / 2)}rem)`, offset: 0.3 },
+      { transform: `translateY(${Math.trunc((height - fontSize) / 2)}rem)`, offset: 0.6 },
+      { transform: `translateY(-${height}rem)` },
     ], {
       duration: speed * 1000,
       iterations: Infinity,
@@ -50,13 +52,14 @@ class Player extends Component {
     } = this.state;
 
     return (
-      <div style={{
-        backgroundColor,
-        color,
-        overflow: 'hidden',
-        position: 'relative',
-        height,
-      }}
+      <div
+        style={{
+          backgroundColor,
+          color,
+          overflow: 'hidden',
+          position: 'relative',
+          height: `${height}rem`,
+        }}
       >
         <p
           ref={this.textP}
