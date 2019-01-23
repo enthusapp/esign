@@ -73,7 +73,7 @@ class App extends Component {
       backgroundColor: 'black',
       color: 'white',
       height: '10',
-      direction: 'scroll-up',
+      direction: 'left',
     };
 
     incButtonList.forEach((bt) => {

@@ -22,26 +22,38 @@ class Player extends Component {
       speed,
       height,
       fontSize,
+      direction,
     } = this.props;
 
-    this.textP.current.animate([
-      // { transform: `translateY(${height}rem)` },
-      // { transform: `translateY(${Math.trunc((height - fontSize) / 2)}rem)`, offset: 0.3 },
-      // { transform: `translateY(${Math.trunc((height - fontSize) / 2)}rem)`, offset: 0.6 },
-      // { transform: `translateY(-${height}rem)` },
-      // { transform: 'translate(10rem, 10rem)' },
-      // { transform: 'translate(0rem, 10rem)', offset: 0.3 },
-      // { transform: 'translate(0rem, 10rem)', offset: 0.6 },
-      // { transform: 'translate(-10rem, 10rem)' },
-      // { transform: `translateX(${10}rem)` },
-      // { transform: `translateX(${0}rem)`, offset: 0.3 },
-      // { transform: `translateX(${0}rem)`, offset: 0.6 },
-      // { transform: `translateX(-${10}rem)` },
-      { transform: `translate(100%, 2rem)` },
-      { transform: `translate(0%, 2rem)`, offset: 0.3 },
-      { transform: `translate(0%, 2rem)`, offset: 0.6 },
-      { transform: `translate(-100%, 2rem)` },
-    ], {
+    const heightMiddle = Math.trunc((height - fontSize) / 2);
+    const animations = {
+      up: [
+        { transform: `translateY(${height}rem)` },
+        { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
+        { transform: `translateY(${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translateY(-${height}rem)` },
+      ],
+      down: [
+        { transform: `translateY(-${height}rem)` },
+        { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
+        { transform: `translateY(${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translateY(${height}rem)` },
+      ],
+      right: [
+        { transform: `translate(-100%, ${heightMiddle}rem)` },
+        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
+        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translate(100%, ${heightMiddle}rem)` },
+      ],
+      left: [
+        { transform: `translate(100%, ${heightMiddle}rem)` },
+        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
+        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translate(-100%, ${heightMiddle}rem)` },
+      ],
+    };
+
+    this.textP.current.animate(animations[direction], {
       duration: speed * 1000,
       iterations: Infinity,
     });
@@ -90,6 +102,7 @@ Player.propTypes = {
   backgroundColor: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
+  direction: PropTypes.string.isRequired,
   fontSize: PropTypes.number.isRequired,
   speed: PropTypes.number.isRequired,
 };
