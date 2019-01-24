@@ -27,27 +27,27 @@ class App extends Component {
       makeState[name] = defaultVal;
 
       const increase = () => {
-        const { [name]: prev } = this.state;
+        const { [name]: prev, direction } = this.state;
         const newValue = prev < highLimit - 1 ? prev + 1 : highLimit;
         this.setState({
           [name]: newValue,
         });
         if (name === 'fontSize') {
           this.setState({
-            currentAnimation: this.getAnimationList(newValue).up,
+            currentAnimation: this.getAnimationList(newValue)[direction],
           });
         }
       };
 
       const decrease = () => {
-        const { [name]: prev } = this.state;
+        const { [name]: prev, direction } = this.state;
         const newValue = prev > lowLimit + 1 ? prev - 1 : lowLimit;
         this.setState({
           [name]: newValue,
         });
         if (name === 'fontSize') {
           this.setState({
-            currentAnimation: this.getAnimationList(newValue).up,
+            currentAnimation: this.getAnimationList(newValue)[direction],
           });
         }
       };
@@ -117,7 +117,12 @@ class App extends Component {
   }
 
   directionChange = (event) => {
+    const { fontSize } = this.state;
+
     this.setState({ direction: event.target.value });
+    this.setState({
+      currentAnimation: this.getAnimationList(fontSize)[event.target.value],
+    });
   };
 
   render() {
