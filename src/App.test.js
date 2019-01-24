@@ -105,4 +105,41 @@ describe('basic app test', () => {
       );
     });
   });
+
+  describe('direction and animation change', () => {
+    let keyList = null;
+    let direction = null;
+
+    beforeEach(() => {
+      keyList = Object.keys(component.instance().getAnimationList());
+      ({ direction } = component.state());
+    });
+
+    it('direction keys', () => {
+      expect(keyList.indexOf(direction)).toBeGreaterThan(-1);
+    });
+
+    it('direction change', () => {
+      const value = keyList[keyList.length - 1];
+      component.instance().directionChange({ target: { value } });
+
+      ({ direction } = component.state());
+      expect(keyList.indexOf(direction)).toBeGreaterThan(-1);
+    });
+
+    it('direction change', () => {
+      const value = keyList[keyList.length - 1];
+      const { currentAnimation } = component.state();
+
+      component.instance().directionChange({ target: { value } });
+
+      const { currentAnimation: newAni } = component.state();
+
+      if (keyList.length !== 1) {
+        expect(currentAnimation).not.toBe(newAni);
+      } else {
+        expect(currentAnimation).toBe(newAni);
+      }
+    });
+  });
 });
