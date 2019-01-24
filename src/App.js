@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
+import DirectionButton from './components/DirectionButton';
 
 const DEFAULT_PLAYER_HEIGHT = 10;
 const DEFAULT_FONT_SIZE = 5;
@@ -11,6 +12,7 @@ class App extends Component {
 
     const makeState = {
       currentAnimation: this.getAnimationList().up,
+      direction: 'up',
     };
 
     this.getIncButtunList().forEach((bt) => {
@@ -114,8 +116,12 @@ class App extends Component {
     };
   }
 
+  directionChange = (event) => {
+    this.setState({ direction: event.target.value });
+  };
+
   render() {
-    const { currentAnimation } = this.state;
+    const { currentAnimation, direction } = this.state;
     const playerProps = {
       className: 'player',
       text: 'Text',
@@ -145,6 +151,12 @@ class App extends Component {
       <div className="App">
         <Player
           {...playerProps}
+        />
+        <DirectionButton
+          name=""
+          keys={['up', 'down', 'right', 'left']}
+          direction={direction}
+          handleChange={this.directionChange}
         />
         {IncButtonComponents}
       </div>
