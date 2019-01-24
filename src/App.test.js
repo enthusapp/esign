@@ -142,4 +142,30 @@ describe('basic app test', () => {
       }
     });
   });
+
+  describe('text input', () => {
+    let textInput = null;
+    let textState = null;
+
+    beforeEach(() => {
+      textInput = component.find('.textInput');
+      ({ textState } = component.state());
+    });
+
+    it('exists', () => {
+      expect(textInput.exists()).toBe(true);
+      expect(textState).not.toBe(undefined);
+    });
+
+    it('onChange', () => {
+      const newText = `${textState}test`;
+
+      component.instance().textChange({ target: { value: newText } });
+
+      const { textState: newTextState } = component.state();
+
+      expect(textState).not.toBe(newTextState);
+      expect(newTextState).toBe(newText);
+    });
+  });
 });

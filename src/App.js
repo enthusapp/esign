@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import TextField from '@material-ui/core/TextField';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
 import DirectionButton from './components/DirectionButton';
@@ -13,6 +14,7 @@ class App extends Component {
     const makeState = {
       currentAnimation: this.getAnimationList().up,
       direction: 'up',
+      textState: 'Text',
     };
 
     this.getIncButtunList().forEach((bt) => {
@@ -125,11 +127,15 @@ class App extends Component {
     });
   };
 
+  textChange = (event) => {
+    this.setState({ textState: event.target.value });
+  };
+
   render() {
-    const { currentAnimation, direction } = this.state;
+    const { currentAnimation, direction, textState } = this.state;
     const playerProps = {
       className: 'player',
-      text: 'Text',
+      text: textState,
       backgroundColor: 'black',
       color: 'white',
       height: String(DEFAULT_PLAYER_HEIGHT),
@@ -156,6 +162,13 @@ class App extends Component {
       <div className="App">
         <Player
           {...playerProps}
+        />
+        <TextField
+          label="Text Input"
+          className="textInput"
+          value={textState}
+          onChange={this.textChange}
+          margin="normal"
         />
         <DirectionButton
           name="Direction"
