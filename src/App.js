@@ -168,6 +168,7 @@ class App extends Component {
           value={textState}
           onChange={this.textChange}
           margin="normal"
+          fullWidth
         />
         <DirectionButton
           name="Direction"
