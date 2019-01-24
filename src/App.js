@@ -133,15 +133,7 @@ class App extends Component {
 
   render() {
     const { currentAnimation, direction, textState } = this.state;
-    const playerProps = {
-      className: 'player',
-      text: textState,
-      backgroundColor: 'black',
-      color: 'white',
-      height: String(DEFAULT_PLAYER_HEIGHT),
-      direction: 'left',
-      animation: currentAnimation,
-    };
+    const playerProps = { };
 
     this.getIncButtunList().forEach((bt) => {
       const { name } = bt;
@@ -161,6 +153,13 @@ class App extends Component {
     return (
       <div className="App">
         <Player
+          className="player"
+          text={textState}
+          backgroundColor="black"
+          color="white"
+          height={String(DEFAULT_PLAYER_HEIGHT)}
+          direction="left"
+          animation={currentAnimation}
           {...playerProps}
         />
         <TextField
