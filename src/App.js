@@ -158,8 +158,8 @@ class App extends Component {
           {...playerProps}
         />
         <DirectionButton
-          name=""
-          keys={['up', 'down', 'right', 'left']}
+          name="Direction"
+          keys={Object.keys(this.getAnimationList())}
           direction={direction}
           handleChange={this.directionChange}
         />

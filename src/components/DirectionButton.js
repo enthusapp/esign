@@ -21,8 +21,6 @@ function DirectionButton(prop) {
       <FormControl component="fieldset">
         <FormLabel component="legend" className="name">{name}</FormLabel>
         <RadioGroup
-          aria-label="Gender"
-          name="gender1"
           value={direction}
           onChange={handleChange}
         >
