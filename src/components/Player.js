@@ -72,7 +72,6 @@ Player.propTypes = {
   backgroundColor: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
-  direction: PropTypes.string.isRequired,
   fontSize: PropTypes.number.isRequired,
   speed: PropTypes.number.isRequired,
   animation: PropTypes.arrayOf(PropTypes.object),
@@ -84,4 +83,5 @@ Player.defaultProps = {
     { transform: 'translateY(-100%)' },
   ],
 };
+
 export default Player;

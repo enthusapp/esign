@@ -2,25 +2,6 @@ import React, { Component } from 'react';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
 
-const incButtonList = [
-  {
-    id: 0,
-    name: 'fontSize',
-    defaultVal: 5,
-    lowLimit: 1,
-    highLimit: 100,
-    reverse: false,
-  },
-  {
-    id: 1,
-    name: 'speed',
-    defaultVal: 10,
-    lowLimit: 1,
-    highLimit: 100,
-    reverse: true,
-  },
-];
-
 const playerHeight = 10;
 
 class App extends Component {
@@ -29,7 +10,7 @@ class App extends Component {
 
     const makeState = {};
 
-    incButtonList.forEach((bt) => {
+    this.getIncButtunList().forEach((bt) => {
       const {
         name,
         defaultVal,
@@ -66,10 +47,27 @@ class App extends Component {
     this.state = makeState;
   }
 
-  getIncButtunList = () => incButtonList; // TODO: refactoring
+  getIncButtunList = () => [
+    {
+      id: 0,
+      name: 'fontSize',
+      defaultVal: 5,
+      lowLimit: 1,
+      highLimit: 100,
+      reverse: false,
+    },
+    {
+      id: 1,
+      name: 'speed',
+      defaultVal: 10,
+      lowLimit: 1,
+      highLimit: 100,
+      reverse: true,
+    },
+  ];
 
   getAnimationList = () => {
-    const fontSize = incButtonList[0].defaultVal;
+    const fontSize = this.getIncButtunList()[0].defaultVal;
     const heightMiddle = Math.trunc((playerHeight - fontSize) / 2);
 
     return {
@@ -86,10 +84,10 @@ class App extends Component {
         { transform: `translateY(${playerHeight}rem)` },
       ],
       right: [
-        { transform: `translate(-100%, ${heightMiddle}rem)`, offset: 0 },
+        { transform: `translate(-100%, ${heightMiddle}rem)` },
         { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
         { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.6 },
-        { transform: `translate(100%, ${heightMiddle}rem)`, offset: 1 },
+        { transform: `translate(100%, ${heightMiddle}rem)` },
       ],
       left: [
         { transform: `translate(100%, ${heightMiddle}rem)` },
@@ -111,13 +109,13 @@ class App extends Component {
       animation: this.getAnimationList().right,
     };
 
-    incButtonList.forEach((bt) => {
+    this.getIncButtunList().forEach((bt) => {
       const { name } = bt;
       const { [name]: btState } = this.state;
       playerProps[name] = btState;
     });
 
-    const IncButtonComponents = incButtonList.map(bt => (<IncButton
+    const IncButtonComponents = this.getIncButtunList().map(bt => (<IncButton
       key={bt.id}
       name={bt.name}
       className={bt.name}
