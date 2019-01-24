@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
 
-const playerHeight = 10;
+const DEFAULT_PLAYER_HEIGHT = 10;
+const DEFAULT_FONT_SIZE = 5;
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-    const makeState = {};
+    const makeState = {
+      currentAnimation: this.getAnimationList().up,
+    };
 
     this.getIncButtunList().forEach((bt) => {
       const {
@@ -23,16 +26,28 @@ class App extends Component {
 
       const increase = () => {
         const { [name]: prev } = this.state;
+        const newValue = prev < highLimit - 1 ? prev + 1 : highLimit;
         this.setState({
-          [name]: prev < highLimit - 1 ? prev + 1 : highLimit,
+          [name]: newValue,
         });
+        if (name === 'fontSize') {
+          this.setState({
+            currentAnimation: this.getAnimationList(newValue).up,
+          });
+        }
       };
 
       const decrease = () => {
         const { [name]: prev } = this.state;
+        const newValue = prev > lowLimit + 1 ? prev - 1 : lowLimit;
         this.setState({
-          [name]: prev > lowLimit + 1 ? prev - 1 : lowLimit,
+          [name]: newValue,
         });
+        if (name === 'fontSize') {
+          this.setState({
+            currentAnimation: this.getAnimationList(newValue).up,
+          });
+        }
       };
 
       if (reverse) {
@@ -47,11 +62,13 @@ class App extends Component {
     this.state = makeState;
   }
 
+  getDefaultPlayerHeight = () => DEFAULT_PLAYER_HEIGHT;
+
   getIncButtunList = () => [
     {
       id: 0,
       name: 'fontSize',
-      defaultVal: 5,
+      defaultVal: DEFAULT_FONT_SIZE,
       lowLimit: 1,
       highLimit: 100,
       reverse: false,
@@ -66,22 +83,21 @@ class App extends Component {
     },
   ];
 
-  getAnimationList = () => {
-    const fontSize = this.getIncButtunList()[0].defaultVal;
-    const heightMiddle = Math.trunc((playerHeight - fontSize) / 2);
+  getAnimationList = (fontSize = DEFAULT_FONT_SIZE) => {
+    const heightMiddle = (DEFAULT_PLAYER_HEIGHT - fontSize) / 2;
 
     return {
       up: [
-        { transform: `translateY(${playerHeight}rem)` },
+        { transform: `translateY(${DEFAULT_PLAYER_HEIGHT}rem)` },
         { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
         { transform: `translateY(${heightMiddle}rem)`, offset: 0.6 },
-        { transform: `translateY(-${playerHeight}rem)` },
+        { transform: `translateY(-${DEFAULT_PLAYER_HEIGHT}rem)` },
       ],
       down: [
-        { transform: `translateY(-${playerHeight}rem)` },
+        { transform: `translateY(-${DEFAULT_PLAYER_HEIGHT}rem)` },
         { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
         { transform: `translateY(${heightMiddle}rem)`, offset: 0.6 },
-        { transform: `translateY(${playerHeight}rem)` },
+        { transform: `translateY(${DEFAULT_PLAYER_HEIGHT}rem)` },
       ],
       right: [
         { transform: `translate(-100%, ${heightMiddle}rem)` },
@@ -99,14 +115,15 @@ class App extends Component {
   }
 
   render() {
+    const { currentAnimation } = this.state;
     const playerProps = {
       className: 'player',
       text: 'Text',
       backgroundColor: 'black',
       color: 'white',
-      height: String(playerHeight),
+      height: String(DEFAULT_PLAYER_HEIGHT),
       direction: 'left',
-      animation: this.getAnimationList().right,
+      animation: currentAnimation,
     };
 
     this.getIncButtunList().forEach((bt) => {
