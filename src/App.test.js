@@ -200,7 +200,7 @@ describe('basic app test', () => {
     });
   });
 
-  describe('player mode', () => {
+  describe('player url', () => {
     it('1', () => {
       expect(component.instance().isPlayerMode()).toBeFalsy();
       window.history.pushState({}, 'Test Title', '/test.html?player=1');
@@ -230,6 +230,16 @@ describe('basic app test', () => {
       window.history.pushState({}, 'Test Title', '/test.html');
       component = shallow(<App />);
       expect(component.instance().isPlayerMode()).toBeFalsy();
+    });
+
+    it('remove input', () => {
+      window.history.pushState({}, 'Test Title', '/test.html?player=1');
+      component = shallow(<App />);
+      expect(component.find('.colorInput').exists()).toBe(false);
+      expect(component.find('.textInput').exists()).toBe(false);
+      expect(component.find('.directionInput').exists()).toBe(false);
+      expect(component.find('.fontSize').exists()).toBe(false);
+      expect(component.find('.speed').exists()).toBe(false);
     });
   });
 });

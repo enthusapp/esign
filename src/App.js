@@ -172,6 +172,7 @@ class App extends Component {
     />
     ));
 
+
     return (
       <div className="App">
         <Player
@@ -184,25 +185,28 @@ class App extends Component {
           animation={currentAnimation}
           {...playerProps}
         />
-        <SwatchesPicker
-          className="colorInput"
-          onChangeComplete={this.colorChange}
-        />
-        <TextField
-          label="Text Input"
-          className="textInput"
-          value={textState}
-          onChange={this.textChange}
-          margin="normal"
-          fullWidth
-        />
-        <DirectionButton
-          name="Direction"
-          keys={Object.keys(this.getAnimationList())}
-          direction={direction}
-          handleChange={this.directionChange}
-        />
-        {IncButtonComponents}
+        {this.isPlayerMode() ? (<div />) : (
+          <div>
+            <SwatchesPicker
+              className="colorInput"
+              onChangeComplete={this.colorChange}
+            />
+            <TextField
+              label="Text Input"
+              className="textInput"
+              value={textState}
+              onChange={this.textChange}
+              margin="normal"
+              fullWidth
+            />
+            <DirectionButton
+              name="Direction"
+              keys={Object.keys(this.getAnimationList())}
+              direction={direction}
+              handleChange={this.directionChange}
+            />
+            {IncButtonComponents}
+          </div>)}
       </div>
     );
   }
