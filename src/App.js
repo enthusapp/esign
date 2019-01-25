@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CirclePicker } from 'react-color';
+import { SwatchesPicker } from 'react-color';
 import TextField from '@material-ui/core/TextField';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
@@ -173,7 +173,7 @@ class App extends Component {
           animation={currentAnimation}
           {...playerProps}
         />
-        <CirclePicker
+        <SwatchesPicker
           className="colorInput"
           onChangeComplete={this.colorChange}
         />
