@@ -168,4 +168,34 @@ describe('basic app test', () => {
       expect(newTextState).toBe(newText);
     });
   });
+
+  describe('color input', () => {
+    let colorInput = null;
+    let colorState = null;
+
+    beforeEach(() => {
+      colorInput = component.find('.colorInput');
+      ({ colorState } = component.state());
+    });
+
+    it('exists', () => {
+      expect(colorInput.exists()).toBe(true);
+      expect(colorState).not.toBe(undefined);
+    });
+
+    it('onChange', () => {
+      let newColor = { hex: '#000000' };
+
+      component.instance().colorChange(newColor);
+      ({ colorState } = component.state());
+      expect(colorState).toBe(newColor.hex);
+
+      newColor = { hex: '#00FF00' };
+      component.instance().colorChange(newColor);
+
+      const { colorState: newColorState } = component.state();
+      expect(colorState).not.toBe(newColorState);
+      expect(newColorState).toBe(newColor.hex);
+    });
+  });
 });

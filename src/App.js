@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { CirclePicker } from 'react-color';
 import TextField from '@material-ui/core/TextField';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
@@ -15,6 +16,7 @@ class App extends Component {
       currentAnimation: this.getAnimationList().up,
       direction: 'up',
       textState: 'Text',
+      colorState: '#FFFFFF',
     };
 
     this.getIncButtunList().forEach((bt) => {
@@ -131,8 +133,17 @@ class App extends Component {
     this.setState({ textState: event.target.value });
   };
 
+  colorChange = (color) => {
+    this.setState({ colorState: color.hex });
+  };
+
   render() {
-    const { currentAnimation, direction, textState } = this.state;
+    const {
+      currentAnimation,
+      direction,
+      textState,
+      colorState,
+    } = this.state;
     const playerProps = { };
 
     this.getIncButtunList().forEach((bt) => {
@@ -156,11 +167,15 @@ class App extends Component {
           className="player"
           text={textState}
           backgroundColor="black"
-          color="white"
+          color={colorState}
           height={String(DEFAULT_PLAYER_HEIGHT)}
           direction="left"
           animation={currentAnimation}
           {...playerProps}
+        />
+        <CirclePicker
+          className="colorInput"
+          onChangeComplete={this.colorChange}
         />
         <TextField
           label="Text Input"
