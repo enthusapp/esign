@@ -200,6 +200,16 @@ describe('basic app test', () => {
     });
   });
 
+  describe('download', () => {
+    it('exists', () => {
+      expect(component.find('.download').exists()).toBe(true);
+    });
+    it('click', () => {
+      URL.createObjectURL = () => {};
+      component.find('.download').simulate('click');
+    });
+  });
+
   describe('player url', () => {
     it('1', () => {
       expect(component.instance().isPlayerMode()).toBeFalsy();

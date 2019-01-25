@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { SwatchesPicker } from 'react-color';
+import { saveAs } from 'file-saver';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
 import DirectionButton from './components/DirectionButton';
@@ -10,6 +12,11 @@ const DEFAULT_FONT_SIZE = 5;
 
 function paramIsTruthy(param) {
   return [1, '1', 'true', 'True'].indexOf(param) > -1;
+}
+
+function download(data, filename) {
+  const file = new Blob([data], { type: 'text/plain;charset=utf-8' });
+  saveAs(file, filename);
 }
 
 class App extends Component {
@@ -145,6 +152,11 @@ class App extends Component {
     this.setState({ colorState: color.hex });
   };
 
+  downloadJSON = () => {
+    const data = JSON.stringify({ text: 'work' }, null, 4);
+    download(data, 'newText.json');
+  }
+
   render() {
     const {
       currentAnimation,
@@ -169,7 +181,6 @@ class App extends Component {
     />
     ));
 
-
     return (
       <div className="App">
         <Player
@@ -184,6 +195,9 @@ class App extends Component {
         />
         {this.isPlayerMode() ? (<div />) : (
           <div>
+            <Button variant="contained" className="download" onClick={this.downloadJSON}>
+              DOWNLOAD
+            </Button>
             <SwatchesPicker
               className="colorInput"
               onChangeComplete={this.colorChange}
