@@ -16,12 +16,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     const url = new URL(window.location.href);
+    const player = paramIsTruthy(url.searchParams.get('player'));
 
-    if (paramIsTruthy(url.searchParams.get('player'))) {
-      App.prototype.isPlayerMode = () => 1;
-    } else {
-      App.prototype.isPlayerMode = () => 0;
-    }
+    App.prototype.isPlayerMode = () => player;
 
     const makeState = {
       currentAnimation: this.getAnimationList().up,
