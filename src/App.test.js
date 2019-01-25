@@ -26,6 +26,7 @@ describe('basic app test', () => {
   describe('component', () => {
     it('rendering', () => {
       component = shallow(<App />);
+
       player = component.find('.player');
       expect(player.exists()).toBe(true);
     });
@@ -196,6 +197,39 @@ describe('basic app test', () => {
       const { colorState: newColorState } = component.state();
       expect(colorState).not.toBe(newColorState);
       expect(newColorState).toBe(newColor.hex);
+    });
+  });
+
+  describe('player mode', () => {
+    it('1', () => {
+      expect(component.instance().isPlayerMode()).toBeFalsy();
+      window.history.pushState({}, 'Test Title', '/test.html?player=1');
+      component = shallow(<App />);
+      expect(component.instance().isPlayerMode()).toBeTruthy();
+    });
+
+    it('true', () => {
+      window.history.pushState({}, 'Test Title', '/test.html?player=true');
+      component = shallow(<App />);
+      expect(component.instance().isPlayerMode()).toBeTruthy();
+    });
+
+    it('0', () => {
+      window.history.pushState({}, 'Test Title', '/test.html?player=0');
+      component = shallow(<App />);
+      expect(component.instance().isPlayerMode()).toBeFalsy();
+    });
+
+    it('false', () => {
+      window.history.pushState({}, 'Test Title', '/test.html?player=false');
+      component = shallow(<App />);
+      expect(component.instance().isPlayerMode()).toBeFalsy();
+    });
+
+    it('none', () => {
+      window.history.pushState({}, 'Test Title', '/test.html');
+      component = shallow(<App />);
+      expect(component.instance().isPlayerMode()).toBeFalsy();
     });
   });
 });

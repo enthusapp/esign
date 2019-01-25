@@ -8,9 +8,20 @@ import DirectionButton from './components/DirectionButton';
 const DEFAULT_PLAYER_HEIGHT = 10;
 const DEFAULT_FONT_SIZE = 5;
 
+function paramIsTruthy(param) {
+  return [1, '1', 'true', 'True'].indexOf(param) > -1;
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
+    const url = new URL(window.location.href);
+
+    if (paramIsTruthy(url.searchParams.get('player'))) {
+      App.prototype.isPlayerMode = () => 1;
+    } else {
+      App.prototype.isPlayerMode = () => 0;
+    }
 
     const makeState = {
       currentAnimation: this.getAnimationList().up,
