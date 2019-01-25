@@ -153,8 +153,27 @@ class App extends Component {
   };
 
   downloadJSON = () => {
-    const data = JSON.stringify({ text: 'work' }, null, 4);
+    const data = JSON.stringify({ ...this.state }, null, 4);
     download(data, 'newText.json');
+  }
+
+  loadJSON = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const data = JSON.parse(reader.result);
+        const newValue = {};
+        Object.keys(data).forEach((key) => {
+          if (Object.prototype.hasOwnProperty.call(this.state, key)) {
+            newValue[key] = data[key];
+          }
+        });
+        this.setState(newValue);
+      };
+      reader.readAsText(file);
+    }
   }
 
   render() {
@@ -195,8 +214,12 @@ class App extends Component {
         />
         {this.isPlayerMode() ? (<div />) : (
           <div>
+            <input type="file" onChange={this.loadJSON} />
+            <Button variant="contained" className="load" onClick={this.loadJSON}>
+              읽어오기
+            </Button>
             <Button variant="contained" className="download" onClick={this.downloadJSON}>
-              DOWNLOAD
+              완료
             </Button>
             <SwatchesPicker
               className="colorInput"

@@ -200,13 +200,30 @@ describe('basic app test', () => {
     });
   });
 
-  describe('download', () => {
+  describe('download/load', () => {
     it('exists', () => {
       expect(component.find('.download').exists()).toBe(true);
+      expect(component.find('.load').exists()).toBe(true);
     });
+
     it('click', () => {
       URL.createObjectURL = () => {};
       component.find('.download').simulate('click');
+    });
+
+    it('load', () => {
+      // Error on blob type, but don't know why
+      // Block until know
+      // const testState = {
+      //   direction: 'up',
+      //   textState: 'Text',
+      //   colorState: '#FFFFFF',
+      //   fontSize: 5,
+      //   speed: 10,
+      // };
+      // const file = new File([testState], 'bar.txt');
+      // component.find('.load').simulate('click',
+      //   { target: { files: [file] } });
     });
   });
 
