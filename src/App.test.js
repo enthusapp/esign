@@ -310,10 +310,10 @@ describe('basic app test', () => {
         Object.keys(testState).forEach((key) => {
           expect(component.state()[key]).toBe(testState[key]);
         });
-        const newAni = component.instance().getAnimationList(testState.fontSize);
-        expect(component.state().currentAnimation).toEqual(
-          newAni[testState.direction],
-        );
+        const newAni = component.instance().getAnimationList(
+          testState.fontSize,
+        )[testState.direction];
+        expect(component.state().currentAnimation).toEqual(newAni);
       });
 
       it('block currentAnimation property', () => {

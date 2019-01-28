@@ -70,9 +70,6 @@ class App extends Component {
     App.prototype.isPlayerMode = () => player;
 
     const makeState = getNewStateFromURL(url);
-    makeState.currentAnimation = this.getAnimationList(
-      makeState.fontSize,
-    )[makeState.direction];
 
     this.getIncButtunList().forEach((bt) => {
       const {
@@ -104,6 +101,7 @@ class App extends Component {
     });
 
     this.state = makeState;
+    this.state.currentAnimation = this.getAnimation();
   }
 
   getDefaultPlayerHeight = () => DEFAULT_PLAYER_HEIGHT;
@@ -124,6 +122,11 @@ class App extends Component {
       reverse: true,
     },
   ];
+
+  getAnimation = () => {
+    const { fontSize, direction } = this.state;
+    return this.getAnimationList(fontSize)[direction];
+  };
 
   getAnimationList = (fontSize = DEFAULT_STATE.fontSize) => {
     const heightMiddle = (DEFAULT_PLAYER_HEIGHT - fontSize) / 2;
@@ -157,10 +160,7 @@ class App extends Component {
   }
 
   updateAnimation = () => {
-    const { fontSize, direction } = this.state;
-    this.setState({
-      currentAnimation: this.getAnimationList(fontSize)[direction],
-    });
+    this.setState({ currentAnimation: this.getAnimation() });
   };
 
   directionChange = (event) => {
