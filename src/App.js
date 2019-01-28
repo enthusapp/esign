@@ -172,6 +172,7 @@ class App extends Component {
   };
 
   downloadJSON = () => {
+    // TODO: remove unnecessary parameters
     const data = JSON.stringify({ ...this.state }, null, 4);
     download(data, 'newText.json');
   }
