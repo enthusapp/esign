@@ -12,6 +12,25 @@ function loadJSON(component, testState) {
   component.instance().setStateFromJSON(testState);
 }
 
+function objectToURLParam(obj) {
+  let param = '?dummy=1';
+
+  Object.keys(obj).forEach((key) => {
+    if (Array.isArray(obj[key])) {
+      obj[key].forEach((el) => { param += `&${key}[]=${el}`; });
+    } else {
+      param += `&${key}=${obj[key]}`;
+    }
+  });
+
+  return param;
+}
+
+function setWindowURL(obj) {
+  const param = `/test.html${objectToURLParam(obj)}`;
+  window.history.pushState({}, 'Test Title', param);
+}
+
 describe('basic app test', () => {
   const div = document.createElement('div');
 
@@ -270,39 +289,48 @@ describe('basic app test', () => {
   });
 
   describe('url player', () => {
+    let param = null;
+
+    it('objectToURLParam', () => {
+      param = `/test.html${objectToURLParam({ player: 1 })}`;
+      expect(param).toBe('/test.html?dummy=1&player=1');
+      param = `/test.html${objectToURLParam({ player: true })}`;
+      expect(param).toBe('/test.html?dummy=1&player=true');
+    });
+
     it('1', () => {
       expect(component.instance().isPlayerMode()).toBeFalsy();
-      window.history.pushState({}, 'Test Title', '/test.html?player=1');
+      setWindowURL({ player: 1 });
       component = shallow(<App />);
       expect(component.instance().isPlayerMode()).toBeTruthy();
     });
 
     it('true', () => {
-      window.history.pushState({}, 'Test Title', '/test.html?player=true');
+      setWindowURL({ player: true });
       component = shallow(<App />);
       expect(component.instance().isPlayerMode()).toBeTruthy();
     });
 
     it('0', () => {
-      window.history.pushState({}, 'Test Title', '/test.html?player=0');
+      setWindowURL({ player: 0 });
       component = shallow(<App />);
       expect(component.instance().isPlayerMode()).toBeFalsy();
     });
 
     it('false', () => {
-      window.history.pushState({}, 'Test Title', '/test.html?player=false');
+      setWindowURL({ player: false });
       component = shallow(<App />);
       expect(component.instance().isPlayerMode()).toBeFalsy();
     });
 
     it('none', () => {
-      window.history.pushState({}, 'Test Title', '/test.html');
+      setWindowURL({ });
       component = shallow(<App />);
       expect(component.instance().isPlayerMode()).toBeFalsy();
     });
 
     it('remove input', () => {
-      window.history.pushState({}, 'Test Title', '/test.html?player=1');
+      setWindowURL({ player: 1 });
       component = shallow(<App />);
       expect(component.find('.colorInput').exists()).toBe(false);
       expect(component.find('.textInput').exists()).toBe(false);
@@ -313,9 +341,12 @@ describe('basic app test', () => {
   });
 
   describe('url options', () => {
+    const param = `/test.html${objectToURLParam({})}`;
+
     it('1', () => {
-      window.history.pushState({}, 'Test Title', '/test.html?');
+      window.history.pushState({}, 'Test Title', param);
       component = shallow(<App />);
+      expect(component.instance().isPlayerMode()).toBeFalsy();
     });
   });
 });
