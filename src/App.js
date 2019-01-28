@@ -111,37 +111,39 @@ class App extends Component {
       up: [
         { transform: `translateY(${DEFAULT_PLAYER_HEIGHT}rem)` },
         { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translateY(${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translateY(${heightMiddle}rem)`, offset: 0.7 },
         { transform: `translateY(-${DEFAULT_PLAYER_HEIGHT}rem)` },
       ],
       down: [
         { transform: `translateY(-${DEFAULT_PLAYER_HEIGHT}rem)` },
         { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translateY(${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translateY(${heightMiddle}rem)`, offset: 0.7 },
         { transform: `translateY(${DEFAULT_PLAYER_HEIGHT}rem)` },
       ],
       right: [
         { transform: `translate(-100%, ${heightMiddle}rem)` },
         { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.7 },
         { transform: `translate(100%, ${heightMiddle}rem)` },
       ],
       left: [
         { transform: `translate(100%, ${heightMiddle}rem)` },
         { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.6 },
+        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.7 },
         { transform: `translate(-100%, ${heightMiddle}rem)` },
       ],
     };
   }
 
-  directionChange = (event) => {
-    const { fontSize } = this.state;
-
-    this.setState({ direction: event.target.value });
+  updateAnimation = () => {
+    const { fontSize, direction } = this.state;
     this.setState({
-      currentAnimation: this.getAnimationList(fontSize)[event.target.value],
+      currentAnimation: this.getAnimationList(fontSize)[direction],
     });
+  };
+
+  directionChange = (event) => {
+    this.setState({ direction: event.target.value }, this.updateAnimation);
   };
 
   textChange = (event) => {
@@ -157,6 +159,19 @@ class App extends Component {
     download(data, 'newText.json');
   }
 
+  setStateFromJSON = (data) => {
+    const newValue = {};
+    Object.keys(data).forEach((key) => {
+      if (key === 'currentAnimation') {
+        return;
+      }
+      if (Object.prototype.hasOwnProperty.call(this.state, key)) {
+        newValue[key] = data[key];
+      }
+    });
+    this.setState(newValue, this.updateAnimation);
+  }
+
   loadJSON = (event) => {
     const file = event.target.files[0];
 
@@ -164,13 +179,8 @@ class App extends Component {
       const reader = new FileReader();
       reader.onload = () => {
         const data = JSON.parse(reader.result);
-        const newValue = {};
-        Object.keys(data).forEach((key) => {
-          if (Object.prototype.hasOwnProperty.call(this.state, key)) {
-            newValue[key] = data[key];
-          }
-        });
-        this.setState(newValue);
+        // TODO: need parse fail error handling
+        this.setStateFromJSON(data);
       };
       reader.readAsText(file);
     }

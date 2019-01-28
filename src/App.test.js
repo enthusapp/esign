@@ -3,6 +3,15 @@ import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import App from './App';
 
+function loadJSON(component, testState) {
+  // Error on blob type, but don't know why
+  // Block until know
+  // const file = new File([testState], 'bar.txt');
+  // component.find('.load').simulate('click',
+  //   { target: { files: [file] } });
+  component.instance().setStateFromJSON(testState);
+}
+
 describe('basic app test', () => {
   const div = document.createElement('div');
 
@@ -212,22 +221,55 @@ describe('basic app test', () => {
     });
 
     it('load', () => {
-      // Error on blob type, but don't know why
-      // Block until know
-      // const testState = {
-      //   direction: 'up',
-      //   textState: 'Text',
-      //   colorState: '#FFFFFF',
-      //   fontSize: 5,
-      //   speed: 10,
-      // };
-      // const file = new File([testState], 'bar.txt');
-      // component.find('.load').simulate('click',
-      //   { target: { files: [file] } });
+      let testState = {
+        direction: 'up',
+        textState: 'Text',
+        colorState: '#FFFFFF',
+        fontSize: 5,
+        speed: 10,
+      };
+      loadJSON(component, testState);
+
+      testState = {
+        direction: 'down',
+        textState: 'TextNew',
+        colorState: '#FF00FF',
+        fontSize: 15,
+        speed: 5,
+      };
+      loadJSON(component, testState);
+      Object.keys(testState).forEach((key) => {
+        expect(component.state()[key]).toBe(testState[key]);
+      });
+      const newAni = component.instance().getAnimationList(testState.fontSize);
+      expect(component.state().currentAnimation).toEqual(
+        newAni[testState.direction],
+      );
     });
+
+    it('block currentAnimation property', () => {
+      const testState = {
+        direction: 'up',
+        textState: 'Text',
+        colorState: '#FFFFFF',
+        fontSize: 5,
+        speed: 10,
+        currentAnimation: [],
+      };
+      loadJSON(component, testState);
+      expect(component.state().currentAnimation).not.toBe(
+        testState.currentAnimation,
+      );
+    });
+
+    it('load wrong json format file', () => { });
+
+    it('file read fail', () => { });
+
+    it('cancel file load', () => { });
   });
 
-  describe('player url', () => {
+  describe('url player', () => {
     it('1', () => {
       expect(component.instance().isPlayerMode()).toBeFalsy();
       window.history.pushState({}, 'Test Title', '/test.html?player=1');
@@ -267,6 +309,13 @@ describe('basic app test', () => {
       expect(component.find('.directionInput').exists()).toBe(false);
       expect(component.find('.fontSize').exists()).toBe(false);
       expect(component.find('.speed').exists()).toBe(false);
+    });
+  });
+
+  describe('url options', () => {
+    it('1', () => {
+      window.history.pushState({}, 'Test Title', '/test.html?');
+      component = shallow(<App />);
     });
   });
 });
