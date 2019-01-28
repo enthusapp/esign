@@ -67,9 +67,10 @@ class App extends Component {
     const url = new URL(window.location.href);
     const player = paramIsTruthy(url.searchParams.get('player'));
 
-    App.prototype.isPlayerMode = () => player;
+    this.state = getNewStateFromURL(url);
+    this.state.currentAnimation = this.getAnimation();
 
-    const makeState = getNewStateFromURL(url);
+    App.prototype.isPlayerMode = () => player;
 
     this.getIncButtunList().forEach((bt) => {
       const {
@@ -99,9 +100,6 @@ class App extends Component {
         App.prototype[`${name}Dec`] = decrease;
       }
     });
-
-    this.state = makeState;
-    this.state.currentAnimation = this.getAnimation();
   }
 
   getDefaultPlayerHeight = () => DEFAULT_PLAYER_HEIGHT;
