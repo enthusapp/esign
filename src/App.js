@@ -106,14 +106,12 @@ class App extends Component {
 
   getIncButtunList = () => [
     {
-      id: 0,
       name: 'fontSize',
       lowLimit: 1,
       highLimit: 100,
       reverse: false,
     },
     {
-      id: 1,
       name: 'speed',
       lowLimit: 1,
       highLimit: 100,
@@ -212,7 +210,7 @@ class App extends Component {
     });
 
     const IncButtonComponents = this.getIncButtunList().map(bt => (<IncButton
-      key={bt.id}
+      key={bt.name}
       name={bt.name}
       className={bt.name}
       increase={App.prototype[`${bt.name}Inc`]}
