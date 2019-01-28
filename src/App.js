@@ -8,7 +8,13 @@ import IncButton from './components/IncButton';
 import DirectionButton from './components/DirectionButton';
 
 const DEFAULT_PLAYER_HEIGHT = 10;
-const DEFAULT_FONT_SIZE = 5;
+const DEFAULT_STATE = {
+  direction: 'up',
+  textState: 'Text',
+  colorState: '#FFFFFF',
+  fontSize: 5,
+  speed: 10,
+};
 
 function paramIsTruthy(param) {
   return [1, '1', 'true', 'True'].indexOf(param) > -1;
@@ -19,6 +25,42 @@ function download(data, filename) {
   saveAs(file, filename);
 }
 
+function getNewState(data) {
+  const newValue = {};
+  Object.keys(DEFAULT_STATE).forEach((key) => {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      newValue[key] = data[key];
+    }
+  });
+  return newValue;
+}
+
+function getNewStateFromURL(url) {
+  const newValue = {};
+
+  Object.assign(newValue, DEFAULT_STATE);
+
+  Object.keys(DEFAULT_STATE).forEach((key) => {
+    if (url.searchParams.get(key)) {
+      switch (key) {
+        case 'colorState':
+          newValue[key] = `#${url.searchParams.get(key)}`;
+          break;
+        case 'fontSize':
+          newValue[key] = parseInt(url.searchParams.get(key), 10);
+          break;
+        case 'speed':
+          newValue[key] = parseInt(url.searchParams.get(key), 10);
+          break;
+        default:
+          newValue[key] = url.searchParams.get(key);
+          break;
+      }
+    }
+  });
+  return newValue;
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -27,48 +69,29 @@ class App extends Component {
 
     App.prototype.isPlayerMode = () => player;
 
-    const makeState = {
-      currentAnimation: this.getAnimationList().up,
-      direction: 'up',
-      textState: 'Text',
-      colorState: '#FFFFFF',
-    };
+    const makeState = getNewStateFromURL(url);
+    makeState.currentAnimation = this.getAnimationList(
+      makeState.fontSize,
+    )[makeState.direction];
 
     this.getIncButtunList().forEach((bt) => {
       const {
         name,
-        defaultVal,
         lowLimit,
         highLimit,
         reverse,
       } = bt;
 
-      makeState[name] = defaultVal;
-
       const increase = () => {
-        const { [name]: prev, direction } = this.state;
+        const { [name]: prev } = this.state;
         const newValue = prev < highLimit - 1 ? prev + 1 : highLimit;
-        this.setState({
-          [name]: newValue,
-        });
-        if (name === 'fontSize') {
-          this.setState({
-            currentAnimation: this.getAnimationList(newValue)[direction],
-          });
-        }
+        this.setState({ [name]: newValue }, this.updateAnimation);
       };
 
       const decrease = () => {
-        const { [name]: prev, direction } = this.state;
+        const { [name]: prev } = this.state;
         const newValue = prev > lowLimit + 1 ? prev - 1 : lowLimit;
-        this.setState({
-          [name]: newValue,
-        });
-        if (name === 'fontSize') {
-          this.setState({
-            currentAnimation: this.getAnimationList(newValue)[direction],
-          });
-        }
+        this.setState({ [name]: newValue }, this.updateAnimation);
       };
 
       if (reverse) {
@@ -89,7 +112,6 @@ class App extends Component {
     {
       id: 0,
       name: 'fontSize',
-      defaultVal: DEFAULT_FONT_SIZE,
       lowLimit: 1,
       highLimit: 100,
       reverse: false,
@@ -97,14 +119,13 @@ class App extends Component {
     {
       id: 1,
       name: 'speed',
-      defaultVal: 10,
       lowLimit: 1,
       highLimit: 100,
       reverse: true,
     },
   ];
 
-  getAnimationList = (fontSize = DEFAULT_FONT_SIZE) => {
+  getAnimationList = (fontSize = DEFAULT_STATE.fontSize) => {
     const heightMiddle = (DEFAULT_PLAYER_HEIGHT - fontSize) / 2;
 
     return {
@@ -160,16 +181,7 @@ class App extends Component {
   }
 
   setStateFromJSON = (data) => {
-    const newValue = {};
-    Object.keys(data).forEach((key) => {
-      if (key === 'currentAnimation') {
-        return;
-      }
-      if (Object.prototype.hasOwnProperty.call(this.state, key)) {
-        newValue[key] = data[key];
-      }
-    });
-    this.setState(newValue, this.updateAnimation);
+    this.setState(getNewState(data), this.updateAnimation);
   }
 
   loadJSON = (event) => {

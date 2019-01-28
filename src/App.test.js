@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import App from './App';
 
-function loadJSON(component, testState) {
+function loadJSON(testState, component) {
   // Error on blob type, but don't know why
   // Block until know
   // const file = new File([testState], 'bar.txt');
   // component.find('.load').simulate('click',
   //   { target: { files: [file] } });
   component.instance().setStateFromJSON(testState);
+  return component;
 }
 
 function objectToURLParam(obj) {
@@ -26,9 +27,15 @@ function objectToURLParam(obj) {
   return param;
 }
 
-function setWindowURL(obj) {
+function setWindowURL(nobj) {
+  const obj = {};
+  Object.assign(obj, nobj);
+  if (Object.prototype.hasOwnProperty.call(nobj, 'colorState')) {
+    obj.colorState = nobj.colorState.slice(1);
+  }
   const param = `/test.html${objectToURLParam(obj)}`;
   window.history.pushState({}, 'Test Title', param);
+  return shallow(<App />);
 }
 
 describe('basic app test', () => {
@@ -72,7 +79,6 @@ describe('basic app test', () => {
       buttons.forEach((bt) => {
         const {
           name,
-          defaultVal,
           lowLimit,
           highLimit,
           reverse,
@@ -81,6 +87,7 @@ describe('basic app test', () => {
         button = component.find(`.${name}`);
         expect(button.exists()).toBe(true);
 
+        const defaultVal = component.state()[name];
         let expectVal = reverse ? defaultVal - 1 : defaultVal + 1;
         component.instance()[`${name}Inc`]();
         expect(component.state()[name]).toBe(expectVal);
@@ -238,54 +245,6 @@ describe('basic app test', () => {
       URL.createObjectURL = () => {};
       component.find('.download').simulate('click');
     });
-
-    it('load', () => {
-      let testState = {
-        direction: 'up',
-        textState: 'Text',
-        colorState: '#FFFFFF',
-        fontSize: 5,
-        speed: 10,
-      };
-      loadJSON(component, testState);
-
-      testState = {
-        direction: 'down',
-        textState: 'TextNew',
-        colorState: '#FF00FF',
-        fontSize: 15,
-        speed: 5,
-      };
-      loadJSON(component, testState);
-      Object.keys(testState).forEach((key) => {
-        expect(component.state()[key]).toBe(testState[key]);
-      });
-      const newAni = component.instance().getAnimationList(testState.fontSize);
-      expect(component.state().currentAnimation).toEqual(
-        newAni[testState.direction],
-      );
-    });
-
-    it('block currentAnimation property', () => {
-      const testState = {
-        direction: 'up',
-        textState: 'Text',
-        colorState: '#FFFFFF',
-        fontSize: 5,
-        speed: 10,
-        currentAnimation: [],
-      };
-      loadJSON(component, testState);
-      expect(component.state().currentAnimation).not.toBe(
-        testState.currentAnimation,
-      );
-    });
-
-    it('load wrong json format file', () => { });
-
-    it('file read fail', () => { });
-
-    it('cancel file load', () => { });
   });
 
   describe('url player', () => {
@@ -300,38 +259,32 @@ describe('basic app test', () => {
 
     it('1', () => {
       expect(component.instance().isPlayerMode()).toBeFalsy();
-      setWindowURL({ player: 1 });
-      component = shallow(<App />);
+      component = setWindowURL({ player: 1 });
       expect(component.instance().isPlayerMode()).toBeTruthy();
     });
 
     it('true', () => {
-      setWindowURL({ player: true });
-      component = shallow(<App />);
+      component = setWindowURL({ player: true });
       expect(component.instance().isPlayerMode()).toBeTruthy();
     });
 
     it('0', () => {
-      setWindowURL({ player: 0 });
-      component = shallow(<App />);
+      component = setWindowURL({ player: 0 });
       expect(component.instance().isPlayerMode()).toBeFalsy();
     });
 
     it('false', () => {
-      setWindowURL({ player: false });
-      component = shallow(<App />);
+      component = setWindowURL({ player: false });
       expect(component.instance().isPlayerMode()).toBeFalsy();
     });
 
     it('none', () => {
-      setWindowURL({ });
-      component = shallow(<App />);
+      component = setWindowURL({ });
       expect(component.instance().isPlayerMode()).toBeFalsy();
     });
 
     it('remove input', () => {
-      setWindowURL({ player: 1 });
-      component = shallow(<App />);
+      component = setWindowURL({ player: 1 });
       expect(component.find('.colorInput').exists()).toBe(false);
       expect(component.find('.textInput').exists()).toBe(false);
       expect(component.find('.directionInput').exists()).toBe(false);
@@ -340,13 +293,51 @@ describe('basic app test', () => {
     });
   });
 
-  describe('url options', () => {
-    const param = `/test.html${objectToURLParam({})}`;
+  describe('url and file load', () => {
+    const stateChangeFuncs = [loadJSON, setWindowURL];
 
-    it('1', () => {
-      window.history.pushState({}, 'Test Title', param);
-      component = shallow(<App />);
-      expect(component.instance().isPlayerMode()).toBeFalsy();
+    stateChangeFuncs.forEach((stateChange) => {
+      it('default', () => {
+        const testState = {
+          direction: 'down',
+          textState: 'TextNew',
+          colorState: '#FF00FF',
+          fontSize: 15,
+          speed: 5,
+        };
+        component = stateChange(testState, component);
+
+        Object.keys(testState).forEach((key) => {
+          expect(component.state()[key]).toBe(testState[key]);
+        });
+        const newAni = component.instance().getAnimationList(testState.fontSize);
+        expect(component.state().currentAnimation).toEqual(
+          newAni[testState.direction],
+        );
+      });
+
+      it('block currentAnimation property', () => {
+        const testState = {
+          direction: 'up',
+          textState: 'Text',
+          colorState: '#FFFFFF',
+          fontSize: 5,
+          speed: 10,
+          currentAnimation: [],
+        };
+        component = stateChange(testState, component);
+        expect(component.state().currentAnimation).not.toBe(
+          testState.currentAnimation,
+        );
+      });
+
+      it('load wrong json format file', () => { });
+
+      it('file read fail', () => { });
+
+      it('cancel file load', () => { });
+
+      it('params limitation', () => { });
     });
   });
 });
