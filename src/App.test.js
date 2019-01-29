@@ -120,6 +120,14 @@ describe('basic app test', () => {
     });
   });
 
+  describe('cancel button', () => {
+    it('exists', () => {
+      expect(component.find('.cancel').exists()).toBe(true);
+    });
+
+    it('clear', () => {});
+  });
+
   describe('fontSize and animation change', () => {
     it('getAnimation operation', () => {
       const playerHeight = component.instance().getDefaultPlayerHeight();

@@ -206,6 +206,14 @@ class App extends Component {
     }
   }
 
+  cancel = () => {
+    if (this.isElectron()) {
+      // close window
+    } else {
+      // set state to default
+    }
+  }
+
   render() {
     const {
       currentAnimation,
@@ -251,6 +259,9 @@ class App extends Component {
             </Button>
             <Button variant="contained" className="download" onClick={this.downloadJSON}>
               완료
+            </Button>
+            <Button variant="contained" className="cancel" onClick={this.cancel}>
+              취소
             </Button>
             <SwatchesPicker
               className="colorInput"
