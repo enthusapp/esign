@@ -31,6 +31,7 @@ class Player extends Component {
 
   render() {
     const {
+      player,
       text,
       backgroundColor,
       color,
@@ -38,15 +39,20 @@ class Player extends Component {
       fontSize,
     } = this.props;
 
+    const backStyle = {
+      backgroundColor,
+      color,
+      overflow: 'hidden',
+      position: 'relative',
+      height: `${height}rem`,
+    };
+    if (player) {
+      delete backStyle.backgroundColor;
+    }
+
     return (
       <div
-        style={{
-          backgroundColor,
-          color,
-          overflow: 'hidden',
-          position: 'relative',
-          height: `${height}rem`,
-        }}
+        style={backStyle}
       >
         <p
           ref={this.textP}
@@ -68,6 +74,7 @@ class Player extends Component {
 }
 
 Player.propTypes = {
+  player: PropTypes.bool.isRequired,
   text: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,

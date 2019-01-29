@@ -228,6 +228,7 @@ class App extends Component {
       <div className="App">
         <Player
           className="player"
+          player={this.isPlayerMode()}
           text={textState}
           backgroundColor="black"
           color={colorState}
