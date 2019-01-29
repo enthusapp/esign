@@ -61,16 +61,22 @@ function getNewStateFromURL(url) {
   return newValue;
 }
 
+function checkElectron() {
+  return navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
     const url = new URL(window.location.href);
     const player = paramIsTruthy(url.searchParams.get('player'));
+    const electron = checkElectron();
 
     this.state = getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
 
     App.prototype.isPlayerMode = () => player;
+    App.prototype.isElectron = () => electron;
 
     this.getIncButtunList().forEach((bt) => {
       const {

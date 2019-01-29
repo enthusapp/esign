@@ -65,6 +65,10 @@ describe('basic app test', () => {
       player = component.find('.player');
       expect(player.exists()).toBe(true);
     });
+
+    it('rendering', () => {
+      expect(component.instance().isElectron()).toBe(false);
+    });
   });
 
   describe('check button list', () => {
