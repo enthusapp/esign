@@ -172,9 +172,14 @@ class App extends Component {
   };
 
   downloadJSON = () => {
-    // TODO: remove unnecessary parameters
-    const data = JSON.stringify({ ...this.state }, null, 4);
-    download(data, 'newText.json');
+    const newValue = {};
+    Object.assign(newValue, this.state);
+
+    newValue.mfp_type = 'esign';
+    delete newValue.currentAnimation;
+    const data = JSON.stringify({ ...newValue }, null, 4);
+
+    download(data, 'esign.json');
   }
 
   setStateFromJSON = (data) => {
