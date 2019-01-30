@@ -120,14 +120,6 @@ describe('basic app test', () => {
     });
   });
 
-  describe('cancel button', () => {
-    it('exists', () => {
-      expect(component.find('.cancel').exists()).toBe(true);
-    });
-
-    it('clear', () => {});
-  });
-
   describe('fontSize and animation change', () => {
     it('getAnimation operation', () => {
       const playerHeight = component.instance().getDefaultPlayerHeight();
@@ -247,15 +239,28 @@ describe('basic app test', () => {
     });
   });
 
-  describe('download/load', () => {
+  describe('download/load/cancel/saveas', () => {
     it('exists', () => {
-      expect(component.find('.download').exists()).toBe(true);
-      expect(component.find('.load').exists()).toBe(true);
+      expect(component.find('.mainButton').exists()).toBe(true);
     });
 
-    it('click', () => {
+    it('clear', () => {
+      component.instance().cancel();
+      const state = component.state();
+      const { currentAnimation } = state;
+      const { fontSize, direction } = component.instance().getDefaultState();
+
+      expect(currentAnimation).toEqual(
+        component.instance().getAnimationList(fontSize)[direction],
+      );
+
+      delete state.currentAnimation;
+      expect(state).toEqual(component.instance().getDefaultState());
+    });
+
+    it('down', () => {
       URL.createObjectURL = () => {};
-      component.find('.download').simulate('click');
+      component.instance().downloadJSON();
     });
   });
 

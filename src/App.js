@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { SwatchesPicker } from 'react-color';
 import { saveAs } from 'file-saver';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
 import DirectionButton from './components/DirectionButton';
+import MainButton from './components/MainButton';
 
 const DEFAULT_PLAYER_HEIGHT = 10;
 const DEFAULT_STATE = {
@@ -125,6 +125,14 @@ class App extends Component {
     },
   ];
 
+  getDefaultState = () => ({
+    direction: 'up',
+    textState: 'Text',
+    colorState: '#FFFFFF',
+    fontSize: 5,
+    speed: 10,
+  })
+
   getAnimation = () => {
     const { fontSize, direction } = this.state;
     return this.getAnimationList(fontSize)[direction];
@@ -210,7 +218,7 @@ class App extends Component {
     if (this.isElectron()) {
       // close window
     } else {
-      // set state to default
+      this.setState(this.getDefaultState(), this.updateAnimation);
     }
   }
 
@@ -253,23 +261,12 @@ class App extends Component {
         />
         {this.isPlayerMode() ? (<div />) : (
           <div>
-            <label htmlFor="contained-button-file">
-              <input
-                id="contained-button-file"
-                type="file"
-                onChange={this.loadJSON}
-                style={{ display: 'none' }}
-              />
-              <Button variant="contained" component="span" className="load">
-                읽어오기
-              </Button>
-            </label>
-            <Button variant="contained" className="download" onClick={this.downloadJSON}>
-              완료
-            </Button>
-            <Button variant="contained" className="cancel" onClick={this.cancel}>
-              취소
-            </Button>
+            <MainButton
+              className="mainButton"
+              loadJSON={this.loadJSON}
+              downloadJSON={this.downloadJSON}
+              cancel={this.cancel}
+            />
             <SwatchesPicker
               className="colorInput"
               onChangeComplete={this.colorChange}
