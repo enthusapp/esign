@@ -253,10 +253,17 @@ class App extends Component {
         />
         {this.isPlayerMode() ? (<div />) : (
           <div>
-            <input type="file" onChange={this.loadJSON} />
-            <Button variant="contained" className="load" onClick={this.loadJSON}>
-              읽어오기
-            </Button>
+            <label htmlFor="contained-button-file">
+              <input
+                id="contained-button-file"
+                type="file"
+                onChange={this.loadJSON}
+                style={{ display: 'none' }}
+              />
+              <Button variant="contained" component="span" className="load">
+                읽어오기
+              </Button>
+            </label>
             <Button variant="contained" className="download" onClick={this.downloadJSON}>
               완료
             </Button>
