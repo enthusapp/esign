@@ -363,4 +363,14 @@ describe('basic app test', () => {
       it('params limitation', () => { });
     });
   });
+
+  describe('electron', () => {
+    it('is electorn?', () => {
+      Object.defineProperty(navigator, 'userAgent',
+        { get: () => 'Mozilla/5.0 Gecko/20100101 electron/ Firefox/28.0)' });
+
+      component = shallow(<App />);
+      expect(component.instance().isElectron()).toBe(true);
+    });
+  });
 });
