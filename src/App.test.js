@@ -244,6 +244,14 @@ describe('basic app test', () => {
       expect(component.find('.mainButton').exists()).toBe(true);
     });
 
+    it('download', () => {
+      URL.createObjectURL = () => {};
+      component.instance().downloadJSON();
+    });
+
+    it('load', () => {
+    });
+
     it('clear', () => {
       component.instance().cancel();
       const state = component.state();
@@ -258,9 +266,7 @@ describe('basic app test', () => {
       expect(state).toEqual(component.instance().getDefaultState());
     });
 
-    it('down', () => {
-      URL.createObjectURL = () => {};
-      component.instance().downloadJSON();
+    it('saveas', () => {
     });
   });
 

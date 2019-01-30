@@ -8,13 +8,6 @@ import DirectionButton from './components/DirectionButton';
 import MainButton from './components/MainButton';
 
 const DEFAULT_PLAYER_HEIGHT = 10;
-const DEFAULT_STATE = {
-  direction: 'up',
-  textState: 'Text',
-  colorState: '#FFFFFF',
-  fontSize: 5,
-  speed: 10,
-};
 
 function paramIsTruthy(param) {
   return [1, '1', 'true', 'True'].indexOf(param) > -1;
@@ -23,42 +16,6 @@ function paramIsTruthy(param) {
 function download(data, filename) {
   const file = new Blob([data], { type: 'text/plain;charset=utf-8' });
   saveAs(file, filename);
-}
-
-function getNewState(data) {
-  const newValue = {};
-  Object.keys(DEFAULT_STATE).forEach((key) => {
-    if (Object.prototype.hasOwnProperty.call(data, key)) {
-      newValue[key] = data[key];
-    }
-  });
-  return newValue;
-}
-
-function getNewStateFromURL(url) {
-  const newValue = {};
-
-  Object.assign(newValue, DEFAULT_STATE);
-
-  Object.keys(DEFAULT_STATE).forEach((key) => {
-    if (url.searchParams.get(key)) {
-      switch (key) {
-        case 'colorState':
-          newValue[key] = `#${url.searchParams.get(key)}`;
-          break;
-        case 'fontSize':
-          newValue[key] = parseInt(url.searchParams.get(key), 10);
-          break;
-        case 'speed':
-          newValue[key] = parseInt(url.searchParams.get(key), 10);
-          break;
-        default:
-          newValue[key] = url.searchParams.get(key);
-          break;
-      }
-    }
-  });
-  return newValue;
 }
 
 function checkElectron() {
@@ -72,7 +29,7 @@ class App extends Component {
     const player = paramIsTruthy(url.searchParams.get('player'));
     const electron = checkElectron();
 
-    this.state = getNewStateFromURL(url);
+    this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
 
     App.prototype.isPlayerMode = () => player;
@@ -108,6 +65,42 @@ class App extends Component {
     });
   }
 
+  getNewState = (data) => {
+    const newValue = {};
+    Object.keys(this.getDefaultState()).forEach((key) => {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        newValue[key] = data[key];
+      }
+    });
+    return newValue;
+  }
+
+  getNewStateFromURL = (url) => {
+    const newValue = {};
+
+    Object.assign(newValue, this.getDefaultState());
+
+    Object.keys(this.getDefaultState()).forEach((key) => {
+      if (url.searchParams.get(key)) {
+        switch (key) {
+          case 'colorState':
+            newValue[key] = `#${url.searchParams.get(key)}`;
+            break;
+          case 'fontSize':
+            newValue[key] = parseInt(url.searchParams.get(key), 10);
+            break;
+          case 'speed':
+            newValue[key] = parseInt(url.searchParams.get(key), 10);
+            break;
+          default:
+            newValue[key] = url.searchParams.get(key);
+            break;
+        }
+      }
+    });
+    return newValue;
+  }
+
   getDefaultPlayerHeight = () => DEFAULT_PLAYER_HEIGHT;
 
   getIncButtunList = () => [
@@ -138,7 +131,7 @@ class App extends Component {
     return this.getAnimationList(fontSize)[direction];
   };
 
-  getAnimationList = (fontSize = DEFAULT_STATE.fontSize) => {
+  getAnimationList = (fontSize = this.getDefaultState().fontSize) => {
     const heightMiddle = (DEFAULT_PLAYER_HEIGHT - fontSize) / 2;
 
     return {
@@ -197,7 +190,7 @@ class App extends Component {
   }
 
   setStateFromJSON = (data) => {
-    this.setState(getNewState(data), this.updateAnimation);
+    this.setState(this.getNewState(data), this.updateAnimation);
   }
 
   loadJSON = (event) => {
