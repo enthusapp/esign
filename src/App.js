@@ -22,6 +22,32 @@ function checkElectron() {
   return navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
 }
 
+function decimalAdjust(type, inValue, inExp) {
+  let value = inValue;
+  let exp = inExp;
+
+  if (typeof exp === 'undefined' || +exp === 0) {
+    return Math[type](value);
+  }
+
+  value = +value;
+  exp = +exp;
+
+  if (Number.isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+    return NaN;
+  }
+
+  value = value.toString().split('e');
+  value = Math[type](+(`${value[0]}e${(value[1] ? (+value[1] - exp) : -exp)}`));
+  value = value.toString().split('e');
+
+  return +(`${value[0]}e${(value[1] ? (+value[1] + exp) : exp)}`);
+}
+
+if (!Math.round10) {
+  Math.round10 = (value, exp) => decimalAdjust('round', value, exp);
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -37,34 +63,60 @@ class App extends Component {
     App.prototype.isElectron = () => electron;
 
     this.getIncButtunList().forEach((bt) => {
-      const {
-        name,
-        lowLimit,
-        highLimit,
-        reverse,
-      } = bt;
+      const { name, increase, decrease } = bt;
 
-      const increase = () => {
+      App.prototype[`${name}Inc`] = () => {
         const { [name]: prev } = this.state;
-        const newValue = prev < highLimit - 1 ? prev + 1 : highLimit;
-        this.setState({ [name]: newValue }, this.updateAnimation);
+        this.setState({ [name]: increase(prev) }, this.updateAnimation);
       };
 
-      const decrease = () => {
+      App.prototype[`${name}Dec`] = () => {
         const { [name]: prev } = this.state;
-        const newValue = prev > lowLimit + 1 ? prev - 1 : lowLimit;
-        this.setState({ [name]: newValue }, this.updateAnimation);
+        this.setState({ [name]: decrease(prev) }, this.updateAnimation);
       };
-
-      if (reverse) {
-        App.prototype[`${name}Inc`] = decrease;
-        App.prototype[`${name}Dec`] = increase;
-      } else {
-        App.prototype[`${name}Inc`] = increase;
-        App.prototype[`${name}Dec`] = decrease;
-      }
     });
   }
+
+  getIncButtunList = () => [
+    {
+      name: 'fontSize',
+      increase: (fontSize) => {
+        let r = 100;
+        if (fontSize < 1) {
+          r = fontSize + 0.1;
+        } else if (fontSize < 2) {
+          r = fontSize + 0.2;
+        } else if (fontSize < 99) {
+          r = fontSize + 1;
+        }
+        return Math.round10(r, -1);
+      },
+      decrease: (fontSize) => {
+        let r = 0.1;
+        if (fontSize > 2) {
+          r = fontSize - 1;
+        } else if (fontSize > 1) {
+          r = fontSize - 0.2;
+        } else if (fontSize > 0.2) {
+          r = fontSize - 0.1;
+        }
+        return Math.round10(r, -1);
+      },
+    },
+    {
+      name: 'speed',
+      increase: speed => (speed > 2 ? speed - 1 : 1),
+      decrease: speed => (speed < 100 - 1 ? speed + 1 : 100),
+    },
+  ];
+
+  getDefaultState = () => ({
+    direction: 'up',
+    textState: 'Text',
+    colorState: '#FFFFFF',
+    fontSize: 5,
+    speed: 10,
+  })
 
   getNewState = (data) => {
     const newValue = {};
@@ -103,29 +155,6 @@ class App extends Component {
   }
 
   getDefaultPlayerHeight = () => DEFAULT_PLAYER_HEIGHT;
-
-  getIncButtunList = () => [
-    {
-      name: 'fontSize',
-      lowLimit: 1,
-      highLimit: 100,
-      reverse: false,
-    },
-    {
-      name: 'speed',
-      lowLimit: 1,
-      highLimit: 100,
-      reverse: true,
-    },
-  ];
-
-  getDefaultState = () => ({
-    direction: 'up',
-    textState: 'Text',
-    colorState: '#FFFFFF',
-    fontSize: 5,
-    speed: 10,
-  })
 
   getAnimation = () => {
     const { fontSize, direction } = this.state;

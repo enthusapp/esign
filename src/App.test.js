@@ -74,45 +74,80 @@ describe('basic app test', () => {
   describe('check button list', () => {
     let buttons = null;
     let button = null;
+    let fontSize = null;
 
     it('get IncButtonList', () => {
       buttons = component.instance().getIncButtunList();
     });
 
+    it('fontSize increase 1', () => {
+      ({ fontSize } = component.state());
+
+      while (fontSize < 20) {
+        component.instance().fontSizeInc();
+        const { fontSize: newFontSize } = component.state();
+        if (fontSize > 2) {
+          expect(newFontSize).toBe(fontSize + 1);
+        }
+        fontSize = newFontSize;
+      }
+    });
+
+    const fontSizeExpects = [20, 19, 18, 17, 16, 15,
+      14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+      1.8, 1.6, 1.4, 1.2,
+      0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1,
+    ];
+
+    it('fontSize decrease', () => {
+      while (fontSize > 1) {
+        component.instance().fontSizeDec();
+        const { fontSize: newFontSize } = component.state();
+        expect(fontSizeExpects.indexOf(newFontSize) > -1).toBe(true);
+        fontSize = newFontSize;
+      }
+    });
+
+    it('fontSize increase', () => {
+      while (fontSize < 20) {
+        component.instance().fontSizeInc();
+        const { fontSize: newFontSize } = component.state();
+        expect(fontSizeExpects.indexOf(newFontSize) > -1).toBe(true);
+        fontSize = newFontSize;
+      }
+    });
+
     it('test each button', () => {
       buttons.forEach((bt) => {
-        const {
-          name,
-          lowLimit,
-          highLimit,
-          reverse,
-        } = bt;
+        const { name, increase, decrease } = bt;
 
         button = component.find(`.${name}`);
         expect(button.exists()).toBe(true);
 
         const defaultVal = component.state()[name];
-        let expectVal = reverse ? defaultVal - 1 : defaultVal + 1;
+        let expectVal = increase(defaultVal);
         component.instance()[`${name}Inc`]();
         expect(component.state()[name]).toBe(expectVal);
 
-        expectVal = defaultVal;
+        expectVal = decrease(expectVal);
         component.instance()[`${name}Dec`]();
         expect(component.state()[name]).toBe(expectVal);
 
-        Array(highLimit * 2).fill().forEach(() => {
+        Array(200).fill().forEach(() => {
           component.instance()[`${name}Inc`]();
+          expectVal = increase(expectVal);
         });
-        expect(component.state()[name]).toBe(reverse ? lowLimit : highLimit);
-        expect(component.state()[name]).toBeLessThan(highLimit + 1);
-        expect(component.state()[name]).toBeGreaterThan(lowLimit - 1);
+        expect(component.state()[name]).toBe(expectVal);
+        expect(expectVal).toBeLessThan(101);
+        expect(expectVal).toBeGreaterThan(0.01);
 
-        Array(highLimit * 3).fill().forEach(() => {
+        Array(300).fill().forEach(() => {
           component.instance()[`${name}Dec`]();
+          expectVal = decrease(expectVal);
         });
-        expect(component.state()[name]).toBe(reverse ? highLimit : lowLimit);
-        expect(component.state()[name]).toBeLessThan(highLimit + 1);
-        expect(component.state()[name]).toBeGreaterThan(lowLimit - 1);
+        expect(component.state()[name]).toBe(expectVal);
+        expect(expectVal).toBeLessThan(101);
+        expect(expectVal).toBeGreaterThan(0.01);
 
         player = component.find('.player');
         expect(player.props()[name]).toBe(component.state()[name]);
@@ -130,7 +165,7 @@ describe('basic app test', () => {
     });
 
     it('Inc then animation change', () => {
-      const { fontSize } = component.state();
+      let { fontSize } = component.state();
       let { currentAnimation } = component.state();
       const playerHeight = component.instance().getDefaultPlayerHeight();
 
@@ -139,9 +174,10 @@ describe('basic app test', () => {
       );
 
       component.instance().fontSizeInc();
+      fontSize = component.instance().getIncButtunList()[0].increase(fontSize);
       ({ currentAnimation } = component.state());
       expect(currentAnimation[1].transform).toBe(
-        `translateY(${(playerHeight - fontSize - 1) / 2}rem)`,
+        `translateY(${(playerHeight - fontSize) / 2}rem)`,
       );
     });
   });
