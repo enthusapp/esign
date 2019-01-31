@@ -2,18 +2,18 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import MainButton from './MainButton';
 
-let loadJSONcalled = false;
-let downloadJSONcalled = false;
-let cancelcalled = false;
+let loadCalled = false;
+let downloadCalled = false;
+let cancelCalled = false;
 
-function loadJSON() {
-  loadJSONcalled = true;
+function load() {
+  loadCalled = true;
 }
-function downloadJSON() {
-  downloadJSONcalled = true;
+function download() {
+  downloadCalled = true;
 }
 function cancel() {
-  cancelcalled = true;
+  cancelCalled = true;
 }
 
 describe('MainButton', () => {
@@ -22,8 +22,8 @@ describe('MainButton', () => {
   it('renders correctly', () => {
     component = shallow(
       <MainButton
-        loadJSON={loadJSON}
-        downloadJSON={downloadJSON}
+        load={load}
+        download={download}
         cancel={cancel}
       />,
     );
@@ -34,6 +34,7 @@ describe('MainButton', () => {
       expect(component.find('.load').exists()).toBe(true);
       expect(component.find('.save').exists()).toBe(true);
       expect(component.find('.cancel').exists()).toBe(true);
+      expect(component.find('.saveAs').exists()).toBe(false);
     });
 
     it('button presss', () => {
@@ -46,18 +47,35 @@ describe('MainButton', () => {
       };
       const file = new File([testState], 'bar.txt');
 
-      expect(downloadJSONcalled).toBe(false);
-      expect(cancelcalled).toBe(false);
-      expect(loadJSONcalled).toBe(false);
+      expect(downloadCalled).toBe(false);
+      expect(cancelCalled).toBe(false);
+      expect(loadCalled).toBe(false);
 
       component.find('.load').simulate('submit', { target: { files: [file] } });
       component.find('.save').simulate('click');
       component.find('.cancel').simulate('click');
 
-      expect(downloadJSONcalled).toBe(true);
-      expect(cancelcalled).toBe(true);
-      // expect(loadJSONcalled).toBe(true);
+      expect(downloadCalled).toBe(true);
+      expect(cancelCalled).toBe(true);
+      // expect(loadCalled).toBe(true);
       // input button test is different
+    });
+  });
+
+  describe('saveas', () => {
+    it('saveas prop true', () => {
+      component = shallow(
+        <MainButton
+          load={load}
+          download={download}
+          cancel={cancel}
+          enableSaveAs
+        />,
+      );
+    });
+
+    it('saveas prop true', () => {
+      expect(component.find('.saveAs').exists()).toBe(true);
     });
   });
 });
