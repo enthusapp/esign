@@ -157,7 +157,7 @@ describe('basic app test', () => {
 
   describe('fontSize and animation change', () => {
     it('getAnimation operation', () => {
-      const playerHeight = component.instance().getDefaultPlayerHeight();
+      const playerHeight = component.instance().getPlayerHeight();
 
       expect(component.instance().getAnimationList(10).up[1].transform).toBe(
         `translateY(${(playerHeight - 10) / 2}rem)`,
@@ -167,7 +167,7 @@ describe('basic app test', () => {
     it('Inc then animation change', () => {
       let { fontSize } = component.state();
       let { currentAnimation } = component.state();
-      const playerHeight = component.instance().getDefaultPlayerHeight();
+      const playerHeight = component.instance().getPlayerHeight();
 
       expect(currentAnimation[1].transform).toBe(
         `translateY(${(playerHeight - fontSize) / 2}rem)`,
@@ -345,7 +345,12 @@ describe('basic app test', () => {
     });
 
     it('remove input', () => {
+      let fullHeight = window.innerHeight;
+      fullHeight /= parseFloat(
+        getComputedStyle(document.querySelector('body'))['font-size'],
+      );
       component = setWindowURL({ player: 1 });
+      expect(component.instance().getPlayerHeight()).toBe(fullHeight);
       expect(component.find('.colorInput').exists()).toBe(false);
       expect(component.find('.textInput').exists()).toBe(false);
       expect(component.find('.directionInput').exists()).toBe(false);

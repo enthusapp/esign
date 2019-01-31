@@ -7,8 +7,6 @@ import IncButton from './components/IncButton';
 import DirectionButton from './components/DirectionButton';
 import MainButton from './components/MainButton';
 
-const DEFAULT_PLAYER_HEIGHT = 10;
-
 function paramIsTruthy(param) {
   return [1, '1', 'true', 'True'].indexOf(param) > -1;
 }
@@ -54,13 +52,19 @@ class App extends Component {
     const url = new URL(window.location.href);
     const player = paramIsTruthy(url.searchParams.get('player'));
     const electron = checkElectron();
+    let fullHeight = window.innerHeight;
+    fullHeight /= parseFloat(
+      getComputedStyle(document.querySelector('body'))['font-size'],
+    );
+    const height = player ? fullHeight : 10;
+
+    App.prototype.isPlayerMode = () => player;
+    App.prototype.isElectron = () => electron;
+    App.prototype.getPlayerHeight = () => height;
 
     this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
     this.state.isFileLoaded = false;
-
-    App.prototype.isPlayerMode = () => player;
-    App.prototype.isElectron = () => electron;
 
     this.getIncButtunList().forEach((bt) => {
       const { name, increase, decrease } = bt;
@@ -154,28 +158,27 @@ class App extends Component {
     return newValue;
   }
 
-  getDefaultPlayerHeight = () => DEFAULT_PLAYER_HEIGHT;
-
   getAnimation = () => {
     const { fontSize, direction } = this.state;
     return this.getAnimationList(fontSize)[direction];
   };
 
   getAnimationList = (fontSize = this.getDefaultState().fontSize) => {
-    const heightMiddle = (DEFAULT_PLAYER_HEIGHT - fontSize) / 2;
+    const height = this.getPlayerHeight();
+    const heightMiddle = (height - fontSize) / 2;
 
     return {
       up: [
-        { transform: `translateY(${DEFAULT_PLAYER_HEIGHT}rem)` },
+        { transform: `translateY(${height}rem)` },
         { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
         { transform: `translateY(${heightMiddle}rem)`, offset: 0.7 },
-        { transform: `translateY(-${DEFAULT_PLAYER_HEIGHT}rem)` },
+        { transform: `translateY(-${height}rem)` },
       ],
       down: [
-        { transform: `translateY(-${DEFAULT_PLAYER_HEIGHT}rem)` },
+        { transform: `translateY(-${height}rem)` },
         { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
         { transform: `translateY(${heightMiddle}rem)`, offset: 0.7 },
-        { transform: `translateY(${DEFAULT_PLAYER_HEIGHT}rem)` },
+        { transform: `translateY(${height}rem)` },
       ],
       right: [
         { transform: `translate(-100%, ${heightMiddle}rem)` },
@@ -284,7 +287,7 @@ class App extends Component {
           text={textState}
           backgroundColor="black"
           color={colorState}
-          height={String(DEFAULT_PLAYER_HEIGHT)}
+          height={String(this.getPlayerHeight())}
           direction="left"
           animation={currentAnimation}
           {...playerProps}
