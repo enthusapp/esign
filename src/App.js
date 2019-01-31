@@ -31,6 +31,7 @@ class App extends Component {
 
     this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
+    this.state.isFileLoaded = false;
 
     App.prototype.isPlayerMode = () => player;
     App.prototype.isElectron = () => electron;
@@ -184,10 +185,13 @@ class App extends Component {
 
     newValue.mfp_type = 'esign';
     delete newValue.currentAnimation;
+    delete newValue.isFileLoaded;
     const data = JSON.stringify({ ...newValue }, null, 4);
 
     download(data, 'esign.json');
   }
+
+  saveAs = () => {}
 
   setStateFromJSON = (data) => {
     this.setState(this.getNewState(data), this.updateAnimation);
@@ -202,6 +206,9 @@ class App extends Component {
         const data = JSON.parse(reader.result);
         // TODO: need parse fail error handling
         this.setStateFromJSON(data);
+        if (this.isElectron()) {
+          this.setState({ isFileLoaded: true });
+        }
       };
       reader.readAsText(file);
     }
@@ -221,6 +228,7 @@ class App extends Component {
       direction,
       textState,
       colorState,
+      isFileLoaded,
     } = this.state;
     const playerProps = { };
 
@@ -252,13 +260,15 @@ class App extends Component {
           animation={currentAnimation}
           {...playerProps}
         />
-        {this.isPlayerMode() ? (<div />) : (
+        {this.isPlayerMode() ? (<></>) : (
           <div>
             <MainButton
               className="mainButton"
-              loadJSON={this.loadJSON}
-              downloadJSON={this.downloadJSON}
+              load={this.loadJSON}
+              download={this.downloadJSON}
               cancel={this.cancel}
+              saveAs={this.saveAs}
+              enableSaveAs={isFileLoaded}
             />
             <SwatchesPicker
               className="colorInput"

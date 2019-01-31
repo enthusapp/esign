@@ -6,9 +6,9 @@ import App from './App';
 function loadJSON(testState, component) {
   // Error on blob type, but don't know why
   // Block until know
-  // const file = new File([testState], 'bar.txt');
-  // component.find('.load').simulate('click',
-  //   { target: { files: [file] } });
+  // const file = new File([testState],
+  //  'bar.txt', { type: 'text/plain;charset=utf-8' });
+  // component.instance().loadJSON({ target: { files: [file] } });
   component.instance().setStateFromJSON(testState);
   return component;
 }
@@ -263,6 +263,8 @@ describe('basic app test', () => {
       );
 
       delete state.currentAnimation;
+      delete state.isFileLoaded;
+      // TODO refactoring
       expect(state).toEqual(component.instance().getDefaultState());
     });
 
@@ -366,11 +368,29 @@ describe('basic app test', () => {
 
   describe('electron', () => {
     it('is electorn?', () => {
+      expect(component.instance().isElectron()).toBe(false);
+    });
+
+    it('is electorn?', () => {
       Object.defineProperty(navigator, 'userAgent',
         { get: () => 'Mozilla/5.0 Gecko/20100101 electron/ Firefox/28.0)' });
 
       component = shallow(<App />);
       expect(component.instance().isElectron()).toBe(true);
+    });
+
+    it('is electorn?', () => {
+      const testState = {
+        direction: 'down',
+        textState: 'TextNew',
+        colorState: '#FF00FF',
+        fontSize: 15,
+        speed: 5,
+      };
+      expect(component.state().isFileLoaded).toBe(false);
+      component = loadJSON(testState, component);
+      // block until readAsText problem solve
+      // expect(component.state().isFileLoaded).toBe(true);
     });
   });
 });
