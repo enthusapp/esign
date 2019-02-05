@@ -281,8 +281,10 @@ describe('basic app test', () => {
     });
 
     it('download', () => {
-      URL.createObjectURL = () => {};
+      let getBlob = null;
+      URL.createObjectURL = (blob) => { getBlob = blob; };
       component.instance().downloadJSON();
+      console.log(getBlob);
     });
 
     it('load', () => {
@@ -420,7 +422,7 @@ describe('basic app test', () => {
       expect(component.instance().isElectron()).toBe(true);
     });
 
-    it('is electorn?', () => {
+    it('loadJSON', () => {
       const testState = {
         direction: 'down',
         textState: 'TextNew',
@@ -432,6 +434,27 @@ describe('basic app test', () => {
       component = loadJSON(testState, component);
       // block until readAsText problem solve
       // expect(component.state().isFileLoaded).toBe(true);
+    });
+
+    it('clear', () => {
+      const spy = jest.spyOn(component.instance(), 'download');
+      component.instance().cancel();
+      const state = component.state();
+      const { currentAnimation } = state;
+      const { fontSize, direction } = component.instance().getDefaultState();
+
+      expect(currentAnimation).not.toEqual(
+        component.instance().getAnimationList(fontSize)[direction],
+      );
+
+      delete state.currentAnimation;
+      delete state.isFileLoaded;
+      // TODO refactoring
+      expect(state).not.toEqual(component.instance().getDefaultState());
+
+      expect(spy).toBeCalledTimes(1);
+
+      spy.mockRestore();
     });
   });
 });

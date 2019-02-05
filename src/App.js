@@ -11,11 +11,6 @@ function paramIsTruthy(param) {
   return [1, '1', 'true', 'True'].indexOf(param) > -1;
 }
 
-function download(data, filename) {
-  const file = new Blob([data], { type: 'text/plain;charset=utf-8' });
-  saveAs(file, filename);
-}
-
 function checkElectron() {
   return navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
 }
@@ -211,6 +206,11 @@ class App extends Component {
     this.setState({ colorState: color.hex });
   };
 
+  download = (data, filename) => {
+    const file = new Blob([data], { type: 'text/plain;charset=utf-8' });
+    saveAs(file, filename);
+  };
+
   downloadJSON = () => {
     const newValue = {};
     Object.assign(newValue, this.state);
@@ -220,7 +220,7 @@ class App extends Component {
     delete newValue.isFileLoaded;
     const data = JSON.stringify({ ...newValue }, null, 4);
 
-    download(data, 'esign.json');
+    this.download(data, 'esign.json');
   }
 
   saveAs = () => {}
@@ -248,7 +248,7 @@ class App extends Component {
 
   cancel = () => {
     if (this.isElectron()) {
-      // close window
+      this.download({ cancel: true });
     } else {
       this.setState(this.getDefaultState(), this.updateAnimation);
     }
