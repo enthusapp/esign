@@ -57,6 +57,16 @@ class App extends Component {
     App.prototype.isElectron = () => electron;
     App.prototype.getPlayerHeight = () => height;
 
+    if (electron) {
+      App.prototype.cancel = () => this.download(
+        JSON.stringify({ cancel: true }, null, 4),
+      );
+    } else {
+      App.prototype.cancel = () => this.setState(
+        this.getDefaultState(), this.updateAnimation,
+      );
+    }
+
     this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
     this.state.isFileLoaded = false;
@@ -206,9 +216,9 @@ class App extends Component {
     this.setState({ colorState: color.hex });
   };
 
-  download = (data, filename) => {
+  download = (data) => {
     const file = new Blob([data], { type: 'text/plain;charset=utf-8' });
-    saveAs(file, filename);
+    saveAs(file, 'esign.json');
   };
 
   downloadJSON = () => {
@@ -220,7 +230,7 @@ class App extends Component {
     delete newValue.isFileLoaded;
     const data = JSON.stringify({ ...newValue }, null, 4);
 
-    this.download(data, 'esign.json');
+    this.download(data);
   }
 
   saveAs = () => {}
@@ -243,14 +253,6 @@ class App extends Component {
         }
       };
       reader.readAsText(file);
-    }
-  }
-
-  cancel = () => {
-    if (this.isElectron()) {
-      this.download({ cancel: true });
-    } else {
-      this.setState(this.getDefaultState(), this.updateAnimation);
     }
   }
 

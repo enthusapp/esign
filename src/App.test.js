@@ -13,6 +13,12 @@ function loadJSON(testState, component) {
   return component;
 }
 
+function downloadTest(component, callback) {
+  const inst = component.instance();
+  URL.createObjectURL = () => { };
+  inst.download = callback;
+}
+
 function objectToURLParam(obj) {
   let param = '?dummy=1';
 
@@ -281,10 +287,22 @@ describe('basic app test', () => {
     });
 
     it('download', () => {
-      let getBlob = null;
-      URL.createObjectURL = (blob) => { getBlob = blob; };
+      downloadTest(component, (rdata) => {
+        const data = JSON.parse(rdata);
+        const {
+          fontSize, speed, colorState, testState,
+        } = component.state();
+
+        expect(data.mfp_type).toEqual('esign');
+        expect(data.currentAnimation).toBe(undefined);
+        expect(data.isFileLoaded).toBe(undefined);
+        expect(data.fontSize).toEqual(fontSize);
+        expect(data.speed).toEqual(speed);
+        expect(data.colorState).toEqual(colorState);
+        expect(data.testState).toEqual(testState);
+      });
+
       component.instance().downloadJSON();
-      console.log(getBlob);
     });
 
     it('load', () => {
@@ -437,24 +455,20 @@ describe('basic app test', () => {
     });
 
     it('clear', () => {
-      const spy = jest.spyOn(component.instance(), 'download');
+      downloadTest(component, (rdata) => {
+        const data = JSON.parse(rdata);
+
+        expect(data.cancel).toBe(true);
+        expect(data.mfp_type).toBe(undefined);
+        expect(data.currentAnimation).toBe(undefined);
+        expect(data.isFileLoaded).toBe(undefined);
+        expect(data.fontSize).toBe(undefined);
+        expect(data.speed).toBe(undefined);
+        expect(data.colorState).toBe(undefined);
+        expect(data.testState).toBe(undefined);
+      });
+
       component.instance().cancel();
-      const state = component.state();
-      const { currentAnimation } = state;
-      const { fontSize, direction } = component.instance().getDefaultState();
-
-      expect(currentAnimation).not.toEqual(
-        component.instance().getAnimationList(fontSize)[direction],
-      );
-
-      delete state.currentAnimation;
-      delete state.isFileLoaded;
-      // TODO refactoring
-      expect(state).not.toEqual(component.instance().getDefaultState());
-
-      expect(spy).toBeCalledTimes(1);
-
-      spy.mockRestore();
     });
   });
 });
