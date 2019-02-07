@@ -32,7 +32,8 @@ class MainButton extends Component {
       isLoaded,
     } = this.state;
 
-    const saveText = isLoaded ? '수정완료' : '새로 만들기';
+    const electronSaveText = isLoaded ? '수정완료' : '새로 만들기';
+    const electronSaveAction = isLoaded ? download : saveAs;
 
     return (
       <div>
@@ -51,8 +52,12 @@ class MainButton extends Component {
             </Button>
           </label>)
         }
-        <Button variant="contained" className="save" onClick={download}>
-          {isElectron ? saveText : '완료' }
+        <Button
+          variant="contained"
+          className="save"
+          onClick={isElectron ? electronSaveAction : download}
+        >
+          {isElectron ? electronSaveText : '완료' }
         </Button>
         {isLoaded ? (
           <Button variant="contained" className="saveAs" onClick={saveAs}>
