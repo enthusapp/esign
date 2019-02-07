@@ -69,6 +69,7 @@ class App extends Component {
 
     this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
+    this.state.loadedFile = undefined;
 
     this.getIncButtunList().forEach((bt) => {
       const { name, increase, decrease } = bt;
@@ -241,16 +242,19 @@ class App extends Component {
     this.setState(this.getNewState(data), this.updateAnimation);
   }
 
+  fileReaderOnLoad = (reader, file) => {
+    const data = JSON.parse(reader.result);
+    // TODO: need parse fail error handling
+    this.setStateFromJSON(data);
+    if (this.isElectron()) this.setState({ loadedFile: file.name });
+  }
+
   loadJSON = (event) => {
     const file = event.target.files[0];
 
     if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        const data = JSON.parse(reader.result);
-        // TODO: need parse fail error handling
-        this.setStateFromJSON(data);
-      };
+      reader.onload = () => { this.fileReaderOnLoad(reader, file); };
       reader.readAsText(file);
     }
   }

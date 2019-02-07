@@ -10,6 +10,7 @@ function isNormalDownloadFormat(data, component) {
 
   if (data.mfp_type !== 'esign') return false;
   if (data.currentAnimation !== undefined) return false;
+  if (data.loadedFile !== undefined) return false;
   if (data.fontSize !== fontSize) return false;
   if (data.speed !== speed) return false;
   if (data.colorState !== colorState) return false;
@@ -295,7 +296,7 @@ describe('basic app test', () => {
     });
   });
 
-  describe('download/load/cancel', () => {
+  describe('main menu on web', () => {
     it('exists', () => {
       expect(component.find('.mainButton').exists()).toBe(true);
     });
@@ -450,9 +451,10 @@ describe('basic app test', () => {
       };
       component = loadJSON(testState, component);
       // block until readAsText problem solve
+      // TODO start here
     });
 
-    it('clear', () => {
+    it('clear on electron', () => {
       downloadTest(component, (rdata) => {
         const data = JSON.parse(rdata);
 
@@ -463,7 +465,7 @@ describe('basic app test', () => {
       component.instance().cancel();
     });
 
-    it('saveAs', () => {
+    it('saveAs on electron', () => {
       downloadTest(component, (rdata) => {
         const data = JSON.parse(rdata);
 
