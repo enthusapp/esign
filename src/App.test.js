@@ -10,7 +10,6 @@ function isNormalDownloadFormat(data, component) {
 
   if (data.mfp_type !== 'esign') return false;
   if (data.currentAnimation !== undefined) return false;
-  if (data.isFileLoaded !== undefined) return false;
   if (data.fontSize !== fontSize) return false;
   if (data.speed !== speed) return false;
   if (data.colorState !== colorState) return false;
@@ -324,7 +323,6 @@ describe('basic app test', () => {
       );
 
       delete state.currentAnimation;
-      delete state.isFileLoaded;
       // TODO refactoring
       expect(state).toEqual(component.instance().getDefaultState());
     });
@@ -450,10 +448,8 @@ describe('basic app test', () => {
         fontSize: 15,
         speed: 5,
       };
-      expect(component.state().isFileLoaded).toBe(false);
       component = loadJSON(testState, component);
       // block until readAsText problem solve
-      // expect(component.state().isFileLoaded).toBe(true);
     });
 
     it('clear', () => {

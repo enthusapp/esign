@@ -69,7 +69,6 @@ class App extends Component {
 
     this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
-    this.state.isFileLoaded = false;
 
     this.getIncButtunList().forEach((bt) => {
       const { name, increase, decrease } = bt;
@@ -227,7 +226,6 @@ class App extends Component {
 
     newValue.mfp_type = 'esign';
     delete newValue.currentAnimation;
-    delete newValue.isFileLoaded;
     return JSON.stringify({ ...newValue }, null, 4);
   }
 
@@ -252,9 +250,6 @@ class App extends Component {
         const data = JSON.parse(reader.result);
         // TODO: need parse fail error handling
         this.setStateFromJSON(data);
-        if (this.isElectron()) {
-          this.setState({ isFileLoaded: true });
-        }
       };
       reader.readAsText(file);
     }
@@ -266,7 +261,6 @@ class App extends Component {
       direction,
       textState,
       colorState,
-      isFileLoaded,
     } = this.state;
     const playerProps = { };
 
@@ -306,7 +300,7 @@ class App extends Component {
               download={this.save}
               cancel={this.cancel}
               saveAs={this.saveAs}
-              enableSaveAs={isFileLoaded}
+              isElectron={this.isElectron()}
             />
             <SwatchesPicker
               className="colorInput"

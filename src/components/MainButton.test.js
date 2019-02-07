@@ -5,6 +5,7 @@ import MainButton from './MainButton';
 let loadCalled = false;
 let downloadCalled = false;
 let cancelCalled = false;
+let saveAsCalled = false;
 
 function load() {
   loadCalled = true;
@@ -14,6 +15,9 @@ function download() {
 }
 function cancel() {
   cancelCalled = true;
+}
+function saveAs() {
+  saveAsCalled = true;
 }
 
 describe('MainButton', () => {
@@ -25,6 +29,8 @@ describe('MainButton', () => {
         load={load}
         download={download}
         cancel={cancel}
+        saveAs={saveAs}
+        isElectron={false}
       />,
     );
   });
@@ -69,13 +75,27 @@ describe('MainButton', () => {
           load={load}
           download={download}
           cancel={cancel}
-          enableSaveAs
+          saveAs={saveAs}
+          isElectron
         />,
       );
     });
 
-    it('saveas prop true', () => {
+    it('saveAs prop true', () => {
+      expect(component.find('.saveAs').exists()).toBe(false);
+      expect(component.state().enableSaveAs).toBe(false);
+      expect(saveAsCalled).toBe(false);
+    });
+
+    it('make saveAs', () => {
+      component.instance().load();
+      expect(component.state().enableSaveAs).toBe(true);
       expect(component.find('.saveAs').exists()).toBe(true);
+    });
+
+    it('saveAs click', () => {
+      component.find('.saveAs').simulate('click');
+      expect(saveAsCalled).toBe(true);
     });
   });
 });
