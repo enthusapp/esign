@@ -46,6 +46,7 @@ class MainButton extends Component {
               className="load"
               type="file"
               onChange={this.load}
+              accept=".esign"
               style={{ display: 'none' }}
             />
             <Button
