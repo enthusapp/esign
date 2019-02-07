@@ -7,8 +7,9 @@ let downloadCalled = false;
 let cancelCalled = false;
 let saveAsCalled = false;
 
-function load() {
-  loadCalled = true;
+function load(event) {
+  const file = event.target.files[0];
+  loadCalled = file;
 }
 function download() {
   downloadCalled = true;
@@ -44,27 +45,19 @@ describe('MainButton', () => {
     });
 
     it('button presss', () => {
-      const testState = {
-        direction: 'down',
-        textState: 'TextNew',
-        colorState: '#FF00FF',
-        fontSize: 15,
-        speed: 5,
-      };
-      const file = new File([testState], 'bar.txt');
+      const file = 'loadTest';
 
       expect(downloadCalled).toBe(false);
       expect(cancelCalled).toBe(false);
       expect(loadCalled).toBe(false);
 
-      component.find('.load').simulate('submit', { target: { files: [file] } });
+      component.find('.load').simulate('change', { target: { files: [file] } });
       component.find('.save').simulate('click');
       component.find('.cancel').simulate('click');
 
       expect(downloadCalled).toBe(true);
       expect(cancelCalled).toBe(true);
-      // expect(loadCalled).toBe(true);
-      // input button test is different
+      expect(loadCalled).toBe(file);
     });
   });
 
@@ -88,7 +81,7 @@ describe('MainButton', () => {
     });
 
     it('make saveAs', () => {
-      component.instance().load();
+      component.instance().load({ target: { files: ['test'] } });
       expect(component.state().enableSaveAs).toBe(true);
       expect(component.find('.saveAs').exists()).toBe(true);
     });

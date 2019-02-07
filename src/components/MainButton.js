@@ -8,7 +8,7 @@ class MainButton extends Component {
     this.state = { enableSaveAs: false };
   }
 
-  load = () => {
+  load = (target) => {
     const {
       load,
       isElectron,
@@ -17,7 +17,7 @@ class MainButton extends Component {
     if (isElectron) {
       this.setState({ enableSaveAs: true });
     }
-    load();
+    load(target);
   }
 
   render() {
