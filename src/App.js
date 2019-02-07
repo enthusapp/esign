@@ -218,7 +218,7 @@ class App extends Component {
 
   download = (data) => {
     const file = new Blob([data], { type: 'text/plain;charset=utf-8' });
-    saveAs(file, 'esign.json');
+    saveAs(file, 'message.esign');
   };
 
   makeDownloadData = (state) => {
