@@ -3,13 +3,13 @@ import { shallow } from 'enzyme';
 import MainButton from './MainButton';
 
 let loadCalled = false;
-let downloadCalled = false;
+let saveCalled = false;
 let cancelCalled = false;
 let saveAsCalled = false;
 
 function calledClear() {
   loadCalled = false;
-  downloadCalled = false;
+  saveCalled = false;
   cancelCalled = false;
   saveAsCalled = false;
 }
@@ -19,7 +19,7 @@ function load(event) {
   loadCalled = file;
 }
 function download() {
-  downloadCalled = true;
+  saveCalled = true;
 }
 function cancel() {
   cancelCalled = true;
@@ -35,7 +35,7 @@ function isTextRight(component, button, text) {
 describe('MainButton', () => {
   let component = null;
 
-  describe('component', () => {
+  describe('on web browser', () => {
     beforeEach(() => {
       component = shallow(
         <MainButton
@@ -70,7 +70,7 @@ describe('MainButton', () => {
 
     it('save presss', () => {
       component.find('.save').simulate('click');
-      expect(downloadCalled).toBe(true);
+      expect(saveCalled).toBe(true);
     });
 
     it('cancel presss', () => {
@@ -104,11 +104,10 @@ describe('MainButton', () => {
       expect(component.state().isLoaded).toBe(false);
     });
 
-    it('press save', () => {
+    it('press save, but work saveAs', () => {
       component.find('.save').simulate('click');
-
       expect(saveAsCalled).toBe(true);
-      expect(downloadCalled).toBe(false);
+      expect(saveCalled).toBe(false);
     });
 
     describe('isLoaded', () => {
@@ -127,14 +126,15 @@ describe('MainButton', () => {
         expect(isTextRight(component, '.saveAs', '새로 만들기')).toBe(true);
       });
 
-      it('saveAs click', () => {
+      it('press saveAs, and saveAs action', () => {
         component.find('.saveAs').simulate('click');
         expect(saveAsCalled).toBe(true);
       });
 
-      it('save click', () => {
+      it('press save, and save after file loading', () => {
         component.find('.save').simulate('click');
-        expect(downloadCalled).toBe(true);
+        expect(saveCalled).toBe(true);
+        expect(saveAsCalled).toBe(false);
       });
     });
   });
