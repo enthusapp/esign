@@ -21,6 +21,10 @@ function saveAs() {
   saveAsCalled = true;
 }
 
+function isTextRight(component, button, text) {
+  return component.find(button).html().indexOf(text) > -1;
+}
+
 describe('MainButton', () => {
   let component = null;
 
@@ -59,6 +63,12 @@ describe('MainButton', () => {
       expect(cancelCalled).toBe(true);
       expect(loadCalled).toBe(file);
     });
+
+    it('button text', () => {
+      expect(isTextRight(component, '.loadText', '읽어오기')).toBe(true);
+      expect(isTextRight(component, '.save', '완료')).toBe(true);
+      expect(isTextRight(component, '.cancel', '초기화')).toBe(true);
+    });
   });
 
   describe('saveas', () => {
@@ -74,16 +84,28 @@ describe('MainButton', () => {
       );
     });
 
+    it('button text', () => {
+      expect(isTextRight(component, '.loadText', '읽어오기')).toBe(true);
+      expect(isTextRight(component, '.save', '새로 만들기')).toBe(true);
+      expect(isTextRight(component, '.cancel', '취소')).toBe(true);
+    });
+
     it('saveAs prop true', () => {
       expect(component.find('.saveAs').exists()).toBe(false);
-      expect(component.state().enableSaveAs).toBe(false);
+      expect(component.state().isLoaded).toBe(false);
       expect(saveAsCalled).toBe(false);
     });
 
     it('make saveAs', () => {
       component.instance().load({ target: { files: ['test'] } });
-      expect(component.state().enableSaveAs).toBe(true);
+      expect(component.state().isLoaded).toBe(true);
       expect(component.find('.saveAs').exists()).toBe(true);
+    });
+
+    it('text change', () => {
+      expect(component.find('.load').exists()).toBe(false);
+      expect(isTextRight(component, '.save', '수정완료')).toBe(true);
+      expect(isTextRight(component, '.saveAs', '새로 만들기')).toBe(true);
     });
 
     it('saveAs click', () => {

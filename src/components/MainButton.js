@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 class MainButton extends Component {
   constructor(props) {
     super(props);
-    this.state = { enableSaveAs: false };
+    this.state = { isLoaded: false };
   }
 
   load = (target) => {
@@ -15,7 +15,7 @@ class MainButton extends Component {
     } = this.props;
 
     if (isElectron) {
-      this.setState({ enableSaveAs: true });
+      this.setState({ isLoaded: true });
     }
     load(target);
   }
@@ -25,37 +25,43 @@ class MainButton extends Component {
       download,
       cancel,
       saveAs,
+      isElectron,
     } = this.props;
 
     const {
-      enableSaveAs,
+      isLoaded,
     } = this.state;
+
+    const saveText = isLoaded ? '수정완료' : '새로 만들기';
 
     return (
       <div>
-        <label htmlFor="load">
-          <input
-            id="load"
-            className="load"
-            type="file"
-            onChange={this.load}
-            style={{ display: 'none' }}
-          />
-          <Button variant="contained" component="span">
-            이전 MESSAGE 읽어오기
-          </Button>
-        </label>
+        {isLoaded ? (<></>
+        ) : (
+          <label htmlFor="load">
+            <input
+              id="load"
+              className="load"
+              type="file"
+              onChange={this.load}
+              style={{ display: 'none' }}
+            />
+            <Button variant="contained" component="span" className="loadText">
+              읽어오기
+            </Button>
+          </label>)
+        }
         <Button variant="contained" className="save" onClick={download}>
-          저장
+          {isElectron ? saveText : '완료' }
         </Button>
-        {enableSaveAs ? (
+        {isLoaded ? (
           <Button variant="contained" className="saveAs" onClick={saveAs}>
-            다른이름으로 저장
+            새로 만들기
           </Button>
         ) : (<></>)
         }
         <Button variant="contained" className="cancel" onClick={cancel}>
-          취소
+          {isElectron ? '취소' : '초기화' }
         </Button>
       </div>
     );
