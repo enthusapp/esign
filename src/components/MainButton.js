@@ -34,6 +34,7 @@ class MainButton extends Component {
 
     const electronSaveText = isLoaded ? '수정완료' : '새로 만들기';
     const electronSaveAction = isLoaded ? download : saveAs;
+    const marginStyle = { margin: '1rem' };
 
     return (
       <div>
@@ -47,7 +48,12 @@ class MainButton extends Component {
               onChange={this.load}
               style={{ display: 'none' }}
             />
-            <Button variant="contained" component="span" className="loadText">
+            <Button
+              variant="contained"
+              component="span"
+              className="loadText"
+              style={marginStyle}
+            >
               읽어오기
             </Button>
           </label>)
@@ -56,16 +62,27 @@ class MainButton extends Component {
           variant="contained"
           className="save"
           onClick={isElectron ? electronSaveAction : download}
+          style={marginStyle}
         >
           {isElectron ? electronSaveText : '완료' }
         </Button>
         {isLoaded ? (
-          <Button variant="contained" className="saveAs" onClick={saveAs}>
+          <Button
+            variant="contained"
+            className="saveAs"
+            onClick={saveAs}
+            style={marginStyle}
+          >
             새로 만들기
           </Button>
         ) : (<></>)
         }
-        <Button variant="contained" className="cancel" onClick={cancel}>
+        <Button
+          variant="contained"
+          className="cancel"
+          onClick={cancel}
+          style={marginStyle}
+        >
           {isElectron ? '취소' : '초기화' }
         </Button>
       </div>
