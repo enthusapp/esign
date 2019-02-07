@@ -3,6 +3,21 @@ import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import App from './App';
 
+function isNormalDownloadFormat(data, component) {
+  const {
+    fontSize, speed, colorState, testState,
+  } = component.state();
+
+  if (data.mfp_type !== 'esign') return false;
+  if (data.currentAnimation !== undefined) return false;
+  if (data.isFileLoaded !== undefined) return false;
+  if (data.fontSize !== fontSize) return false;
+  if (data.speed !== speed) return false;
+  if (data.colorState !== colorState) return false;
+  if (data.testState !== testState) return false;
+  return true;
+}
+
 function loadJSON(testState, component) {
   // Error on blob type, but don't know why
   // Block until know
@@ -281,7 +296,7 @@ describe('basic app test', () => {
     });
   });
 
-  describe('download/load/cancel/saveas', () => {
+  describe('download/load/cancel', () => {
     it('exists', () => {
       expect(component.find('.mainButton').exists()).toBe(true);
     });
@@ -289,20 +304,10 @@ describe('basic app test', () => {
     it('download', () => {
       downloadTest(component, (rdata) => {
         const data = JSON.parse(rdata);
-        const {
-          fontSize, speed, colorState, testState,
-        } = component.state();
-
-        expect(data.mfp_type).toEqual('esign');
-        expect(data.currentAnimation).toBe(undefined);
-        expect(data.isFileLoaded).toBe(undefined);
-        expect(data.fontSize).toEqual(fontSize);
-        expect(data.speed).toEqual(speed);
-        expect(data.colorState).toEqual(colorState);
-        expect(data.testState).toEqual(testState);
+        expect(isNormalDownloadFormat(data, component)).toBe(true);
       });
 
-      component.instance().downloadJSON();
+      component.instance().save();
     });
 
     it('load', () => {
@@ -322,9 +327,6 @@ describe('basic app test', () => {
       delete state.isFileLoaded;
       // TODO refactoring
       expect(state).toEqual(component.instance().getDefaultState());
-    });
-
-    it('saveas', () => {
     });
   });
 
@@ -459,16 +461,21 @@ describe('basic app test', () => {
         const data = JSON.parse(rdata);
 
         expect(data.cancel).toBe(true);
-        expect(data.mfp_type).toBe(undefined);
-        expect(data.currentAnimation).toBe(undefined);
-        expect(data.isFileLoaded).toBe(undefined);
-        expect(data.fontSize).toBe(undefined);
-        expect(data.speed).toBe(undefined);
-        expect(data.colorState).toBe(undefined);
-        expect(data.testState).toBe(undefined);
+        expect(isNormalDownloadFormat(data, component)).toBe(false);
       });
 
       component.instance().cancel();
+    });
+
+    it('saveAs', () => {
+      downloadTest(component, (rdata) => {
+        const data = JSON.parse(rdata);
+
+        expect(data.saveAs).toBe(true);
+        expect(isNormalDownloadFormat(data, component)).toBe(true);
+      });
+
+      component.instance().saveAs();
     });
   });
 });

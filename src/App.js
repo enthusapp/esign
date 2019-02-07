@@ -221,19 +221,23 @@ class App extends Component {
     saveAs(file, 'esign.json');
   };
 
-  downloadJSON = () => {
+  makeDownloadData = (state) => {
     const newValue = {};
-    Object.assign(newValue, this.state);
+    Object.assign(newValue, state);
 
     newValue.mfp_type = 'esign';
     delete newValue.currentAnimation;
     delete newValue.isFileLoaded;
-    const data = JSON.stringify({ ...newValue }, null, 4);
-
-    this.download(data);
+    return JSON.stringify({ ...newValue }, null, 4);
   }
 
-  saveAs = () => {}
+  save = () => {
+    this.download(this.makeDownloadData(this.state));
+  }
+
+  saveAs = () => {
+    this.download(this.makeDownloadData({ saveAs: true, ...this.state }));
+  }
 
   setStateFromJSON = (data) => {
     this.setState(this.getNewState(data), this.updateAnimation);
@@ -299,7 +303,7 @@ class App extends Component {
             <MainButton
               className="mainButton"
               load={this.loadJSON}
-              download={this.downloadJSON}
+              download={this.save}
               cancel={this.cancel}
               saveAs={this.saveAs}
               enableSaveAs={isFileLoaded}
