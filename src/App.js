@@ -238,7 +238,10 @@ class App extends Component {
   }
 
   save = () => {
-    this.download(this.makeDownloadFormat(this.state));
+    const downData = this.makeDownloadFormat(this.state);
+    const { fileName } = this.state;
+    if (this.isElectron()) downData.fileName = fileName;
+    this.download(downData);
   }
 
   saveAs = () => {
@@ -256,7 +259,7 @@ class App extends Component {
     if (this.isElectron()) this.setState({ fileName: file.name });
   }
 
-  loadJSON = (event) => {
+  load = (event) => {
     const file = event.target.files[0];
 
     if (file) {
@@ -307,7 +310,7 @@ class App extends Component {
           <div>
             <MainButton
               className="mainButton"
-              load={this.loadJSON}
+              load={this.load}
               download={this.save}
               cancel={this.cancel}
               saveAs={this.saveAs}

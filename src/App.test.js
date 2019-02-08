@@ -4,18 +4,7 @@ import { shallow } from 'enzyme';
 import App from './App';
 
 function makeNormalDownloadData(component) {
-  const {
-    fontSize, speed, colorState, textState, direction,
-  } = component.state();
-
-  return {
-    mfp_type: 'esign',
-    direction,
-    fontSize,
-    speed,
-    colorState,
-    textState,
-  };
+  return component.instance().makeDownloadFormat(component.state());
 }
 
 function load(testState, component, fileName = 'foo.esign') {
@@ -308,7 +297,14 @@ describe('basic app test', () => {
       component.instance().save();
     });
 
-    it('load', () => {
+    it('makeDownloadFormat', () => {
+      const testState = {
+        foo: 'bar',
+        ...component.instance().getDefaultState(),
+      };
+      expect(component.instance().makeDownloadFormat(testState)).toEqual(
+        { mfp_type: 'esign', ...component.instance().getDefaultState() },
+      );
     });
 
     it('clear', () => {
@@ -439,19 +435,6 @@ describe('basic app test', () => {
       expect(component.instance().isElectron()).toBe(true);
     });
 
-    it('load', () => {
-      const testState = {
-        direction: 'down',
-        textState: 'TextNew',
-        colorState: '#FF00FF',
-        fontSize: 15,
-        speed: 5,
-      };
-      component = load(testState, component);
-      // block until readAsText problem solve
-      // TODO start here
-    });
-
     it('clear on electron', () => {
       downloadTest(component, (rdata) => {
         expect({ cancel: true }).toEqual(rdata);
@@ -469,12 +452,34 @@ describe('basic app test', () => {
       component.instance().saveAs();
     });
 
-    it('save on electron', () => {
-      downloadTest(component, (rdata) => {
-        const dData = { fileName: true, ...makeNormalDownloadData(component) };
-        expect(dData).toEqual(JSON.parse(rdata));
+    describe('electron save and saveAs after load', () => {
+      const fileName = 'bar.esign';
+
+      beforeEach(() => {
+        component = load(
+          component.instance().getDefaultState(),
+          component,
+          fileName,
+        );
       });
-      // TODO makeNormalDownloadData DRY and this
+
+      it('saveAs should do save work after load', () => {
+        downloadTest(component, (rdata) => {
+          const dData = { saveAs: true, ...makeNormalDownloadData(component) };
+          expect(dData).toEqual(rdata);
+        });
+
+        component.instance().saveAs();
+      });
+
+      it('save should have fileName after load', () => {
+        downloadTest(component, (rdata) => {
+          const dData = { fileName, ...makeNormalDownloadData(component) };
+          expect(dData).toEqual(rdata);
+        });
+
+        component.instance().save();
+      });
     });
   });
 });
