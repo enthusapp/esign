@@ -3,19 +3,19 @@ import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import App from './App';
 
-function isNormalDownloadFormat(data, component) {
+function makeNormalDownloadData(component) {
   const {
-    fontSize, speed, colorState, testState,
+    fontSize, speed, colorState, textState, direction,
   } = component.state();
 
-  if (data.mfp_type !== 'esign') return false;
-  if (data.currentAnimation !== undefined) return false;
-  if (data.loadedFile !== undefined) return false;
-  if (data.fontSize !== fontSize) return false;
-  if (data.speed !== speed) return false;
-  if (data.colorState !== colorState) return false;
-  if (data.testState !== testState) return false;
-  return true;
+  return {
+    mfp_type: 'esign',
+    direction,
+    fontSize,
+    speed,
+    colorState,
+    textState,
+  };
 }
 
 function loadJSON(testState, component) {
@@ -303,8 +303,7 @@ describe('basic app test', () => {
 
     it('download', () => {
       downloadTest(component, (rdata) => {
-        const data = JSON.parse(rdata);
-        expect(isNormalDownloadFormat(data, component)).toBe(true);
+        expect(makeNormalDownloadData(component)).toEqual(JSON.parse(rdata));
       });
 
       component.instance().save();
@@ -456,10 +455,7 @@ describe('basic app test', () => {
 
     it('clear on electron', () => {
       downloadTest(component, (rdata) => {
-        const data = JSON.parse(rdata);
-
-        expect(data.cancel).toBe(true);
-        expect(isNormalDownloadFormat(data, component)).toBe(false);
+        expect({ cancel: true }).toEqual(JSON.parse(rdata));
       });
 
       component.instance().cancel();
@@ -467,13 +463,18 @@ describe('basic app test', () => {
 
     it('saveAs on electron', () => {
       downloadTest(component, (rdata) => {
-        const data = JSON.parse(rdata);
-
-        expect(data.saveAs).toBe(true);
-        expect(isNormalDownloadFormat(data, component)).toBe(true);
+        const dData = { saveAs: true, ...makeNormalDownloadData(component) };
+        expect(dData).toEqual(JSON.parse(rdata));
       });
 
       component.instance().saveAs();
+    });
+
+    it('save on electron', () => {
+      downloadTest(component, (rdata) => {
+        const dData = { fileName: true, ...makeNormalDownloadData(component) };
+        expect(dData).toEqual(JSON.parse(rdata));
+      });
     });
   });
 });
