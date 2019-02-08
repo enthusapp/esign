@@ -18,13 +18,12 @@ function makeNormalDownloadData(component) {
   };
 }
 
-function loadJSON(testState, component) {
-  // Error on blob type, but don't know why
-  // Block until know
-  // const file = new File([testState],
-  //  'bar.txt', { type: 'text/plain;charset=utf-8' });
-  // component.instance().loadJSON({ target: { files: [file] } });
-  component.instance().setStateFromJSON(testState);
+function load(testState, component, fileName = 'foo.esign') {
+  // Use fileReaderOnLoad because error on FileReader of JSDOM
+  const reader = { result: JSON.stringify(testState) };
+  const file = { name: fileName };
+
+  component.instance().fileReaderOnLoad(reader, file);
   return component;
 }
 
@@ -303,7 +302,7 @@ describe('basic app test', () => {
 
     it('download', () => {
       downloadTest(component, (rdata) => {
-        expect(makeNormalDownloadData(component)).toEqual(JSON.parse(rdata));
+        expect(makeNormalDownloadData(component)).toEqual(rdata);
       });
 
       component.instance().save();
@@ -380,7 +379,7 @@ describe('basic app test', () => {
   });
 
   describe('url and file load', () => {
-    const stateChangeFuncs = [loadJSON, setWindowURL];
+    const stateChangeFuncs = [load, setWindowURL];
 
     stateChangeFuncs.forEach((stateChange) => {
       it('default', () => {
@@ -440,7 +439,7 @@ describe('basic app test', () => {
       expect(component.instance().isElectron()).toBe(true);
     });
 
-    it('loadJSON', () => {
+    it('load', () => {
       const testState = {
         direction: 'down',
         textState: 'TextNew',
@@ -448,14 +447,14 @@ describe('basic app test', () => {
         fontSize: 15,
         speed: 5,
       };
-      component = loadJSON(testState, component);
+      component = load(testState, component);
       // block until readAsText problem solve
       // TODO start here
     });
 
     it('clear on electron', () => {
       downloadTest(component, (rdata) => {
-        expect({ cancel: true }).toEqual(JSON.parse(rdata));
+        expect({ cancel: true }).toEqual(rdata);
       });
 
       component.instance().cancel();
@@ -464,7 +463,7 @@ describe('basic app test', () => {
     it('saveAs on electron', () => {
       downloadTest(component, (rdata) => {
         const dData = { saveAs: true, ...makeNormalDownloadData(component) };
-        expect(dData).toEqual(JSON.parse(rdata));
+        expect(dData).toEqual(rdata);
       });
 
       component.instance().saveAs();
@@ -475,6 +474,7 @@ describe('basic app test', () => {
         const dData = { fileName: true, ...makeNormalDownloadData(component) };
         expect(dData).toEqual(JSON.parse(rdata));
       });
+      // TODO makeNormalDownloadData DRY and this
     });
   });
 });

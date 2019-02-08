@@ -58,9 +58,7 @@ class App extends Component {
     App.prototype.getPlayerHeight = () => height;
 
     if (electron) {
-      App.prototype.cancel = () => this.download(
-        JSON.stringify({ cancel: true }, null, 4),
-      );
+      App.prototype.cancel = () => this.download({ cancel: true });
     } else {
       App.prototype.cancel = () => this.setState(
         this.getDefaultState(), this.updateAnimation,
@@ -69,7 +67,7 @@ class App extends Component {
 
     this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
-    this.state.loadedFile = undefined;
+    this.state.fileName = undefined;
 
     this.getIncButtunList().forEach((bt) => {
       const { name, increase, decrease } = bt;
@@ -217,25 +215,34 @@ class App extends Component {
   };
 
   download = (data) => {
-    const file = new Blob([data], { type: 'text/plain;charset=utf-8' });
+    const file = new Blob(
+      [JSON.stringify(data, null, 4)],
+      { type: 'text/plain;charset=utf-8' },
+    );
     saveAs(file, 'message.esign');
   };
 
-  makeDownloadData = (state) => {
-    const newValue = {};
-    Object.assign(newValue, state);
+  makeDownloadFormat = (state) => {
+    const {
+      fontSize, speed, colorState, textState, direction,
+    } = state;
 
-    newValue.mfp_type = 'esign';
-    delete newValue.currentAnimation;
-    return JSON.stringify({ ...newValue }, null, 4);
+    return {
+      mfp_type: 'esign',
+      direction,
+      fontSize,
+      speed,
+      colorState,
+      textState,
+    };
   }
 
   save = () => {
-    this.download(this.makeDownloadData(this.state));
+    this.download(this.makeDownloadFormat(this.state));
   }
 
   saveAs = () => {
-    this.download(this.makeDownloadData({ saveAs: true, ...this.state }));
+    this.download({ saveAs: true, ...this.makeDownloadFormat(this.state) });
   }
 
   setStateFromJSON = (data) => {
@@ -246,7 +253,7 @@ class App extends Component {
     const data = JSON.parse(reader.result);
     // TODO: need parse fail error handling
     this.setStateFromJSON(data);
-    if (this.isElectron()) this.setState({ loadedFile: file.name });
+    if (this.isElectron()) this.setState({ fileName: file.name });
   }
 
   loadJSON = (event) => {
