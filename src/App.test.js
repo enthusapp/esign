@@ -284,6 +284,18 @@ describe('basic app test', () => {
     });
   });
 
+  describe('player sticky', () => {
+    it('sticky style', () => {
+      const { position, top, zIndex } = component
+        .find('.PlayerWrap').props().style;
+      expect(position).toBe('sticky');
+      expect(top).toBe(0);
+      const { zIndex: inputZIndex } = component
+        .find('.InputWrap').props().style;
+      expect(zIndex).toBeGreaterThan(inputZIndex);
+    });
+  });
+
   describe('main menu on web', () => {
     it('exists', () => {
       expect(component.find('.mainButton').exists()).toBe(true);

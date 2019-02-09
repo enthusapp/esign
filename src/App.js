@@ -119,9 +119,9 @@ class App extends Component {
 
   getDefaultState = () => ({
     direction: 'up',
-    textState: 'Text',
-    colorState: '#FFFFFF',
-    fontSize: 5,
+    textState: 'Enthus 메시지 편집기',
+    colorState: '#FFCCBC',
+    fontSize: 2,
     speed: 10,
   })
 
@@ -295,19 +295,24 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Player
-          className="player"
-          player={this.isPlayerMode()}
-          text={textState}
-          backgroundColor="black"
-          color={colorState}
-          height={String(this.getPlayerHeight())}
-          direction="left"
-          animation={currentAnimation}
-          {...playerProps}
-        />
+        <div
+          className="PlayerWrap"
+          style={{ position: 'sticky', top: 0, zIndex: 10 }}
+        >
+          <Player
+            className="player"
+            player={this.isPlayerMode()}
+            text={textState}
+            backgroundColor="black"
+            color={colorState}
+            height={String(this.getPlayerHeight())}
+            direction="left"
+            animation={currentAnimation}
+            {...playerProps}
+          />
+        </div>
         {this.isPlayerMode() ? (<></>) : (
-          <div>
+          <div className="InputWrap" style={{ zIndex: 1 }}>
             <MainButton
               className="mainButton"
               load={this.load}
