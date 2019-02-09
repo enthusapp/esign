@@ -37,7 +37,7 @@ class MainButton extends Component {
     const marginStyle = { margin: '1rem' };
 
     return (
-      <div>
+      <div style={{ backgroundColor: 'white', width: '100%' }}>
         {isLoaded ? (<></>
         ) : (
           <label htmlFor="load">

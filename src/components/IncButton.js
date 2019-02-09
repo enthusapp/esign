@@ -8,8 +8,8 @@ function IncButton(prop) {
   } = prop;
 
   const buttonStyle = {
-    height: '100px',
-    width: '100px',
+    height: '50px',
+    width: '50px',
     margin: '10px',
     fontSize: '30px',
   };

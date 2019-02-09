@@ -119,10 +119,10 @@ class App extends Component {
 
   getDefaultState = () => ({
     direction: 'up',
-    textState: 'Enthus 메시지 편집기',
+    textState: 'ENTHUS 메시지 편집기',
     colorState: '#FFCCBC',
     fontSize: 2,
-    speed: 10,
+    speed: 5,
   })
 
   getNewState = (data) => {
@@ -310,9 +310,7 @@ class App extends Component {
             animation={currentAnimation}
             {...playerProps}
           />
-        </div>
-        {this.isPlayerMode() ? (<></>) : (
-          <div className="InputWrap" style={{ zIndex: 1 }}>
+          {this.isPlayerMode() ? (<></>) : (
             <MainButton
               className="mainButton"
               load={this.load}
@@ -321,12 +319,12 @@ class App extends Component {
               saveAs={this.saveAs}
               isElectron={this.isElectron()}
             />
-            <SwatchesPicker
-              className="colorInput"
-              onChangeComplete={this.colorChange}
-            />
+          )}
+        </div>
+        {this.isPlayerMode() ? (<></>) : (
+          <div className="InputWrap" style={{ zIndex: 1 }}>
             <TextField
-              label="Text Input"
+              label="이곳에 메시지를 입력하세요."
               className="textInput"
               value={textState}
               onChange={this.textChange}
@@ -334,12 +332,16 @@ class App extends Component {
               fullWidth
             />
             <DirectionButton
-              name="Direction"
+              name="방향 설정"
               keys={Object.keys(this.getAnimationList())}
               direction={direction}
               handleChange={this.directionChange}
             />
             {IncButtonComponents}
+            <SwatchesPicker
+              className="colorInput"
+              onChangeComplete={this.colorChange}
+            />
           </div>)}
       </div>
     );

@@ -57,29 +57,18 @@ describe('IncButton', () => {
     });
 
     describe('button style', () => {
-      let style = null;
-
       it('exists', () => {
-        ({ style } = btDecFontSize.props());
-      });
-
-      it('exists', () => {
-        let height = null;
-        let width = null;
-        let margin = null;
-        let fontSize = null;
-
-        ({
+        const {
           height,
           width,
           margin,
           fontSize,
-        } = style);
+        } = btDecFontSize.props().style;
 
-        expect(height).toBe('100px');
-        expect(width).toBe('100px');
-        expect(margin).toBe('10px');
-        expect(fontSize).toBe('30px');
+        expect(height).not.toBe(undefined);
+        expect(width).not.toBe(undefined);
+        expect(margin).not.toBe(undefined);
+        expect(fontSize).not.toBe(undefined);
       });
     });
 
