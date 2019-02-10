@@ -225,12 +225,7 @@ class App extends Component {
   makeDownloadFormat = ({
     fontSize, speed, colorState, textState, direction,
   }) => ({
-    mfp_type: 'esign',
-    direction,
-    fontSize,
-    speed,
-    colorState,
-    textState,
+    fontSize, speed, colorState, textState, direction, mfp_type: 'esign',
   });
 
   save = () => {
