@@ -222,20 +222,16 @@ class App extends Component {
     saveAs(file, 'message.esign');
   };
 
-  makeDownloadFormat = (state) => {
-    const {
-      fontSize, speed, colorState, textState, direction,
-    } = state;
-
-    return {
-      mfp_type: 'esign',
-      direction,
-      fontSize,
-      speed,
-      colorState,
-      textState,
-    };
-  }
+  makeDownloadFormat = ({
+    fontSize, speed, colorState, textState, direction,
+  }) => ({
+    mfp_type: 'esign',
+    direction,
+    fontSize,
+    speed,
+    colorState,
+    textState,
+  });
 
   save = () => {
     const downData = this.makeDownloadFormat(this.state);
