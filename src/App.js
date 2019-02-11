@@ -46,6 +46,8 @@ class App extends Component {
 
     this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
+    const { speed, direction } = this.state;
+    this.state.currentSpeed = direction.length * speed;
 
     this.getIncButtunList().forEach((bt) => {
       const { name, increase, decrease } = bt;
@@ -201,7 +203,9 @@ class App extends Component {
   }
 
   updateAnimation = () => {
+    const { speed, direction } = this.state;
     this.setState({ currentAnimation: this.getAnimation() });
+    this.setState({ currentSpeed: speed * direction.length });
   };
 
   directionChange = (event) => {
@@ -273,15 +277,14 @@ class App extends Component {
 
   render() {
     const {
-      currentAnimation, direction, textState, colorState,
+      currentAnimation,
+      direction,
+      textState,
+      colorState,
+      currentSpeed,
+      fontSize,
     } = this.state;
     const playerProps = { };
-
-    this.getIncButtunList().forEach((bt) => {
-      const { name } = bt;
-      const { [name]: btState } = this.state;
-      playerProps[name] = btState;
-    });
 
     const IncButtonComponents = this.getIncButtunList().map(bt => (
       <Grid item xs key={bt.name}>
@@ -311,7 +314,8 @@ class App extends Component {
             backgroundColor="black"
             color={colorState}
             height={String(this.getPlayerHeight())}
-            direction="left"
+            speed={currentSpeed}
+            fontSize={fontSize}
             animation={currentAnimation}
             {...playerProps}
           />

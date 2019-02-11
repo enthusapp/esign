@@ -336,6 +336,7 @@ describe('basic app test', () => {
 
       // TODO refactoring
       delete state.currentAnimation;
+      delete state.currentSpeed;
       expect(state).toEqual(component.instance().getDefaultState());
     });
   });
