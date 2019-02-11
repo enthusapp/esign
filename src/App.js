@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { SwatchesPicker } from 'react-color';
 import { saveAs } from 'file-saver';
 import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
 import DirectionButton from './components/DirectionButton';
@@ -52,7 +55,7 @@ class App extends Component {
     const player = paramIsTruthy(url.searchParams.get('player'));
     const electron = checkElectron();
     const fullHeight = pixToRem(window.innerHeight);
-    const height = player ? fullHeight : 10;
+    const height = player ? fullHeight : 5;
 
     App.prototype.isPlayerMode = () => player;
     App.prototype.isElectron = () => electron;
@@ -119,8 +122,8 @@ class App extends Component {
 
   getDefaultState = () => ({
     direction: 'up',
-    textState: 'ENTHUS 메시지 편집기',
-    colorState: '#FFCCBC',
+    textState: 'ENTHUS 미디어 파사드',
+    colorState: '#FFFFFF',
     fontSize: 2,
     speed: 5,
   })
@@ -310,26 +313,59 @@ class App extends Component {
           )}
         </div>
         {this.isPlayerMode() ? (<></>) : (
-          <div className="InputWrap" style={{ zIndex: 1 }}>
-            <TextField
-              label="이곳에 메시지를 입력하세요."
-              className="textInput"
-              value={textState}
-              onChange={this.textChange}
-              margin="normal"
-              fullWidth
-            />
-            <DirectionButton
-              name="방향 설정"
-              keys={Object.keys(this.getAnimationList())}
-              direction={direction}
-              handleChange={this.directionChange}
-            />
+          <div
+            className="InputWrap"
+            style={{
+              backgroundColor: '#eeeeee',
+              zIndex: 1,
+              padding: '0.5rem',
+            }}
+          >
+            <Grid container spacing={24} justify="center">
+              <Grid item xs={12}>
+                <Paper elevation={1} style={{ padding: '1rem' }}>
+                  <Typography component="p">
+                    메시지 입력
+                  </Typography>
+                  <TextField
+                    className="textInput"
+                    value={textState}
+                    onChange={this.textChange}
+                    margin="normal"
+                    fullWidth
+                  />
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper elevation={1} style={{ padding: '1rem' }}>
+                  <Typography component="p">
+                    방향 설정
+                  </Typography>
+                  <DirectionButton
+                    name="방향 설정"
+                    keys={Object.keys(this.getAnimationList())}
+                    direction={direction}
+                    handleChange={this.directionChange}
+                  />
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper elevation={1} style={{ padding: '1rem' }}>
+                  <Typography component="p">
+                    색 설정
+                  </Typography>
+                  <div style={{ paddingTop: '0.5rem' }}>
+                    <SwatchesPicker
+                      className="colorInput"
+                      onChangeComplete={this.colorChange}
+                      width={window.innerWidth - 50}
+                      height={170}
+                    />
+                  </div>
+                </Paper>
+              </Grid>
+            </Grid>
             {IncButtonComponents}
-            <SwatchesPicker
-              className="colorInput"
-              onChangeComplete={this.colorChange}
-            />
           </div>)}
       </div>
     );
