@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import App from './App';
+import Tool from './tool';
 
 function makeNormalDownloadData(component) {
   return component.instance().makeDownloadFormat(component.state());
@@ -193,10 +194,31 @@ describe('basic app test', () => {
 
   describe('getAnimation2', () => {
     let keyList = null;
+    let animation = null;
 
     beforeEach(() => {
       keyList = Object.keys(component.instance().getAnimationList2());
+      animation = component.instance().getAnimation2();
+    });
+
+    it('direction keys', () => {
       expect(keyList.length).toBe(4);
+      expect(animation.length).toBe(8);
+    });
+
+    it('direction format', () => {
+      const offset = Tool.ceil10(1 / (animation.length - 1), -4);
+      let sum = 0;
+
+      animation.forEach((ani) => {
+        expect(Object.prototype.hasOwnProperty.call(ani, 'transform')).toBe(true);
+        expect(ani.offset).toBe(sum);
+        sum = Tool.ceil10(sum + offset, -4);
+        if (sum > 1) sum = 1;
+      });
+
+      expect(animation[0].offset).toBe(0);
+      expect(animation[animation.length - 1].offset).toBe(1);
     });
   });
 
@@ -339,6 +361,7 @@ describe('basic app test', () => {
       );
 
       delete state.currentAnimation;
+      delete state.direction2;
       // TODO refactoring
       expect(state).toEqual(component.instance().getDefaultState());
     });

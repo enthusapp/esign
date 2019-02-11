@@ -10,6 +10,7 @@ import IncButton from './components/IncButton';
 import DirectionButton from './components/DirectionButton';
 import DirectionButton2 from './components/DirectionButton2';
 import MainButton from './components/MainButton';
+import Tool from './tool';
 
 function paramIsTruthy(param) {
   return [1, '1', 'true', 'True'].indexOf(param) > -1;
@@ -17,32 +18,6 @@ function paramIsTruthy(param) {
 
 function checkElectron() {
   return navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
-}
-
-function decimalAdjust(type, inValue, inExp) {
-  let value = inValue;
-  let exp = inExp;
-
-  if (typeof exp === 'undefined' || +exp === 0) {
-    return Math[type](value);
-  }
-
-  value = +value;
-  exp = +exp;
-
-  if (Number.isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
-    return NaN;
-  }
-
-  value = value.toString().split('e');
-  value = Math[type](+(`${value[0]}e${(value[1] ? (+value[1] - exp) : -exp)}`));
-  value = value.toString().split('e');
-
-  return +(`${value[0]}e${(value[1] ? (+value[1] + exp) : exp)}`);
-}
-
-if (!Math.round10) {
-  Math.round10 = (value, exp) => decimalAdjust('round', value, exp);
 }
 
 const pixToRem = pix => pix / parseFloat(
@@ -72,6 +47,7 @@ class App extends Component {
 
     this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
+    this.state.direction2 = ['up', 'down'];
 
     this.getIncButtunList().forEach((bt) => {
       const { name, increase, decrease } = bt;
@@ -101,7 +77,7 @@ class App extends Component {
         } else if (fontSize < 99) {
           r = fontSize + 1;
         }
-        return Math.round10(r, -1);
+        return Tool.round10(r, -1);
       },
       decrease: (fontSize) => {
         let r = 0.1;
@@ -112,7 +88,7 @@ class App extends Component {
         } else if (fontSize > 0.2) {
           r = fontSize - 0.1;
         }
-        return Math.round10(r, -1);
+        return Tool.round10(r, -1);
       },
     },
     {
@@ -204,8 +180,64 @@ class App extends Component {
     };
   }
 
+  getAnimation2 = () => {
+    const { fontSize, direction2 } = this.state;
+    let animation = [];
+
+    direction2.forEach((direct) => {
+      animation = [...animation, ...this.getAnimationList2(fontSize)[direct]];
+    });
+
+    const offset = Tool.ceil10(1 / (animation.length - 1), -4);
+    let sum = 0;
+
+    return animation.map((ani) => {
+      const rsum = sum;
+      sum = Tool.ceil10(sum + offset, -4);
+      if (sum > 1) sum = 1;
+
+      return { transform: ani, offset: rsum };
+    });
+  };
+
+  getAnimationList2 = (fontSize = this.getDefaultState().fontSize) => {
+    const height = this.getPlayerHeight();
+    const heightMiddle = (height - fontSize) / 2;
+
+    return {
+      up: [
+        `translateY(${height}rem)`,
+        `translateY(${heightMiddle}rem)`,
+        `translateY(${heightMiddle}rem)`,
+        `translateY(-${height}rem)`,
+      ],
+      down: [
+        `translateY(-${height}rem)`,
+        `translateY(${heightMiddle}rem)`,
+        `translateY(${heightMiddle}rem)`,
+        `translateY(${height}rem)`,
+      ],
+      right: [
+        `translate(-100%, ${heightMiddle}rem)`,
+        `translate(0%, ${heightMiddle}rem)`,
+        `translate(0%, ${heightMiddle}rem)`,
+        `translate(100%, ${heightMiddle}rem)`,
+      ],
+      left: [
+        `translate(100%, ${heightMiddle}rem)`,
+        `translate(0%, ${heightMiddle}rem)`,
+        `translate(0%, ${heightMiddle}rem)`,
+        `translate(-100%, ${heightMiddle}rem)`,
+      ],
+    };
+  }
+
   updateAnimation = () => {
     this.setState({ currentAnimation: this.getAnimation() });
+  };
+
+  updateAnimation2 = () => {
+    this.setState({ currentAnimation: this.getAnimation2() });
   };
 
   directionChange = (event) => {
@@ -213,9 +245,7 @@ class App extends Component {
   };
 
   directionChange2 = (event) => {
-    this.setState({ direction: event.target.value }, this.updateAnimation);
-    console.log(event.target.checked);
-    console.log(event.target.value);
+    this.setState({ direction: event.target.value }, this.updateAnimation2);
   }
 
   textChange = (event) => {
