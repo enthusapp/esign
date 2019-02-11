@@ -169,7 +169,7 @@ describe('basic app test', () => {
     it('getAnimation operation', () => {
       const playerHeight = component.instance().getPlayerHeight();
 
-      expect(component.instance().getAnimationList(10).up[1].transform).toBe(
+      expect(component.instance().getAnimationList(10).up[1]).toBe(
         `translateY(${(playerHeight - 10) / 2}rem)`,
       );
     });
@@ -192,13 +192,13 @@ describe('basic app test', () => {
     });
   });
 
-  describe('getAnimation2', () => {
+  describe('getAnimation', () => {
     let keyList = null;
     let animation = null;
 
     beforeEach(() => {
-      keyList = Object.keys(component.instance().getAnimationList2());
-      animation = component.instance().getAnimation2();
+      keyList = Object.keys(component.instance().getAnimationList());
+      animation = component.instance().getAnimation();
     });
 
     it('direction format', () => {
@@ -218,7 +218,7 @@ describe('basic app test', () => {
 
     it('direction all true', () => {
       keyList.forEach((key) => {
-        component.instance().directionChange2({
+        component.instance().directionChange({
           target: { value: key, checked: true },
         });
       });
@@ -229,50 +229,13 @@ describe('basic app test', () => {
 
     it('direction all false', () => {
       keyList.forEach((key) => {
-        component.instance().directionChange2({
+        component.instance().directionChange({
           target: { value: key, checked: false },
         });
       });
 
       const { currentAnimation: newAni } = component.state();
       expect(newAni.length).toBe(4);
-    });
-  });
-
-  describe('direction and animation change', () => {
-    let keyList = null;
-    let direction = null;
-
-    beforeEach(() => {
-      keyList = Object.keys(component.instance().getAnimationList());
-      ({ direction } = component.state());
-    });
-
-    it('direction keys', () => {
-      expect(keyList.indexOf(direction)).toBeGreaterThan(-1);
-    });
-
-    it('direction change', () => {
-      const value = keyList[keyList.length - 1];
-      component.instance().directionChange({ target: { value } });
-
-      ({ direction } = component.state());
-      expect(keyList.indexOf(direction)).toBeGreaterThan(-1);
-    });
-
-    it('direction change', () => {
-      const value = keyList[keyList.length - 1];
-      const { currentAnimation } = component.state();
-
-      component.instance().directionChange({ target: { value } });
-
-      const { currentAnimation: newAni } = component.state();
-
-      if (keyList.length !== 1) {
-        expect(currentAnimation).not.toBe(newAni);
-      } else {
-        expect(currentAnimation).toBe(newAni);
-      }
     });
   });
 
@@ -370,16 +333,9 @@ describe('basic app test', () => {
     it('clear', () => {
       component.instance().cancel();
       const state = component.state();
-      const { currentAnimation } = state;
-      const { fontSize, direction } = component.instance().getDefaultState();
 
-      expect(currentAnimation).toEqual(
-        component.instance().getAnimationList(fontSize)[direction],
-      );
-
-      delete state.currentAnimation;
-      delete state.direction2;
       // TODO refactoring
+      delete state.currentAnimation;
       expect(state).toEqual(component.instance().getDefaultState());
     });
   });
@@ -441,7 +397,7 @@ describe('basic app test', () => {
     stateChangeFuncs.forEach((stateChange) => {
       it('default', () => {
         const testState = {
-          direction: 'down',
+          direction: ['down'],
           textState: 'TextNew',
           colorState: '#FF00FF',
           fontSize: 15,
@@ -450,17 +406,13 @@ describe('basic app test', () => {
         component = stateChange(testState, component);
 
         Object.keys(testState).forEach((key) => {
-          expect(component.state()[key]).toBe(testState[key]);
+          expect(component.state()[key]).toEqual(testState[key]);
         });
-        const newAni = component.instance().getAnimationList(
-          testState.fontSize,
-        )[testState.direction];
-        expect(component.state().currentAnimation).toEqual(newAni);
       });
 
       it('block currentAnimation property', () => {
         const testState = {
-          direction: 'up',
+          direction: ['up'],
           textState: 'Text',
           colorState: '#FFFFFF',
           fontSize: 5,

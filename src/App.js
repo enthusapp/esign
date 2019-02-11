@@ -7,7 +7,6 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
-import DirectionButton from './components/DirectionButton';
 import CheckboxSelection from './components/CheckboxSelection';
 import MainButton from './components/MainButton';
 import Tool from './tool';
@@ -47,7 +46,6 @@ class App extends Component {
 
     this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
-    this.state.direction2 = ['up', 'down'];
 
     this.getIncButtunList().forEach((bt) => {
       const { name, increase, decrease } = bt;
@@ -100,7 +98,7 @@ class App extends Component {
   ];
 
   getDefaultState = () => ({
-    direction: 'up',
+    direction: ['up'],
     textState: 'ENTHUS 미디어 파사드',
     colorState: '#FFFFFF',
     fontSize: 2,
@@ -123,6 +121,13 @@ class App extends Component {
     Object.assign(newValue, this.getDefaultState());
 
     Object.keys(this.getDefaultState()).forEach((key) => {
+      if (key === 'direction') {
+        newValue[key] = url.searchParams.getAll(`${key}[]`);
+        if (newValue[key].length === 0) {
+          newValue[key] = this.getDefaultState()[key];
+        } // TODO: make new validation function
+        return;
+      }
       if (url.searchParams.get(key)) {
         switch (key) {
           case 'colorState':
@@ -145,47 +150,10 @@ class App extends Component {
 
   getAnimation = () => {
     const { fontSize, direction } = this.state;
-    return this.getAnimationList(fontSize)[direction];
-  };
-
-  getAnimationList = (fontSize = this.getDefaultState().fontSize) => {
-    const height = this.getPlayerHeight();
-    const heightMiddle = (height - fontSize) / 2;
-
-    return {
-      up: [
-        { transform: `translateY(${height}rem)` },
-        { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translateY(${heightMiddle}rem)`, offset: 0.7 },
-        { transform: `translateY(-${height}rem)` },
-      ],
-      down: [
-        { transform: `translateY(-${height}rem)` },
-        { transform: `translateY(${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translateY(${heightMiddle}rem)`, offset: 0.7 },
-        { transform: `translateY(${height}rem)` },
-      ],
-      right: [
-        { transform: `translate(-100%, ${heightMiddle}rem)` },
-        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.7 },
-        { transform: `translate(100%, ${heightMiddle}rem)` },
-      ],
-      left: [
-        { transform: `translate(100%, ${heightMiddle}rem)` },
-        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.3 },
-        { transform: `translate(0%, ${heightMiddle}rem)`, offset: 0.7 },
-        { transform: `translate(-100%, ${heightMiddle}rem)` },
-      ],
-    };
-  }
-
-  getAnimation2 = () => {
-    const { fontSize, direction2 } = this.state;
     let animation = [];
 
-    direction2.forEach((direct) => {
-      animation = [...animation, ...this.getAnimationList2(fontSize)[direct]];
+    direction.forEach((direct) => {
+      animation = [...animation, ...this.getAnimationList(fontSize)[direct]];
     });
 
     const offset = Tool.ceil10(1 / (animation.length - 1), -4);
@@ -200,7 +168,7 @@ class App extends Component {
     });
   };
 
-  getAnimationList2 = (fontSize = this.getDefaultState().fontSize) => {
+  getAnimationList = (fontSize = this.getDefaultState().fontSize) => {
     const height = this.getPlayerHeight();
     const heightMiddle = (height - fontSize) / 2;
 
@@ -236,25 +204,17 @@ class App extends Component {
     this.setState({ currentAnimation: this.getAnimation() });
   };
 
-  updateAnimation2 = () => {
-    this.setState({ currentAnimation: this.getAnimation2() });
-  };
-
   directionChange = (event) => {
-    this.setState({ direction: event.target.value }, this.updateAnimation);
-  };
-
-  directionChange2 = (event) => {
-    const { direction2 } = this.state;
-    const index = direction2.indexOf(event.target.value);
+    const { direction } = this.state;
+    const index = direction.indexOf(event.target.value);
 
     if (event.target.checked) {
-      if (index === -1) direction2.push(event.target.value);
-    } else if (index > -1 && direction2.length > 1) {
-      direction2.splice(index, 1);
+      if (index === -1) direction.push(event.target.value);
+    } else if (index > -1 && direction.length > 1) {
+      direction.splice(index, 1);
     }
 
-    this.setState({ direction2 }, this.updateAnimation2);
+    this.setState({ direction }, this.updateAnimation);
   }
 
   textChange = (event) => {
@@ -313,7 +273,7 @@ class App extends Component {
 
   render() {
     const {
-      currentAnimation, direction2, direction, textState, colorState,
+      currentAnimation, direction, textState, colorState,
     } = this.state;
     const playerProps = { };
 
@@ -392,22 +352,10 @@ class App extends Component {
                   <Typography component="p">
                     방향 설정
                   </Typography>
-                  <DirectionButton
-                    keys={Object.keys(this.getAnimationList())}
-                    direction={direction}
-                    handleChange={this.directionChange}
-                  />
-                </Paper>
-              </Grid>
-              <Grid item xs>
-                <Paper elevation={1} style={{ padding: '1rem' }}>
-                  <Typography component="p">
-                    방향 설정
-                  </Typography>
                   <CheckboxSelection
-                    checkedKeys={direction2}
+                    checkedKeys={direction}
                     keys={Object.keys(this.getAnimationList())}
-                    handleChange={this.directionChange2}
+                    handleChange={this.directionChange}
                   />
                 </Paper>
               </Grid>
