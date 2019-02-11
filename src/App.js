@@ -245,7 +245,16 @@ class App extends Component {
   };
 
   directionChange2 = (event) => {
-    this.setState({ direction: event.target.value }, this.updateAnimation2);
+    const { direction2 } = this.state;
+    const index = direction2.indexOf(event.target.value);
+
+    if (event.target.checked) {
+      if (index === -1) direction2.push(event.target.value);
+    } else if (index > -1 && direction2.length > 1) {
+      direction2.splice(index, 1);
+    }
+
+    this.setState({ direction2 }, this.updateAnimation2);
   }
 
   textChange = (event) => {
@@ -304,7 +313,7 @@ class App extends Component {
 
   render() {
     const {
-      currentAnimation, direction, textState, colorState,
+      currentAnimation, direction2, direction, textState, colorState,
     } = this.state;
     const playerProps = { };
 
@@ -396,7 +405,7 @@ class App extends Component {
                     방향 설정
                   </Typography>
                   <CheckboxSelection
-                    checkedKeys={[direction]}
+                    checkedKeys={direction2}
                     keys={Object.keys(this.getAnimationList())}
                     handleChange={this.directionChange2}
                   />

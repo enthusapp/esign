@@ -201,11 +201,6 @@ describe('basic app test', () => {
       animation = component.instance().getAnimation2();
     });
 
-    it('direction keys', () => {
-      expect(keyList.length).toBe(4);
-      expect(animation.length).toBe(8);
-    });
-
     it('direction format', () => {
       const offset = Tool.ceil10(1 / (animation.length - 1), -4);
       let sum = 0;
@@ -219,6 +214,28 @@ describe('basic app test', () => {
 
       expect(animation[0].offset).toBe(0);
       expect(animation[animation.length - 1].offset).toBe(1);
+    });
+
+    it('direction all true', () => {
+      keyList.forEach((key) => {
+        component.instance().directionChange2({
+          target: { value: key, checked: true },
+        });
+      });
+
+      const { currentAnimation } = component.state();
+      expect(currentAnimation.length).toBe(keyList.length * 4);
+    });
+
+    it('direction all false', () => {
+      keyList.forEach((key) => {
+        component.instance().directionChange2({
+          target: { value: key, checked: false },
+        });
+      });
+
+      const { currentAnimation: newAni } = component.state();
+      expect(newAni.length).toBe(4);
     });
   });
 
