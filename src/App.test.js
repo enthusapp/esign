@@ -191,6 +191,15 @@ describe('basic app test', () => {
     });
   });
 
+  describe('getAnimation2', () => {
+    let keyList = null;
+
+    beforeEach(() => {
+      keyList = Object.keys(component.instance().getAnimationList2());
+      expect(keyList.length).toBe(4);
+    });
+  });
+
   describe('direction and animation change', () => {
     let keyList = null;
     let direction = null;

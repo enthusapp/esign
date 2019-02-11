@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
 import DirectionButton from './components/DirectionButton';
+import DirectionButton2 from './components/DirectionButton2';
 import MainButton from './components/MainButton';
 
 function paramIsTruthy(param) {
@@ -211,6 +212,12 @@ class App extends Component {
     this.setState({ direction: event.target.value }, this.updateAnimation);
   };
 
+  directionChange2 = (event) => {
+    this.setState({ direction: event.target.value }, this.updateAnimation);
+    console.log(event.target.checked);
+    console.log(event.target.value);
+  }
+
   textChange = (event) => {
     this.setState({ textState: event.target.value });
   };
@@ -278,7 +285,7 @@ class App extends Component {
     });
 
     const IncButtonComponents = this.getIncButtunList().map(bt => (
-      <Grid item xs={6} key={bt.name}>
+      <Grid item xs key={bt.name}>
         <Paper elevation={1} style={{ padding: '1rem' }}>
           <Typography component="p">
             {bt.label}
@@ -350,6 +357,18 @@ class App extends Component {
                     keys={Object.keys(this.getAnimationList())}
                     direction={direction}
                     handleChange={this.directionChange}
+                  />
+                </Paper>
+              </Grid>
+              <Grid item xs>
+                <Paper elevation={1} style={{ padding: '1rem' }}>
+                  <Typography component="p">
+                    방향 설정
+                  </Typography>
+                  <DirectionButton2
+                    checkedKeys={[direction]}
+                    keys={Object.keys(this.getAnimationList())}
+                    handleChange={this.directionChange2}
                   />
                 </Paper>
               </Grid>
