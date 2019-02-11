@@ -3,9 +3,7 @@ import { mount } from 'enzyme';
 import Checkbox from '@material-ui/core/Checkbox';
 import DirectionButton2 from './DirectionButton2';
 
-function handleChange(event) {
-  console.log(event.target.value);
-  console.log(event.target.checked);
+function handleChange() {
 }
 
 describe('DirectionButton2', () => {
