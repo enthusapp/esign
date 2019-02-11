@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Player from './components/Player';
 import IncButton from './components/IncButton';
 import DirectionButton from './components/DirectionButton';
-import DirectionButton2 from './components/DirectionButton2';
+import CheckboxSelection from './components/CheckboxSelection';
 import MainButton from './components/MainButton';
 import Tool from './tool';
 
@@ -395,7 +395,7 @@ class App extends Component {
                   <Typography component="p">
                     방향 설정
                   </Typography>
-                  <DirectionButton2
+                  <CheckboxSelection
                     checkedKeys={[direction]}
                     keys={Object.keys(this.getAnimationList())}
                     handleChange={this.directionChange2}

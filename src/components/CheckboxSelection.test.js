@@ -1,19 +1,19 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import Checkbox from '@material-ui/core/Checkbox';
-import DirectionButton2 from './DirectionButton2';
+import CheckboxSelection from './CheckboxSelection';
 
 function handleChange() {
 }
 
-describe('DirectionButton2', () => {
+describe('CheckboxSelection', () => {
   let component = null;
   const KeyList = ['up', 'down', 'right', 'left'];
   const checkList = ['down', 'right', 'left'];
 
   it('renders correctly', () => {
     component = mount(
-      <DirectionButton2
+      <CheckboxSelection
         keys={KeyList}
         checkedKeys={checkList}
         handleChange={handleChange}

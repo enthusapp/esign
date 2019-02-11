@@ -3,7 +3,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-function DirectionButton2(prop) {
+function CheckboxSelection(prop) {
   const {
     keys,
     checkedKeys,
@@ -33,4 +33,4 @@ function DirectionButton2(prop) {
   );
 }
 
-export default DirectionButton2;
+export default CheckboxSelection;
