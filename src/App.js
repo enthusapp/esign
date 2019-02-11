@@ -89,6 +89,7 @@ class App extends Component {
 
   getIncButtunList = () => [
     {
+      label: '글자 크기',
       name: 'fontSize',
       increase: (fontSize) => {
         let r = 100;
@@ -114,6 +115,7 @@ class App extends Component {
       },
     },
     {
+      label: '속도',
       name: 'speed',
       increase: speed => (speed > 2 ? speed - 1 : 1),
       decrease: speed => (speed < 100 - 1 ? speed + 1 : 100),
@@ -275,13 +277,19 @@ class App extends Component {
       playerProps[name] = btState;
     });
 
-    const IncButtonComponents = this.getIncButtunList().map(bt => (<IncButton
-      key={bt.name}
-      name={bt.name}
-      className={bt.name}
-      increase={App.prototype[`${bt.name}Inc`]}
-      decrease={App.prototype[`${bt.name}Dec`]}
-    />
+    const IncButtonComponents = this.getIncButtunList().map(bt => (
+      <Grid item xs={6} key={bt.name}>
+        <Paper elevation={1} style={{ padding: '1rem' }}>
+          <Typography component="p">
+            {bt.label}
+          </Typography>
+          <IncButton
+            className={bt.name}
+            increase={App.prototype[`${bt.name}Inc`]}
+            decrease={App.prototype[`${bt.name}Dec`]}
+          />
+        </Paper>
+      </Grid>
     ));
 
     return (
@@ -315,11 +323,7 @@ class App extends Component {
         {this.isPlayerMode() ? (<></>) : (
           <div
             className="InputWrap"
-            style={{
-              backgroundColor: '#eeeeee',
-              zIndex: 1,
-              padding: '0.5rem',
-            }}
+            style={{ zIndex: 1, padding: '0.5rem' }}
           >
             <Grid container spacing={24} justify="center">
               <Grid item xs={12}>
@@ -336,13 +340,13 @@ class App extends Component {
                   />
                 </Paper>
               </Grid>
-              <Grid item xs={12}>
+              {IncButtonComponents}
+              <Grid item xs>
                 <Paper elevation={1} style={{ padding: '1rem' }}>
                   <Typography component="p">
                     방향 설정
                   </Typography>
                   <DirectionButton
-                    name="방향 설정"
                     keys={Object.keys(this.getAnimationList())}
                     direction={direction}
                     handleChange={this.directionChange}
@@ -365,7 +369,6 @@ class App extends Component {
                 </Paper>
               </Grid>
             </Grid>
-            {IncButtonComponents}
           </div>)}
       </div>
     );

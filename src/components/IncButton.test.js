@@ -5,7 +5,6 @@ import IncButton from './IncButton';
 describe('IncButton', () => {
   let component = null;
   let number = 0;
-  const TestName = 'TestName';
 
   function increase() {
     number += 1;
@@ -18,12 +17,10 @@ describe('IncButton', () => {
   it('renders correctly', () => {
     component = shallow(
       <IncButton
-        name={TestName}
         increase={increase}
         decrease={decrease}
       />,
     );
-    expect(component.find('.name').text()).toBe(TestName);
   });
 
   describe('component', () => {

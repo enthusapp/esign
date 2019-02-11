@@ -2,21 +2,19 @@ import React from 'react';
 
 function IncButton(prop) {
   const {
-    name,
     increase,
     decrease,
   } = prop;
 
   const buttonStyle = {
-    height: '50px',
-    width: '50px',
-    margin: '10px',
+    height: '3rem',
+    width: '3rem',
+    margin: '0.5rem',
     fontSize: '30px',
   };
 
   return (
     <div>
-      <p className="name">{name}</p>
       <button
         className="btIncFontSize"
         type="button"
