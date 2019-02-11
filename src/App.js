@@ -41,16 +41,17 @@ if (!Math.round10) {
   Math.round10 = (value, exp) => decimalAdjust('round', value, exp);
 }
 
+const pixToRem = pix => pix / parseFloat(
+  getComputedStyle(document.querySelector('body'))['font-size'],
+);
+
 class App extends Component {
   constructor(props) {
     super(props);
     const url = new URL(window.location.href);
     const player = paramIsTruthy(url.searchParams.get('player'));
     const electron = checkElectron();
-    let fullHeight = window.innerHeight;
-    fullHeight /= parseFloat(
-      getComputedStyle(document.querySelector('body'))['font-size'],
-    );
+    const fullHeight = pixToRem(window.innerHeight);
     const height = player ? fullHeight : 10;
 
     App.prototype.isPlayerMode = () => player;
@@ -67,7 +68,6 @@ class App extends Component {
 
     this.state = this.getNewStateFromURL(url);
     this.state.currentAnimation = this.getAnimation();
-    this.state.fileName = undefined;
 
     this.getIncButtunList().forEach((bt) => {
       const { name, increase, decrease } = bt;
@@ -262,10 +262,7 @@ class App extends Component {
 
   render() {
     const {
-      currentAnimation,
-      direction,
-      textState,
-      colorState,
+      currentAnimation, direction, textState, colorState,
     } = this.state;
     const playerProps = { };
 
