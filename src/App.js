@@ -120,28 +120,25 @@ class App extends Component {
     const newValue = {};
 
     Object.assign(newValue, this.getDefaultState());
+    Object.keys(newValue).forEach((key) => {
+      const param = url.searchParams.get(key);
 
-    Object.keys(this.getDefaultState()).forEach((key) => {
-      if (key === 'direction') {
-        newValue[key] = url.searchParams.getAll(key);
-        if (newValue[key].length === 0) {
-          newValue[key] = this.getDefaultState()[key];
-        } // TODO: make new validation function
-        return;
-      }
-      if (url.searchParams.get(key)) {
+      if (param) {
         switch (key) {
           case 'colorState':
-            newValue[key] = `#${url.searchParams.get(key)}`;
+            newValue[key] = `#${param}`;
             break;
           case 'fontSize':
-            newValue[key] = parseInt(url.searchParams.get(key), 10);
+            newValue[key] = parseInt(param, 10);
             break;
           case 'speed':
-            newValue[key] = parseInt(url.searchParams.get(key), 10);
+            newValue[key] = parseInt(param, 10);
+            break;
+          case 'direction':
+            newValue[key] = url.searchParams.getAll(key);
             break;
           default:
-            newValue[key] = url.searchParams.get(key);
+            newValue[key] = param;
             break;
         }
       }
