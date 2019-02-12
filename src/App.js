@@ -146,25 +146,52 @@ class App extends Component {
     return newValue;
   }
 
-  getAnimation = () => {
-    const { fontSize, direction } = this.state;
+  sumAnimations = ({ fontSize, direction }) => {
     let animation = [];
-
     direction.forEach((direct) => {
       animation = [...animation, ...this.getAnimationList(fontSize)[direct]];
     });
+    return animation;
+  }
 
-    const offset = Tool.ceil10(1 / (animation.length - 1), -4);
+  removeCrossAnimation = (animation) => {
+    const newAni = [];
+    let preAni = animation[0];
+
+    animation.forEach((ani) => {
+      if (preAni[0] !== ani[0] && preAni[1] !== ani[1]) {
+        if (preAni[0] < 0 || preAni === 100) {
+          newAni.push([preAni[0], ani[1]]);
+        } else {
+          newAni.push([ani[0], preAni[1]]);
+        }
+      }
+      newAni.push(ani);
+      preAni = ani;
+    });
+
+    return newAni;
+  }
+
+  makeAnimationFormat = (newAni) => {
+    const offset = Tool.ceil10(1 / (newAni.length - 1), -4);
     let sum = 0;
 
-    return animation.map((ani) => {
+    return newAni.map((ani) => {
       const rsum = sum;
       sum = Tool.ceil10(sum + offset, -4);
       if (sum > 1) sum = 1;
 
-      return { transform: ani, offset: rsum };
+      return {
+        transform: `translate(${ani[0]}%, ${ani[1]}rem)`,
+        offset: rsum,
+      };
     });
-  };
+  }
+
+  getAnimation = () => this.makeAnimationFormat(
+    this.removeCrossAnimation(this.sumAnimations(this.state)),
+  )
 
   getAnimationList = (fontSize = this.getDefaultState().fontSize) => {
     const height = this.getPlayerHeight();
@@ -172,28 +199,32 @@ class App extends Component {
 
     return {
       up: [
-        `translateY(${height}rem)`,
-        `translateY(${heightMiddle}rem)`,
-        `translateY(${heightMiddle}rem)`,
-        `translateY(-${height}rem)`,
+        [0, height],
+        [0, heightMiddle],
+        [0, heightMiddle],
+        [0, heightMiddle],
+        [0, -height],
       ],
       down: [
-        `translateY(-${height}rem)`,
-        `translateY(${heightMiddle}rem)`,
-        `translateY(${heightMiddle}rem)`,
-        `translateY(${height}rem)`,
+        [0, -height],
+        [0, heightMiddle],
+        [0, heightMiddle],
+        [0, heightMiddle],
+        [0, height],
       ],
       left: [
-        `translate(100%, ${heightMiddle}rem)`,
-        `translate(0%, ${heightMiddle}rem)`,
-        `translate(0%, ${heightMiddle}rem)`,
-        `translate(-100%, ${heightMiddle}rem)`,
+        [100, heightMiddle],
+        [0, heightMiddle],
+        [0, heightMiddle],
+        [0, heightMiddle],
+        [-100, heightMiddle],
       ],
       right: [
-        `translate(-100%, ${heightMiddle}rem)`,
-        `translate(0%, ${heightMiddle}rem)`,
-        `translate(0%, ${heightMiddle}rem)`,
-        `translate(100%, ${heightMiddle}rem)`,
+        [-100, heightMiddle],
+        [0, heightMiddle],
+        [0, heightMiddle],
+        [0, heightMiddle],
+        [100, heightMiddle],
       ],
     };
   }

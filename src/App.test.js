@@ -174,9 +174,10 @@ describe('basic app test', () => {
   describe('fontSize and animation change', () => {
     it('getAnimation operation', () => {
       const playerHeight = component.instance().getPlayerHeight();
+      const up = component.instance().getAnimationList(10).up[1];
 
-      expect(component.instance().getAnimationList(10).up[1]).toBe(
-        `translateY(${(playerHeight - 10) / 2}rem)`,
+      expect(`translate(${up[0]}%, ${up[1]}rem)`).toBe(
+        `translate(0%, ${(playerHeight - 10) / 2}rem)`,
       );
     });
 
@@ -186,14 +187,14 @@ describe('basic app test', () => {
       const playerHeight = component.instance().getPlayerHeight();
 
       expect(currentAnimation[1].transform).toBe(
-        `translateY(${(playerHeight - fontSize) / 2}rem)`,
+        `translate(0%, ${(playerHeight - fontSize) / 2}rem)`,
       );
 
       component.instance().fontSizeInc();
       fontSize = component.instance().getIncButtunList()[0].increase(fontSize);
       ({ currentAnimation } = component.state());
       expect(currentAnimation[1].transform).toBe(
-        `translateY(${(playerHeight - fontSize) / 2}rem)`,
+        `translate(0%, ${(playerHeight - fontSize) / 2}rem)`,
       );
     });
   });
@@ -222,15 +223,35 @@ describe('basic app test', () => {
       expect(animation[animation.length - 1].offset).toBe(1);
     });
 
-    it('direction all true', () => {
-      keyList.forEach((key) => {
-        component.instance().directionChange({
-          target: { value: key, checked: true },
+    describe('direction all true', () => {
+      let currentAnimation;
+
+      beforeEach(() => {
+        keyList.forEach((key) => {
+          component.instance().directionChange({
+            target: { value: key, checked: true },
+          });
         });
+        ({ currentAnimation } = component.state());
       });
 
-      const { currentAnimation } = component.state();
-      expect(currentAnimation.length).toBe(keyList.length * 4);
+      it('length', () => {
+        expect(currentAnimation.length).toBeGreaterThanOrEqual(
+          keyList.length * component.instance().getAnimationList().up.length,
+        );
+      });
+
+      it('remove cross', () => {
+        const inst = component.instance();
+        const anima = inst.removeCrossAnimation(
+          inst.sumAnimations(component.state()),
+        );
+        let preAni = anima[0];
+        anima.forEach((ani) => {
+          expect(ani[0] !== preAni[0] && ani[1] !== preAni[1]).toBe(false);
+          preAni = ani;
+        });
+      });
     });
 
     it('direction all false', () => {
@@ -241,7 +262,9 @@ describe('basic app test', () => {
       });
 
       const { currentAnimation: newAni } = component.state();
-      expect(newAni.length).toBe(4);
+      expect(newAni.length).toBe(
+        component.instance().getAnimationList().up.length,
+      );
     });
   });
 
