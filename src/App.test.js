@@ -224,18 +224,16 @@ describe('basic app test', () => {
     });
 
     describe('direction all true', () => {
-      let currentAnimation;
-
       beforeEach(() => {
         keyList.forEach((key) => {
           component.instance().directionChange({
             target: { value: key, checked: true },
           });
         });
-        ({ currentAnimation } = component.state());
       });
 
       it('length', () => {
+        const { currentAnimation } = component.state();
         expect(currentAnimation.length).toBeGreaterThanOrEqual(
           keyList.length * component.instance().getAnimationList().up.length,
         );
