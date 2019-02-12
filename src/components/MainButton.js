@@ -34,7 +34,7 @@ class MainButton extends Component {
 
     const electronSaveText = isLoaded ? '수정완료' : '새로 만들기';
     const electronSaveAction = isLoaded ? download : saveAs;
-    const marginStyle = { margin: '0.5rem', width: '6.5rem' };
+    const marginStyle = { margin: '0.5rem', width: `${isElectron ? 7 : 6}rem` };
 
     return (
       <div style={{ backgroundColor: '#eeeeee', width: '100%' }}>

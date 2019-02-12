@@ -28,7 +28,7 @@ function objectToURLParam(obj) {
 
   Object.keys(obj).forEach((key) => {
     if (Array.isArray(obj[key])) {
-      obj[key].forEach((el) => { param += `&${key}[]=${el}`; });
+      obj[key].forEach((el) => { param += `&${key}=${el}`; });
     } else {
       param += `&${key}=${obj[key]}`;
     }

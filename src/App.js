@@ -29,14 +29,7 @@ class App extends Component {
     const url = new URL(window.location.href);
     const player = paramIsTruthy(url.searchParams.get('player'));
     const electron = checkElectron();
-    let height;
-
-    if (player) {
-      height = pixToRem(window.innerHeight);
-    } else {
-      height = 5;
-      document.getElementsByTagName('body')[0].style.backgroundColor = '#eeeeee';
-    }
+    const height = player ? pixToRem(window.innerHeight) : 5;
 
     App.prototype.isPlayerMode = () => player;
     App.prototype.isElectron = () => electron;
@@ -130,7 +123,7 @@ class App extends Component {
 
     Object.keys(this.getDefaultState()).forEach((key) => {
       if (key === 'direction') {
-        newValue[key] = url.searchParams.getAll(`${key}[]`);
+        newValue[key] = url.searchParams.getAll(key);
         if (newValue[key].length === 0) {
           newValue[key] = this.getDefaultState()[key];
         } // TODO: make new validation function
@@ -308,7 +301,10 @@ class App extends Component {
     ));
 
     return (
-      <div className="App">
+      <div
+        className="App"
+        style={this.isPlayerMode() ? {} : { backgroundColor: '#EEEEEE' }}
+      >
         <div
           className="PlayerWrap"
           style={{ position: 'sticky', top: 0, zIndex: 10 }}
