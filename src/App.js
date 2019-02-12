@@ -99,7 +99,7 @@ class App extends Component {
   ];
 
   getDefaultState = () => ({
-    direction: ['up'],
+    direction: ['up', 'down', 'left', 'right'],
     textState: 'ENTHUS 미디어 파사드',
     colorState: '#FFFFFF',
     fontSize: 2,
@@ -186,17 +186,17 @@ class App extends Component {
         `translateY(${heightMiddle}rem)`,
         `translateY(${height}rem)`,
       ],
-      right: [
-        `translate(-100%, ${heightMiddle}rem)`,
-        `translate(0%, ${heightMiddle}rem)`,
-        `translate(0%, ${heightMiddle}rem)`,
-        `translate(100%, ${heightMiddle}rem)`,
-      ],
       left: [
         `translate(100%, ${heightMiddle}rem)`,
         `translate(0%, ${heightMiddle}rem)`,
         `translate(0%, ${heightMiddle}rem)`,
         `translate(-100%, ${heightMiddle}rem)`,
+      ],
+      right: [
+        `translate(-100%, ${heightMiddle}rem)`,
+        `translate(0%, ${heightMiddle}rem)`,
+        `translate(0%, ${heightMiddle}rem)`,
+        `translate(100%, ${heightMiddle}rem)`,
       ],
     };
   }

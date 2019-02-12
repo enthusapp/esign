@@ -160,7 +160,13 @@ describe('basic app test', () => {
         expect(expectVal).toBeGreaterThan(0.01);
 
         player = component.find('.player');
-        expect(player.props()[name]).toBe(component.state()[name]);
+        if (name === 'speed') {
+          expect(player.props()[name]).toBe(
+            component.state()[name] * component.state().direction.length,
+          );
+        } else {
+          expect(player.props()[name]).toBe(component.state()[name]);
+        }
       });
     });
   });
