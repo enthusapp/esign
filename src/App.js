@@ -29,8 +29,14 @@ class App extends Component {
     const url = new URL(window.location.href);
     const player = paramIsTruthy(url.searchParams.get('player'));
     const electron = checkElectron();
-    const fullHeight = pixToRem(window.innerHeight);
-    const height = player ? fullHeight : 5;
+    let height;
+
+    if (player) {
+      height = pixToRem(window.innerHeight);
+    } else {
+      height = 5;
+      document.getElementsByTagName('body')[0].style.backgroundColor = '#eeeeee';
+    }
 
     App.prototype.isPlayerMode = () => player;
     App.prototype.isElectron = () => electron;

@@ -34,7 +34,7 @@ class MainButton extends Component {
 
     const electronSaveText = isLoaded ? '수정완료' : '새로 만들기';
     const electronSaveAction = isLoaded ? download : saveAs;
-    const marginStyle = { margin: '0.5rem', width: '6rem' };
+    const marginStyle = { margin: '0.5rem', width: '6.5rem' };
 
     return (
       <div style={{ backgroundColor: '#eeeeee', width: '100%' }}>
@@ -50,7 +50,7 @@ class MainButton extends Component {
               style={{ display: 'none' }}
             />
             <Button
-              variant="contained"
+              variant="outlined"
               color="primary"
               component="span"
               className="loadText"
@@ -61,7 +61,7 @@ class MainButton extends Component {
           </label>)
         }
         <Button
-          variant="contained"
+          variant="outlined"
           color="primary"
           className="save"
           onClick={isElectron ? electronSaveAction : download}
@@ -71,7 +71,7 @@ class MainButton extends Component {
         </Button>
         {isLoaded ? (
           <Button
-            variant="contained"
+            variant="outlined"
             color="primary"
             className="saveAs"
             onClick={saveAs}
@@ -82,7 +82,7 @@ class MainButton extends Component {
         ) : (<></>)
         }
         <Button
-          variant="contained"
+          variant="outlined"
           color="primary"
           className="cancel"
           onClick={cancel}

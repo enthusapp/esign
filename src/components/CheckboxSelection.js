@@ -20,6 +20,7 @@ function CheckboxSelection(prop) {
           className={`${el}checkBox`}
           checked={checkedKeys.indexOf(el) > -1}
           onChange={handleChange}
+          color="default"
           value={el}
         />
         )
