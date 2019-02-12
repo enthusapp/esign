@@ -315,7 +315,7 @@ class App extends Component {
 
     const IncButtonComponents = this.getIncButtunList().map(bt => (
       <Grid item xs key={bt.name}>
-        <Paper elevation={1} style={{ padding: '1rem' }}>
+        <Paper elevation={4} style={{ padding: '1rem' }}>
           <Typography component="p">
             {bt.label}
           </Typography>
@@ -329,10 +329,7 @@ class App extends Component {
     ));
 
     return (
-      <div
-        className="App"
-        style={this.isPlayerMode() ? {} : { backgroundColor: '#EEEEEE' }}
-      >
+      <div className="App">
         <div
           className="PlayerWrap"
           style={{ position: 'sticky', top: 0, zIndex: 10 }}
@@ -367,7 +364,7 @@ class App extends Component {
           >
             <Grid container spacing={24} justify="center">
               <Grid item xs={12}>
-                <Paper elevation={1} style={{ padding: '1rem' }}>
+                <Paper elevation={4} style={{ padding: '1rem' }}>
                   <Typography component="p">
                     메시지 입력
                   </Typography>
@@ -382,7 +379,7 @@ class App extends Component {
               </Grid>
               {IncButtonComponents}
               <Grid item xs>
-                <Paper elevation={1} style={{ padding: '1rem' }}>
+                <Paper elevation={4} style={{ padding: '1rem' }}>
                   <Typography component="p">
                     방향 설정
                   </Typography>
@@ -394,7 +391,7 @@ class App extends Component {
                 </Paper>
               </Grid>
               <Grid item xs={12}>
-                <Paper elevation={1} style={{ padding: '1rem' }}>
+                <Paper elevation={4} style={{ padding: '1rem' }}>
                   <Typography component="p">
                     색 설정
                   </Typography>

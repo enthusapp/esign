@@ -37,7 +37,7 @@ class MainButton extends Component {
     const marginStyle = { margin: '0.5rem', width: `${isElectron ? 7 : 6}rem` };
 
     return (
-      <div style={{ backgroundColor: '#eeeeee', width: '100%' }}>
+      <div style={{ backgroundColor: '#ffffff', width: '100%' }}>
         {isLoaded ? (<></>
         ) : (
           <label htmlFor="load">
@@ -50,8 +50,7 @@ class MainButton extends Component {
               style={{ display: 'none' }}
             />
             <Button
-              variant="outlined"
-              color="primary"
+              variant="contained"
               component="span"
               className="loadText"
               style={marginStyle}
@@ -61,8 +60,7 @@ class MainButton extends Component {
           </label>)
         }
         <Button
-          variant="outlined"
-          color="primary"
+          variant="contained"
           className="save"
           onClick={isElectron ? electronSaveAction : download}
           style={marginStyle}
@@ -71,8 +69,7 @@ class MainButton extends Component {
         </Button>
         {isLoaded ? (
           <Button
-            variant="outlined"
-            color="primary"
+            variant="contained"
             className="saveAs"
             onClick={saveAs}
             style={marginStyle}
@@ -82,8 +79,7 @@ class MainButton extends Component {
         ) : (<></>)
         }
         <Button
-          variant="outlined"
-          color="primary"
+          variant="contained"
           className="cancel"
           onClick={cancel}
           style={marginStyle}
