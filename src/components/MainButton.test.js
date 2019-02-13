@@ -2,51 +2,43 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import MainButton from './MainButton';
 
-let loadCalled = false;
-let saveCalled = false;
-let cancelCalled = false;
-let saveAsCalled = false;
-
-function calledClear() {
-  loadCalled = false;
-  saveCalled = false;
-  cancelCalled = false;
-  saveAsCalled = false;
-}
-
-function load(event) {
-  const file = event.target.files[0];
-  loadCalled = file;
-}
-function download() {
-  saveCalled = true;
-}
-function cancel() {
-  cancelCalled = true;
-}
-function saveAs() {
-  saveAsCalled = true;
-}
-
 function isTextRight(component, button, text) {
   return component.find(button).html().indexOf(text) > -1;
 }
 
 describe('MainButton', () => {
   let component = null;
+  let loadMock;
+  let saveMock;
+  let saveAsMock;
+  let cancelMock;
+  const loadEvent = { target: { files: ['loadTest'] } };
+
+  beforeEach(() => {
+    loadMock = jest.fn();
+    saveMock = jest.fn();
+    saveAsMock = jest.fn();
+    cancelMock = jest.fn();
+  });
+
+  afterEach(() => {
+    loadMock.mockReset();
+    saveMock.mockReset();
+    saveAsMock.mockReset();
+    cancelMock.mockReset();
+  });
 
   describe('on web browser', () => {
     beforeEach(() => {
       component = shallow(
         <MainButton
-          load={load}
-          download={download}
-          cancel={cancel}
-          saveAs={saveAs}
+          load={loadMock}
+          download={saveMock}
+          cancel={cancelMock}
+          saveAs={saveAsMock}
           isElectron={false}
         />,
       );
-      calledClear();
     });
 
     it('button exists', () => {
@@ -63,19 +55,20 @@ describe('MainButton', () => {
     });
 
     it('load presss', () => {
-      const file = 'loadTest';
-      component.find('.load').simulate('change', { target: { files: [file] } });
-      expect(loadCalled).toBe(file);
+      component.find('.load').simulate('change', loadEvent);
+
+      expect(loadMock).toHaveBeenCalledTimes(1);
+      expect(loadMock.mock.calls[0][0]).toEqual(loadEvent);
     });
 
     it('save presss', () => {
       component.find('.save').simulate('click');
-      expect(saveCalled).toBe(true);
+      expect(saveMock).toHaveBeenCalledTimes(1);
     });
 
     it('cancel presss', () => {
       component.find('.cancel').simulate('click');
-      expect(cancelCalled).toBe(true);
+      expect(cancelMock).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -83,14 +76,13 @@ describe('MainButton', () => {
     beforeEach(() => {
       component = shallow(
         <MainButton
-          load={load}
-          download={download}
-          cancel={cancel}
-          saveAs={saveAs}
+          load={loadMock}
+          download={saveMock}
+          cancel={cancelMock}
+          saveAs={saveAsMock}
           isElectron
         />,
       );
-      calledClear();
     });
 
     it('button text', () => {
@@ -106,13 +98,13 @@ describe('MainButton', () => {
 
     it('press save, but work saveAs', () => {
       component.find('.save').simulate('click');
-      expect(saveAsCalled).toBe(true);
-      expect(saveCalled).toBe(false);
+      expect(saveAsMock).toHaveBeenCalledTimes(1);
+      expect(saveMock).toHaveBeenCalledTimes(0);
     });
 
     describe('isLoaded', () => {
       beforeEach(() => {
-        component.find('.load').simulate('change', { target: { files: ['test'] } });
+        component.find('.load').simulate('change', loadEvent);
       });
 
       it('press load', () => {
@@ -128,13 +120,13 @@ describe('MainButton', () => {
 
       it('press saveAs, and saveAs action', () => {
         component.find('.saveAs').simulate('click');
-        expect(saveAsCalled).toBe(true);
+        expect(saveAsMock).toHaveBeenCalledTimes(1);
       });
 
       it('press save, and save after file loading', () => {
         component.find('.save').simulate('click');
-        expect(saveCalled).toBe(true);
-        expect(saveAsCalled).toBe(false);
+        expect(saveMock).toHaveBeenCalledTimes(1);
+        expect(saveAsMock).toHaveBeenCalledTimes(0);
       });
     });
   });
